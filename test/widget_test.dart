@@ -2,6 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'package:flutter/material.dart';
 
+import 'package:fc26_conquest/localization/app_strings.dart';
 import 'package:fc26_conquest/models/campaign_setup.dart';
 import 'package:fc26_conquest/models/team.dart';
 import 'package:fc26_conquest/screens/home_screen.dart';
@@ -61,6 +62,7 @@ void main() {
           availableClubTeams: 10,
           availableNationTeams: 8,
           teams: _sampleTeams,
+          strings: const AppStrings(AppLanguage.de),
           onNewCampaign: (CampaignSetup setup) async {},
           onContinue: () {},
           onOpenCustomWheel: () {},

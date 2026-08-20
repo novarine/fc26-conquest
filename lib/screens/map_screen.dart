@@ -2,6 +2,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 
+import '../localization/app_strings.dart';
 import '../models/campaign_state.dart';
 import '../models/player.dart';
 import '../models/team.dart';
@@ -19,6 +20,7 @@ class MapScreen extends StatefulWidget {
     required this.playerById,
     required this.attackableTeams,
     required this.defenderCandidates,
+    required this.strings,
     required this.onSetBattlePairing,
     required this.onOpenStats,
     required this.onResetCampaign,
@@ -31,6 +33,7 @@ class MapScreen extends StatefulWidget {
   final Player? Function(int id) playerById;
   final List<Team> Function() attackableTeams;
   final List<Team> Function(int attackerId) defenderCandidates;
+  final AppStrings strings;
   final Future<void> Function(int attackerId, int defenderId) onSetBattlePairing;
   final VoidCallback onOpenStats;
   final Future<void> Function() onResetCampaign;
@@ -82,12 +85,12 @@ class _MapScreenState extends State<MapScreen> {
         actions: [
           IconButton(
             onPressed: widget.onOpenStats,
-            tooltip: 'Statistiken',
+            tooltip: widget.strings.statsTooltip,
             icon: const Icon(Icons.bar_chart),
           ),
           IconButton(
             onPressed: widget.onResetCampaign,
-            tooltip: 'Kampagne zuruecksetzen',
+            tooltip: widget.strings.resetCampaignTooltip,
             icon: const Icon(Icons.restart_alt),
           ),
         ],
@@ -115,6 +118,7 @@ class _MapScreenState extends State<MapScreen> {
                       lastTransfer: transferredPlayer,
                       remainingTeams: widget.remainingTeams,
                       matchesPlayed: widget.campaign.matchesPlayed,
+                      strings: widget.strings,
                     ),
                     const SizedBox(height: 12),
                     Expanded(
@@ -139,11 +143,13 @@ class _MapScreenState extends State<MapScreen> {
                                               .take(6)
                                               .toList(),
                                           onResetCampaign: widget.onResetCampaign,
+                                          strings: widget.strings,
                                         )
                                       : _RightPanel(
                                           teams: activeTeams,
                                           wheelBusy: _wheelBusy,
                                           onSpin: _openWheelFlow,
+                                          strings: widget.strings,
                                         ),
                                 ),
                               ],
@@ -168,11 +174,13 @@ class _MapScreenState extends State<MapScreen> {
                                               .take(6)
                                               .toList(),
                                           onResetCampaign: widget.onResetCampaign,
+                                          strings: widget.strings,
                                         )
                                       : _RightPanel(
                                           teams: activeTeams,
                                           wheelBusy: _wheelBusy,
                                           onSpin: _openWheelFlow,
+                                          strings: widget.strings,
                                         ),
                                 ),
                               ],
@@ -229,8 +237,9 @@ class _MapScreenState extends State<MapScreen> {
       final attacker = await showTeamWheelDialog(
         context: context,
         teams: attackers,
-        title: 'Schritt 1: Angreifer auslosen',
-        subtitle: 'Wie bei Wheel of Names: erst Team A bestimmen.',
+        title: widget.strings.wheelStep1Title,
+        subtitle: widget.strings.wheelStep1Subtitle,
+        strings: widget.strings,
       );
       if (!mounted || attacker == null) {
         return;
@@ -244,8 +253,9 @@ class _MapScreenState extends State<MapScreen> {
       final defender = await showTeamWheelDialog(
         context: context,
         teams: defenders,
-        title: 'Schritt 2: Nachbar-Gegner auslosen',
-        subtitle: 'Nur angrenzende Teams sind auf diesem Rad.',
+        title: widget.strings.wheelStep2Title,
+        subtitle: widget.strings.wheelStep2Subtitle,
+        strings: widget.strings,
       );
       if (!mounted || defender == null) {
         return;
@@ -336,6 +346,7 @@ class _MapScreenState extends State<MapScreen> {
         return _ChampionCelebrationDialog(
           champion: champion,
           squad: squad,
+          strings: widget.strings,
         );
       },
     );
@@ -346,10 +357,12 @@ class _ChampionCelebrationDialog extends StatefulWidget {
   const _ChampionCelebrationDialog({
     required this.champion,
     required this.squad,
+    required this.strings,
   });
 
   final Team champion;
   final List<Player> squad;
+  final AppStrings strings;
 
   @override
   State<_ChampionCelebrationDialog> createState() => _ChampionCelebrationDialogState();
@@ -444,9 +457,9 @@ class _ChampionCelebrationDialogState extends State<_ChampionCelebrationDialog>
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              const Text(
-                                'WORLD CHAMPION',
-                                style: TextStyle(
+                              Text(
+                                widget.strings.worldChampion,
+                                style: const TextStyle(
                                   color: Colors.white,
                                   fontSize: 32,
                                   fontWeight: FontWeight.w900,
@@ -528,7 +541,7 @@ class _ChampionCelebrationDialogState extends State<_ChampionCelebrationDialog>
                               FilledButton.icon(
                                 onPressed: () => Navigator.of(context).pop(),
                                 icon: const Icon(Icons.celebration),
-                                label: const Text('Weiterfeiern'),
+                                label: Text(widget.strings.celebrateMore),
                                 style: FilledButton.styleFrom(
                                   backgroundColor: const Color(0xFF22C55E),
                                   foregroundColor: Colors.white,
@@ -614,6 +627,7 @@ class _TopStrip extends StatelessWidget {
     required this.lastTransfer,
     required this.remainingTeams,
     required this.matchesPlayed,
+    required this.strings,
   });
 
   final Team? champion;
@@ -621,6 +635,7 @@ class _TopStrip extends StatelessWidget {
   final Player? lastTransfer;
   final int remainingTeams;
   final int matchesPlayed;
+  final AppStrings strings;
 
   @override
   Widget build(BuildContext context) {
@@ -635,11 +650,11 @@ class _TopStrip extends StatelessWidget {
         spacing: 10,
         runSpacing: 10,
         children: [
-          _tile('Teams', '$remainingTeams'),
-          _tile('Matches', '$matchesPlayed'),
-          _tile('Champion', champion?.name ?? 'Noch offen'),
-          _tile('Letzter Sieger', lastWinner?.name ?? 'Noch keiner'),
-          _tile('Spielertransfer', lastTransfer?.name ?? 'Keiner'),
+          _tile(strings.statTeams, '$remainingTeams'),
+          _tile(strings.statMatches, '$matchesPlayed'),
+          _tile(strings.statChampion, champion?.name ?? strings.championPending),
+          _tile(strings.statLastWinner, lastWinner?.name ?? strings.noneYet),
+          _tile(strings.statPlayerTransfer, lastTransfer?.name ?? strings.noneLabel),
         ],
       ),
     );
@@ -679,11 +694,13 @@ class _RightPanel extends StatelessWidget {
     required this.teams,
     required this.wheelBusy,
     required this.onSpin,
+    required this.strings,
   });
 
   final List<Team> teams;
   final bool wheelBusy;
   final Future<void> Function() onSpin;
+  final AppStrings strings;
 
   @override
   Widget build(BuildContext context) {
@@ -697,18 +714,18 @@ class _RightPanel extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            'Match-Auslosung',
-            style: TextStyle(
+          Text(
+            strings.matchDrawTitle,
+            style: const TextStyle(
               color: Colors.white,
               fontWeight: FontWeight.w900,
               fontSize: 20,
             ),
           ),
           const SizedBox(height: 8),
-          const Text(
-            'Das Gluecksrad dreht zuerst den Angreifer und danach den gueltigen Nachbar-Gegner.',
-            style: TextStyle(color: Color(0xFFB6D3F5)),
+          Text(
+            strings.matchDrawDescription,
+            style: const TextStyle(color: Color(0xFFB6D3F5)),
           ),
           const SizedBox(height: 14),
           SizedBox(
@@ -722,7 +739,7 @@ class _RightPanel extends StatelessWidget {
                       child: CircularProgressIndicator(strokeWidth: 2),
                     )
                   : const Icon(Icons.casino_rounded),
-              label: Text(wheelBusy ? 'Rad dreht...' : 'Gluecksrad starten'),
+              label: Text(wheelBusy ? strings.wheelSpinning : strings.startWheelButton),
               style: FilledButton.styleFrom(
                 backgroundColor: const Color(0xFF06B6D4),
                 foregroundColor: const Color(0xFF06213A),
@@ -730,9 +747,9 @@ class _RightPanel extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 14),
-          const Text(
-            'Aktive Teams',
-            style: TextStyle(color: Colors.white, fontWeight: FontWeight.w800),
+          Text(
+            strings.activeTeams,
+            style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w800),
           ),
           const SizedBox(height: 10),
           Expanded(
@@ -786,11 +803,13 @@ class _ChampionSidePanel extends StatefulWidget {
     required this.champion,
     required this.squad,
     required this.onResetCampaign,
+    required this.strings,
   });
 
   final Team champion;
   final List<Player> squad;
   final Future<void> Function() onResetCampaign;
+  final AppStrings strings;
 
   @override
   State<_ChampionSidePanel> createState() => _ChampionSidePanelState();
@@ -838,14 +857,14 @@ class _ChampionSidePanelState extends State<_ChampionSidePanel>
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Row(
+          Row(
             children: [
-              Icon(Icons.emoji_events, color: Color(0xFFFACC15), size: 28),
-              SizedBox(width: 10),
+              const Icon(Icons.emoji_events, color: Color(0xFFFACC15), size: 28),
+              const SizedBox(width: 10),
               Expanded(
                 child: Text(
-                  'Turnier Beendet',
-                  style: TextStyle(
+                  widget.strings.tournamentEnded,
+                  style: const TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.w900,
                     fontSize: 24,
@@ -856,7 +875,7 @@ class _ChampionSidePanelState extends State<_ChampionSidePanel>
           ),
           const SizedBox(height: 10),
           Text(
-            '${widget.champion.name} hat den Pokal glorreich geholt.',
+            widget.strings.championSubtitle(widget.champion.name),
             style: const TextStyle(
               color: Color(0xFFF8E7A1),
               fontWeight: FontWeight.w700,
@@ -907,20 +926,20 @@ class _ChampionSidePanelState extends State<_ChampionSidePanel>
             ),
           ),
           const SizedBox(height: 6),
-          const Center(
+          Center(
             child: Text(
-              'Kroenung des Conquest-Champions',
+              widget.strings.championCrowned,
               textAlign: TextAlign.center,
-              style: TextStyle(
+              style: const TextStyle(
                 color: Color(0xFFBFDBFE),
                 fontWeight: FontWeight.w700,
               ),
             ),
           ),
           const SizedBox(height: 18),
-          const Text(
-            'Helden des Finales',
-            style: TextStyle(
+          Text(
+            widget.strings.finalHeroes,
+            style: const TextStyle(
               color: Color(0xFFFFF3C4),
               fontWeight: FontWeight.w900,
               fontSize: 18,
@@ -955,7 +974,7 @@ class _ChampionSidePanelState extends State<_ChampionSidePanel>
             child: FilledButton.icon(
               onPressed: widget.onResetCampaign,
               icon: const Icon(Icons.restart_alt),
-              label: const Text('Neue Kampagne starten'),
+              label: Text(widget.strings.startNewCampaignButton),
               style: FilledButton.styleFrom(
                 backgroundColor: const Color(0xFFFACC15),
                 foregroundColor: const Color(0xFF10253A),

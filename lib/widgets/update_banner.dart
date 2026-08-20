@@ -1,17 +1,21 @@
 import 'package:flutter/material.dart';
 
+import '../localization/app_strings.dart';
+
 class UpdateBanner extends StatelessWidget {
   const UpdateBanner({
     super.key,
     required this.latestVersion,
     required this.releaseNotes,
     required this.onUpdate,
+    required this.strings,
     this.onDismiss,
   });
 
   final String latestVersion;
   final String releaseNotes;
   final VoidCallback onUpdate;
+  final AppStrings strings;
   final VoidCallback? onDismiss;
 
   @override
@@ -37,7 +41,7 @@ class UpdateBanner extends StatelessWidget {
                 const SizedBox(width: 12),
                 Expanded(
                   child: Text(
-                    'New version available: $latestVersion',
+                    strings.newVersionAvailable(latestVersion),
                     style: const TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.w700,
@@ -47,13 +51,13 @@ class UpdateBanner extends StatelessWidget {
                 TextButton(
                   onPressed: onUpdate,
                   style: TextButton.styleFrom(foregroundColor: Colors.white),
-                  child: const Text('Update'),
+                  child: Text(strings.updateButton),
                 ),
                 if (onDismiss != null)
                   IconButton(
                     onPressed: onDismiss,
                     icon: const Icon(Icons.close, color: Colors.white),
-                    tooltip: 'Dismiss',
+                    tooltip: strings.dismissTooltip,
                   ),
               ],
             ),

@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 
+import '../localization/app_strings.dart';
 import '../models/campaign_setup.dart';
 import '../models/team.dart';
 import '../utils/team_filter.dart';
-
-const _noLeagueFilter = 'Alle Ligen';
-const _noCountryFilter = 'Alle Laender';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({
@@ -16,6 +14,7 @@ class HomeScreen extends StatefulWidget {
     required this.availableClubTeams,
     required this.availableNationTeams,
     required this.teams,
+    required this.strings,
     required this.onOpenCustomWheel,
   });
 
@@ -25,6 +24,7 @@ class HomeScreen extends StatefulWidget {
   final int availableClubTeams;
   final int availableNationTeams;
   final List<Team> teams;
+  final AppStrings strings;
   final VoidCallback onOpenCustomWheel;
 
   @override
@@ -34,8 +34,8 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   TeamType _mode = TeamType.club;
   int _teamCount = 8;
-  String _league = _noLeagueFilter;
-  String _country = _noCountryFilter;
+  String? _league;
+  String? _country;
   RangeValues? _ratingRange;
   bool _licensedOnly = false;
 
@@ -56,8 +56,8 @@ class _HomeScreenState extends State<HomeScreen> {
     final range = _ratingRange ?? RangeValues(bounds.min.toDouble(), bounds.max.toDouble());
     return filterTeams(
       _teamsForMode,
-      league: _mode == TeamType.club && _league != _noLeagueFilter ? _league : null,
-      country: _mode == TeamType.club && _country != _noCountryFilter ? _country : null,
+      league: _mode == TeamType.club ? _league : null,
+      country: _mode == TeamType.club ? _country : null,
       minRating: range.start.round(),
       maxRating: range.end.round(),
       licensedOnly: _licensedOnly,
@@ -65,8 +65,8 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _resetFilters() {
-    _league = _noLeagueFilter;
-    _country = _noCountryFilter;
+    _league = null;
+    _country = null;
     _ratingRange = null;
     _licensedOnly = false;
   }
@@ -74,6 +74,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final strings = widget.strings;
     final bounds = _ratingBounds;
     final ratingRange =
         _ratingRange ?? RangeValues(bounds.min.toDouble(), bounds.max.toDouble());
@@ -139,34 +140,34 @@ class _HomeScreenState extends State<HomeScreen> {
                             color: const Color(0xFFE0F2FE),
                             borderRadius: BorderRadius.circular(999),
                           ),
-                          child: const Text(
-                            'Kinderfreundlicher Eroberungsmodus',
-                            style: TextStyle(fontWeight: FontWeight.w800),
+                          child: Text(
+                            strings.homeBadge,
+                            style: const TextStyle(fontWeight: FontWeight.w800),
                           ),
                         ),
                         const SizedBox(height: 18),
                         Text('FC 26 Conquest', style: theme.textTheme.displaySmall),
                         const SizedBox(height: 10),
                         Text(
-                          'Erobere die Welt. Ein Match nach dem anderen.',
+                          strings.homeHeadline,
                           style: theme.textTheme.headlineSmall?.copyWith(
                             color: const Color(0xFF0F172A),
                             fontWeight: FontWeight.w900,
                           ),
                         ),
                         const SizedBox(height: 16),
-                        const Text(
-                          'Bunte Weltkarte, sichtbares Gluecksrad und Team-Badges statt trockener Tabellen. Genau richtig fuer einen verspielten Conquest-Prototyp.',
-                          style: TextStyle(fontSize: 16, height: 1.4),
+                        Text(
+                          strings.homeDescription,
+                          style: const TextStyle(fontSize: 16, height: 1.4),
                         ),
                         const SizedBox(height: 24),
                         Wrap(
                           spacing: 12,
                           runSpacing: 12,
-                          children: const [
-                            _MiniFeature(icon: Icons.casino_rounded, label: 'Gluecksrad'),
-                            _MiniFeature(icon: Icons.flag_circle, label: 'Team-Badges'),
-                            _MiniFeature(icon: Icons.map_rounded, label: 'Fantasy-Karte'),
+                          children: [
+                            _MiniFeature(icon: Icons.casino_rounded, label: strings.featureWheel),
+                            _MiniFeature(icon: Icons.flag_circle, label: strings.featureBadges),
+                            _MiniFeature(icon: Icons.map_rounded, label: strings.featureMap),
                           ],
                         ),
                         const SizedBox(height: 24),
@@ -180,7 +181,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'Neue Kampagne konfigurieren',
+                                strings.setupHeading,
                                 style: theme.textTheme.titleMedium?.copyWith(
                                   fontWeight: FontWeight.w900,
                                 ),
@@ -191,7 +192,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 runSpacing: 10,
                                 children: [
                                   ChoiceChip(
-                                    label: Text('Clubs (${widget.availableClubTeams})'),
+                                    label: Text(strings.clubsChip(widget.availableClubTeams)),
                                     selected: _mode == TeamType.club,
                                     onSelected: (_) => setState(() {
                                       _mode = TeamType.club;
@@ -199,7 +200,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     }),
                                   ),
                                   ChoiceChip(
-                                    label: Text('Nationen (${widget.availableNationTeams})'),
+                                    label: Text(strings.nationsChip(widget.availableNationTeams)),
                                     selected: _mode == TeamType.nation,
                                     onSelected: (_) => setState(() {
                                       _mode = TeamType.nation;
@@ -214,22 +215,24 @@ class _HomeScreenState extends State<HomeScreen> {
                                   spacing: 10,
                                   runSpacing: 10,
                                   children: [
-                                    DropdownButton<String>(
+                                    DropdownButton<String?>(
                                       value: _league,
-                                      items: [_noLeagueFilter, ...leagues]
-                                          .map((value) => DropdownMenuItem(value: value, child: Text(value)))
-                                          .toList(),
+                                      items: [
+                                        DropdownMenuItem<String?>(value: null, child: Text(strings.allLeagues)),
+                                        ...leagues.map((value) => DropdownMenuItem<String?>(value: value, child: Text(value))),
+                                      ],
                                       onChanged: (value) => setState(() {
-                                        _league = value ?? _noLeagueFilter;
+                                        _league = value;
                                       }),
                                     ),
-                                    DropdownButton<String>(
+                                    DropdownButton<String?>(
                                       value: _country,
-                                      items: [_noCountryFilter, ...countries]
-                                          .map((value) => DropdownMenuItem(value: value, child: Text(value)))
-                                          .toList(),
+                                      items: [
+                                        DropdownMenuItem<String?>(value: null, child: Text(strings.allCountries)),
+                                        ...countries.map((value) => DropdownMenuItem<String?>(value: value, child: Text(value))),
+                                      ],
                                       onChanged: (value) => setState(() {
-                                        _country = value ?? _noCountryFilter;
+                                        _country = value;
                                       }),
                                     ),
                                   ],
@@ -237,7 +240,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               ],
                               const SizedBox(height: 12),
                               Text(
-                                'Rating: ${ratingRange.start.round()} - ${ratingRange.end.round()}',
+                                strings.ratingRangeLabel(ratingRange.start.round(), ratingRange.end.round()),
                               ),
                               RangeSlider(
                                 values: ratingRange,
@@ -270,11 +273,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                         padding: const EdgeInsets.only(top: 12),
                                         child: Column(
                                           crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: const [
-                                            Text('Nur FC 26 Lizenzteams'),
+                                          children: [
+                                            Text(strings.licensedOnlyTitle),
                                             Text(
-                                              'Manuell gepflegte Bestenliste, nicht live mit aktuellen FC-26-Patches synchronisiert.',
-                                              style: TextStyle(fontSize: 12),
+                                              strings.licensedOnlySubtitle,
+                                              style: const TextStyle(fontSize: 12),
                                             ),
                                           ],
                                         ),
@@ -284,7 +287,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ),
                               ),
                               const SizedBox(height: 12),
-                              Text('Teamanzahl: $effectiveTeamCount von ${filteredTeams.length} verfuegbar'),
+                              Text(strings.teamCountLabel(effectiveTeamCount, filteredTeams.length)),
                               Slider(
                                 value: effectiveTeamCount.toDouble(),
                                 min: 2,
@@ -308,31 +311,27 @@ class _HomeScreenState extends State<HomeScreen> {
                                     CampaignSetup(
                                       mode: _mode,
                                       teamCount: effectiveTeamCount,
-                                      league: _mode == TeamType.club && _league != _noLeagueFilter
-                                          ? _league
-                                          : null,
-                                      country: _mode == TeamType.club && _country != _noCountryFilter
-                                          ? _country
-                                          : null,
+                                      league: _mode == TeamType.club ? _league : null,
+                                      country: _mode == TeamType.club ? _country : null,
                                       minRating: ratingRange.start.round(),
                                       maxRating: ratingRange.end.round(),
                                       licensedOnly: _licensedOnly,
                                     ),
                                   ),
                           icon: const Icon(Icons.auto_awesome),
-                          label: const Text('Neue Kampagne'),
+                          label: Text(strings.newCampaignButton),
                         ),
                         const SizedBox(height: 12),
                         OutlinedButton.icon(
                           onPressed: widget.hasCampaign ? widget.onContinue : null,
                           icon: const Icon(Icons.play_arrow),
-                          label: const Text('Kampagne fortsetzen'),
+                          label: Text(strings.continueCampaignButton),
                         ),
                         const SizedBox(height: 12),
                         TextButton.icon(
                           onPressed: widget.onOpenCustomWheel,
                           icon: const Icon(Icons.casino_outlined),
-                          label: const Text('Zufallsrad-Werkzeug'),
+                          label: Text(strings.customWheelToolButton),
                         ),
                       ],
                     ),

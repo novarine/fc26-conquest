@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../localization/app_strings.dart';
 import '../models/player.dart';
 import '../models/team.dart';
 import '../services/conquest_service.dart';
@@ -16,6 +17,7 @@ class BattleScreen extends StatefulWidget {
     required this.defenderSquad,
     required this.attackerRegions,
     required this.defenderRegions,
+    required this.strings,
     required this.onSubmit,
     required this.onCancel,
   });
@@ -27,6 +29,7 @@ class BattleScreen extends StatefulWidget {
   final List<Player> defenderSquad;
   final int attackerRegions;
   final int defenderRegions;
+  final AppStrings strings;
   final Future<void> Function(int winnerId, int? transferredPlayerId, String? score)
       onSubmit;
   final VoidCallback onCancel;
@@ -49,11 +52,12 @@ class _BattleScreenState extends State<BattleScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final strings = widget.strings;
 
     return Scaffold(
       backgroundColor: const Color(0xFF061425),
       appBar: AppBar(
-        title: const Text('Match-Ergebnis'),
+        title: Text(strings.matchResultTitle),
         leading: IconButton(
           onPressed: widget.onCancel,
           icon: const Icon(Icons.arrow_back),
@@ -85,10 +89,11 @@ class _BattleScreenState extends State<BattleScreen> {
                           defender: widget.defender,
                           attackerRegions: widget.attackerRegions,
                           defenderRegions: widget.defenderRegions,
+                          strings: strings,
                         ),
                         const SizedBox(height: 18),
                         Text(
-                          'Wer hat gewonnen?',
+                          strings.whoWonHeading,
                           style: theme.textTheme.titleLarge?.copyWith(
                             color: Colors.white,
                             fontWeight: FontWeight.w900,
@@ -112,9 +117,9 @@ class _BattleScreenState extends State<BattleScreen> {
                           controller: _scoreController,
                           style: const TextStyle(color: Colors.white),
                           decoration: InputDecoration(
-                            labelText: 'Optionaler Score',
+                            labelText: strings.optionalScoreLabel,
                             labelStyle: const TextStyle(color: Color(0xFF93C5FD)),
-                            hintText: 'z. B. 3:1',
+                            hintText: strings.scoreHint,
                             hintStyle: const TextStyle(color: Color(0xFF60A5FA)),
                             filled: true,
                             fillColor: Colors.white.withValues(alpha: 0.08),
@@ -138,7 +143,7 @@ class _BattleScreenState extends State<BattleScreen> {
                                 foregroundColor: Colors.white,
                                 side: const BorderSide(color: Color(0xFF60A5FA)),
                               ),
-                              child: const Text('Abbrechen'),
+                              child: Text(strings.cancelButton),
                             ),
                             const SizedBox(width: 12),
                             FilledButton.icon(
@@ -152,7 +157,7 @@ class _BattleScreenState extends State<BattleScreen> {
                                             : _scoreController.text.trim(),
                                       ),
                               icon: const Icon(Icons.emoji_events),
-                              label: const Text('Gebiet erobern'),
+                              label: Text(strings.captureRegionButton),
                               style: FilledButton.styleFrom(
                                 backgroundColor: const Color(0xFF22C55E),
                                 foregroundColor: Colors.white,
@@ -209,6 +214,7 @@ class _BattleScreenState extends State<BattleScreen> {
   }
 
   Widget _buildTransferSection(ThemeData theme) {
+    final strings = widget.strings;
     return Container(
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
@@ -220,7 +226,7 @@ class _BattleScreenState extends State<BattleScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Transfer aus dem besiegten Team',
+            strings.transferSectionTitle,
             style: theme.textTheme.titleMedium?.copyWith(
               color: Colors.white,
               fontWeight: FontWeight.w800,
@@ -243,15 +249,15 @@ class _BattleScreenState extends State<BattleScreen> {
               ),
               filled: true,
               fillColor: Colors.white.withValues(alpha: 0.06),
-              helperText: 'Optional: ein Spieler wechselt direkt zum Siegerteam.',
+              helperText: strings.transferHelperText,
               helperStyle: const TextStyle(color: Color(0xFF93C5FD)),
             ),
             dropdownColor: const Color(0xFF112A45),
             style: const TextStyle(color: Colors.white),
             items: [
-              const DropdownMenuItem<int?>(
+              DropdownMenuItem<int?>(
                 value: null,
-                child: Text('Keinen Spieler uebernehmen'),
+                child: Text(strings.noPlayerTransferOption),
               ),
               ..._losingSquad.map(
                 (player) => DropdownMenuItem<int?>(
@@ -291,9 +297,9 @@ class _BattleScreenState extends State<BattleScreen> {
             ),
           ] else ...[
             const SizedBox(height: 8),
-            const Text(
-              'Fuer dieses Team sind aktuell keine Spieler verfuegbar.',
-              style: TextStyle(
+            Text(
+              strings.noPlayersAvailable,
+              style: const TextStyle(
                 color: Color(0xFFBFDBFE),
                 fontWeight: FontWeight.w600,
               ),
@@ -301,7 +307,7 @@ class _BattleScreenState extends State<BattleScreen> {
           ],
           if (_selectedPlayer != null) ...[
             const SizedBox(height: 14),
-            _TransferPlayerCard(player: _selectedPlayer!),
+            _TransferPlayerCard(player: _selectedPlayer!, strings: strings),
           ],
         ],
       ),
@@ -348,12 +354,14 @@ class _BattleHeader extends StatelessWidget {
     required this.defender,
     required this.attackerRegions,
     required this.defenderRegions,
+    required this.strings,
   });
 
   final Team attacker;
   final Team defender;
   final int attackerRegions;
   final int defenderRegions;
+  final AppStrings strings;
 
   @override
   Widget build(BuildContext context) {
@@ -371,7 +379,7 @@ class _BattleHeader extends StatelessWidget {
       child: Row(
         children: [
           Expanded(
-            child: _TeamShowcase(team: attacker, regions: attackerRegions),
+            child: _TeamShowcase(team: attacker, regions: attackerRegions, strings: strings),
           ),
           const Padding(
             padding: EdgeInsets.symmetric(horizontal: 10),
@@ -385,7 +393,7 @@ class _BattleHeader extends StatelessWidget {
             ),
           ),
           Expanded(
-            child: _TeamShowcase(team: defender, regions: defenderRegions),
+            child: _TeamShowcase(team: defender, regions: defenderRegions, strings: strings),
           ),
         ],
       ),
@@ -394,9 +402,10 @@ class _BattleHeader extends StatelessWidget {
 }
 
 class _TransferPlayerCard extends StatelessWidget {
-  const _TransferPlayerCard({required this.player});
+  const _TransferPlayerCard({required this.player, required this.strings});
 
   final Player player;
+  final AppStrings strings;
 
   @override
   Widget build(BuildContext context) {
@@ -446,7 +455,7 @@ class _TransferPlayerCard extends StatelessWidget {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  '${player.position} • ${player.nation ?? '-'} • ${player.age ?? '-'} Jahre',
+                  '${player.position} • ${player.nation ?? '-'} • ${player.age ?? '-'} ${strings.yearsSuffix}',
                   style: const TextStyle(
                     fontWeight: FontWeight.w600,
                     color: Color(0xFFBFDBFE),
@@ -454,7 +463,7 @@ class _TransferPlayerCard extends StatelessWidget {
                 ),
                 const SizedBox(height: 2),
                 Text(
-                  'Wert ${player.value ?? '-'} • Lohn ${player.wage ?? '-'}',
+                  strings.valueWageLabel(player.value ?? '-', player.wage ?? '-'),
                   style: const TextStyle(color: Color(0xFF93C5FD), fontSize: 12),
                 ),
                 const SizedBox(height: 10),
@@ -609,10 +618,12 @@ class _TeamShowcase extends StatelessWidget {
   const _TeamShowcase({
     required this.team,
     required this.regions,
+    required this.strings,
   });
 
   final Team team;
   final int regions;
+  final AppStrings strings;
 
   @override
   Widget build(BuildContext context) {
@@ -631,7 +642,7 @@ class _TeamShowcase extends StatelessWidget {
         ),
         const SizedBox(height: 4),
         Text(
-          'Regionen: $regions',
+          strings.regionsLabel(regions),
           style: const TextStyle(color: Color(0xFFBFDBFE)),
         ),
       ],

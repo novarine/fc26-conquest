@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../localization/app_strings.dart';
 import '../models/wheel_preset.dart';
 import '../services/storage_service.dart';
 import '../widgets/generic_wheel_dialog.dart';
@@ -24,9 +25,10 @@ const _examplePresets = [
 ];
 
 class CustomWheelScreen extends StatefulWidget {
-  const CustomWheelScreen({super.key, required this.onBack});
+  const CustomWheelScreen({super.key, required this.onBack, required this.strings});
 
   final VoidCallback onBack;
+  final AppStrings strings;
 
   @override
   State<CustomWheelScreen> createState() => _CustomWheelScreenState();
@@ -83,18 +85,20 @@ class _CustomWheelScreenState extends State<CustomWheelScreen> {
       context: context,
       entries: preset.entries,
       title: preset.name,
+      strings: widget.strings,
     );
   }
 
   Future<void> _addPreset() async {
     final nameController = TextEditingController();
     final entriesController = TextEditingController();
+    final strings = widget.strings;
 
     final created = await showDialog<WheelPreset>(
       context: context,
       builder: (dialogContext) {
         return AlertDialog(
-          title: const Text('Neues Zufallsrad'),
+          title: Text(strings.newWheelDialogTitle),
           content: SizedBox(
             width: 420,
             child: Column(
@@ -102,14 +106,14 @@ class _CustomWheelScreenState extends State<CustomWheelScreen> {
               children: [
                 TextField(
                   controller: nameController,
-                  decoration: const InputDecoration(labelText: 'Name'),
+                  decoration: InputDecoration(labelText: strings.nameLabel),
                 ),
                 const SizedBox(height: 12),
                 TextField(
                   controller: entriesController,
                   maxLines: 8,
-                  decoration: const InputDecoration(
-                    labelText: 'Eintraege (eine Zeile pro Eintrag)',
+                  decoration: InputDecoration(
+                    labelText: strings.entriesLabel,
                     alignLabelWithHint: true,
                   ),
                 ),
@@ -119,7 +123,7 @@ class _CustomWheelScreenState extends State<CustomWheelScreen> {
           actions: [
             TextButton(
               onPressed: () => Navigator.of(dialogContext).pop(),
-              child: const Text('Abbrechen'),
+              child: Text(strings.cancelButton),
             ),
             FilledButton(
               onPressed: () {
@@ -142,7 +146,7 @@ class _CustomWheelScreenState extends State<CustomWheelScreen> {
                   ),
                 );
               },
-              child: const Text('Erstellen'),
+              child: Text(strings.createButton),
             ),
           ],
         );
@@ -159,9 +163,10 @@ class _CustomWheelScreenState extends State<CustomWheelScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final strings = widget.strings;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Zufallsrad'),
+        title: Text(strings.customWheelTitle),
         leading: IconButton(
           onPressed: widget.onBack,
           icon: const Icon(Icons.arrow_back),
@@ -170,12 +175,12 @@ class _CustomWheelScreenState extends State<CustomWheelScreen> {
       floatingActionButton: FloatingActionButton.extended(
         onPressed: _addPreset,
         icon: const Icon(Icons.add),
-        label: const Text('Neues Rad'),
+        label: Text(strings.newWheelFab),
       ),
       body: _loading
           ? const Center(child: CircularProgressIndicator())
           : _presets.isEmpty
-              ? const Center(child: Text('Noch keine Zufallsraeder angelegt.'))
+              ? Center(child: Text(strings.noWheelsYet))
               : ListView.separated(
                   padding: const EdgeInsets.fromLTRB(16, 16, 16, 96),
                   itemCount: _presets.length,
@@ -185,7 +190,7 @@ class _CustomWheelScreenState extends State<CustomWheelScreen> {
                     return Card(
                       child: ListTile(
                         title: Text(preset.name),
-                        subtitle: Text('${preset.entries.length} Eintraege'),
+                        subtitle: Text(strings.entriesCount(preset.entries.length)),
                         onTap: () => _spinPreset(preset),
                         trailing: Row(
                           mainAxisSize: MainAxisSize.min,
@@ -193,12 +198,12 @@ class _CustomWheelScreenState extends State<CustomWheelScreen> {
                             IconButton(
                               onPressed: () => _spinPreset(preset),
                               icon: const Icon(Icons.rotate_right),
-                              tooltip: 'Drehen',
+                              tooltip: strings.spinTooltip,
                             ),
                             IconButton(
                               onPressed: () => _deletePreset(preset),
                               icon: const Icon(Icons.delete_outline),
-                              tooltip: 'Loeschen',
+                              tooltip: strings.deleteTooltip,
                             ),
                           ],
                         ),

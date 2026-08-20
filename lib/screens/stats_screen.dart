@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../localization/app_strings.dart';
 import '../models/team.dart';
 import '../models/team_stats.dart';
 
@@ -8,11 +9,13 @@ class StatsScreen extends StatelessWidget {
     super.key,
     required this.teams,
     required this.stats,
+    required this.strings,
     required this.onBack,
   });
 
   final List<Team> teams;
   final Map<int, TeamStats> stats;
+  final AppStrings strings;
   final VoidCallback onBack;
 
   @override
@@ -28,7 +31,7 @@ class StatsScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Statistiken'),
+        title: Text(strings.statsTitle),
         leading: IconButton(
           onPressed: onBack,
           icon: const Icon(Icons.arrow_back),
@@ -44,11 +47,18 @@ class StatsScreen extends StatelessWidget {
 
           return Card(
             child: ListTile(
-              title: Text(team?.name ?? 'Team ${stat.teamId}'),
+              title: Text(team?.name ?? strings.teamFallback(stat.teamId)),
               subtitle: Text(
-                'Siege ${stat.wins} | Niederlagen ${stat.losses} | Regionen ${stat.currentRegions} | Kader ${stat.squadSize} | Transfers ${stat.transfersIn} | Winrate ${(stat.winRate * 100).toStringAsFixed(0)}%',
+                strings.statsSubtitle(
+                  wins: stat.wins,
+                  losses: stat.losses,
+                  regions: stat.currentRegions,
+                  squad: stat.squadSize,
+                  transfers: stat.transfersIn,
+                  winRate: (stat.winRate * 100).toStringAsFixed(0),
+                ),
               ),
-              trailing: Text('Peak ${stat.biggestExtent}'),
+              trailing: Text(strings.peakLabel(stat.biggestExtent)),
             ),
           );
         },
