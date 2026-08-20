@@ -3,7 +3,47 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter/material.dart';
 
 import 'package:fc26_conquest/models/campaign_setup.dart';
+import 'package:fc26_conquest/models/team.dart';
 import 'package:fc26_conquest/screens/home_screen.dart';
+
+const _sampleTeams = [
+  Team(
+    id: 1,
+    name: 'Test FC',
+    type: TeamType.club,
+    rating: 80,
+    logo: '',
+    primaryColor: '#123456',
+    league: 'Test League',
+    country: 'Testland',
+  ),
+  Team(
+    id: 2,
+    name: 'Other FC',
+    type: TeamType.club,
+    rating: 75,
+    logo: '',
+    primaryColor: '#654321',
+    league: 'Test League',
+    country: 'Testland',
+  ),
+  Team(
+    id: 101,
+    name: 'Testnation',
+    type: TeamType.nation,
+    rating: 82,
+    logo: '',
+    primaryColor: '#111111',
+  ),
+  Team(
+    id: 102,
+    name: 'Otherland',
+    type: TeamType.nation,
+    rating: 78,
+    logo: '',
+    primaryColor: '#222222',
+  ),
+];
 
 void main() {
   testWidgets('home screen shows campaign actions', (WidgetTester tester) async {
@@ -20,6 +60,7 @@ void main() {
           hasCampaign: false,
           availableClubTeams: 10,
           availableNationTeams: 8,
+          teams: _sampleTeams,
           onNewCampaign: (CampaignSetup setup) async {},
           onContinue: () {},
           onOpenCustomWheel: () {},

@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 
 import '../models/campaign_setup.dart';
 import '../models/team.dart';
+import '../utils/team_filter.dart';
+
+const _noLeagueFilter = 'Alle Ligen';
+const _noCountryFilter = 'Alle Laender';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({
@@ -11,6 +15,7 @@ class HomeScreen extends StatefulWidget {
     required this.onContinue,
     required this.availableClubTeams,
     required this.availableNationTeams,
+    required this.teams,
     required this.onOpenCustomWheel,
   });
 
@@ -19,6 +24,7 @@ class HomeScreen extends StatefulWidget {
   final VoidCallback onContinue;
   final int availableClubTeams;
   final int availableNationTeams;
+  final List<Team> teams;
   final VoidCallback onOpenCustomWheel;
 
   @override
@@ -28,15 +34,57 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   TeamType _mode = TeamType.club;
   int _teamCount = 8;
+  String _league = _noLeagueFilter;
+  String _country = _noCountryFilter;
+  RangeValues? _ratingRange;
+
+  List<Team> get _teamsForMode =>
+      widget.teams.where((team) => team.type == _mode).toList();
+
+  ({int min, int max}) get _ratingBounds {
+    final pool = _teamsForMode;
+    if (pool.isEmpty) {
+      return (min: 0, max: 99);
+    }
+    final ratings = pool.map((team) => team.rating);
+    return (min: ratings.reduce((a, b) => a < b ? a : b), max: ratings.reduce((a, b) => a > b ? a : b));
+  }
+
+  List<Team> get _filteredTeams {
+    final bounds = _ratingBounds;
+    final range = _ratingRange ?? RangeValues(bounds.min.toDouble(), bounds.max.toDouble());
+    return filterTeams(
+      _teamsForMode,
+      league: _mode == TeamType.club && _league != _noLeagueFilter ? _league : null,
+      country: _mode == TeamType.club && _country != _noCountryFilter ? _country : null,
+      minRating: range.start.round(),
+      maxRating: range.end.round(),
+    );
+  }
+
+  void _resetFilters() {
+    _league = _noLeagueFilter;
+    _country = _noCountryFilter;
+    _ratingRange = null;
+  }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final maxTeams = _mode == TeamType.club
-        ? widget.availableClubTeams
-        : widget.availableNationTeams;
-    final safeMax = maxTeams < 2 ? 2 : maxTeams;
+    final bounds = _ratingBounds;
+    final ratingRange =
+        _ratingRange ?? RangeValues(bounds.min.toDouble(), bounds.max.toDouble());
+    final filteredTeams = _filteredTeams;
+    final safeMax = filteredTeams.length < 2 ? 2 : filteredTeams.length;
     final effectiveTeamCount = _teamCount.clamp(2, safeMax).toInt();
+    final leagues = _mode == TeamType.club
+        ? {for (final team in _teamsForMode) if (team.league != null) team.league!}.toList()
+        : <String>[];
+    final countries = _mode == TeamType.club
+        ? {for (final team in _teamsForMode) if (team.country != null) team.country!}.toList()
+        : <String>[];
+    leagues.sort();
+    countries.sort();
 
     return Scaffold(
       body: Container(
@@ -144,6 +192,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     selected: _mode == TeamType.club,
                                     onSelected: (_) => setState(() {
                                       _mode = TeamType.club;
+                                      _resetFilters();
                                     }),
                                   ),
                                   ChoiceChip(
@@ -151,12 +200,57 @@ class _HomeScreenState extends State<HomeScreen> {
                                     selected: _mode == TeamType.nation,
                                     onSelected: (_) => setState(() {
                                       _mode = TeamType.nation;
+                                      _resetFilters();
                                     }),
                                   ),
                                 ],
                               ),
+                              if (_mode == TeamType.club) ...[
+                                const SizedBox(height: 12),
+                                Wrap(
+                                  spacing: 10,
+                                  runSpacing: 10,
+                                  children: [
+                                    DropdownButton<String>(
+                                      value: _league,
+                                      items: [_noLeagueFilter, ...leagues]
+                                          .map((value) => DropdownMenuItem(value: value, child: Text(value)))
+                                          .toList(),
+                                      onChanged: (value) => setState(() {
+                                        _league = value ?? _noLeagueFilter;
+                                      }),
+                                    ),
+                                    DropdownButton<String>(
+                                      value: _country,
+                                      items: [_noCountryFilter, ...countries]
+                                          .map((value) => DropdownMenuItem(value: value, child: Text(value)))
+                                          .toList(),
+                                      onChanged: (value) => setState(() {
+                                        _country = value ?? _noCountryFilter;
+                                      }),
+                                    ),
+                                  ],
+                                ),
+                              ],
                               const SizedBox(height: 12),
-                              Text('Teamanzahl: $effectiveTeamCount'),
+                              Text(
+                                'Rating: ${ratingRange.start.round()} - ${ratingRange.end.round()}',
+                              ),
+                              RangeSlider(
+                                values: ratingRange,
+                                min: bounds.min.toDouble(),
+                                max: bounds.max.toDouble(),
+                                divisions: (bounds.max - bounds.min) > 0 ? bounds.max - bounds.min : null,
+                                labels: RangeLabels(
+                                  ratingRange.start.round().toString(),
+                                  ratingRange.end.round().toString(),
+                                ),
+                                onChanged: (value) => setState(() {
+                                  _ratingRange = value;
+                                }),
+                              ),
+                              const SizedBox(height: 12),
+                              Text('Teamanzahl: $effectiveTeamCount von ${filteredTeams.length} verfuegbar'),
                               Slider(
                                 value: effectiveTeamCount.toDouble(),
                                 min: 2,
@@ -174,9 +268,22 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                         const SizedBox(height: 20),
                         FilledButton.icon(
-                          onPressed: () => widget.onNewCampaign(
-                            CampaignSetup(mode: _mode, teamCount: effectiveTeamCount),
-                          ),
+                          onPressed: filteredTeams.length < 2
+                              ? null
+                              : () => widget.onNewCampaign(
+                                    CampaignSetup(
+                                      mode: _mode,
+                                      teamCount: effectiveTeamCount,
+                                      league: _mode == TeamType.club && _league != _noLeagueFilter
+                                          ? _league
+                                          : null,
+                                      country: _mode == TeamType.club && _country != _noCountryFilter
+                                          ? _country
+                                          : null,
+                                      minRating: ratingRange.start.round(),
+                                      maxRating: ratingRange.end.round(),
+                                    ),
+                                  ),
                           icon: const Icon(Icons.auto_awesome),
                           label: const Text('Neue Kampagne'),
                         ),

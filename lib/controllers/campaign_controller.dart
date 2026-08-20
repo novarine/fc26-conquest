@@ -11,6 +11,7 @@ import '../services/app_logger.dart';
 import '../services/conquest_service.dart';
 import '../services/seed_data_service.dart';
 import '../services/storage_service.dart';
+import '../utils/team_filter.dart';
 
 enum AppPage { home, map, battle, stats }
 
@@ -102,7 +103,13 @@ class CampaignController extends ChangeNotifier {
     );
     _setLoading(true);
     try {
-      final availableTeams = teamsForMode(setup.mode);
+      final availableTeams = filterTeams(
+        teamsForMode(setup.mode),
+        league: setup.league,
+        country: setup.country,
+        minRating: setup.minRating,
+        maxRating: setup.maxRating,
+      );
       if (availableTeams.length < 2) {
         throw StateError('Nicht genug Teams fuer den gewaehlten Modus vorhanden.');
       }

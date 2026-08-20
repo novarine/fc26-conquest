@@ -236,6 +236,7 @@ class _Fc26ConquestAppState extends State<Fc26ConquestApp> {
           hasCampaign: _controller.hasCampaign,
           availableClubTeams: clubCount,
           availableNationTeams: nationCount,
+          teams: _controller.teams,
           onNewCampaign: (CampaignSetup setup) => _controller.startNewCampaign(
             setup: setup,
           ),
