@@ -23,6 +23,7 @@
 - Der Rating-Bereich funktioniert in beiden Modi (Club und Nation).
 - "Neue Kampagne" ist deaktiviert, wenn der gefilterte Team-Pool weniger als 2 Teams enthaelt.
 - Reine Filterlogik: [../lib/utils/team_filter.dart](../lib/utils/team_filter.dart)
+- Abgedeckte Ligen/Laender (Stand zuletzt erweitert): Premier League, Bundesliga, LaLiga, Serie A, Ligue 1, Eredivisie, Primeira Liga, Super Lig, Serie A Brazil, Primera Division, Austrian Bundesliga, Belgian Pro League, Swiss Super League, Scottish Premiership, Saudi Pro League, MLS.
 
 ## Zufallsrad-Werkzeug
 

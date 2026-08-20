@@ -330,6 +330,116 @@
         "logo":  "assets/logos/river-plate.png"
     },
     {
+        "id":  31,
+        "type":  "club",
+        "rating":  78,
+        "league":  "Austrian Bundesliga",
+        "name":  "Red Bull Salzburg",
+        "primaryColor":  "#ED1C24",
+        "secondaryColor":  "#FFFFFF",
+        "country":  "Austria",
+        "logo":  "assets/logos/red-bull-salzburg.png"
+    },
+    {
+        "id":  32,
+        "type":  "club",
+        "rating":  74,
+        "league":  "Austrian Bundesliga",
+        "name":  "Rapid Wien",
+        "primaryColor":  "#006633",
+        "secondaryColor":  "#FFFFFF",
+        "country":  "Austria",
+        "logo":  "assets/logos/rapid-wien.png"
+    },
+    {
+        "id":  33,
+        "type":  "club",
+        "rating":  72,
+        "league":  "Austrian Bundesliga",
+        "name":  "LASK",
+        "primaryColor":  "#000000",
+        "secondaryColor":  "#C9A227",
+        "country":  "Austria",
+        "logo":  "assets/logos/lask.png"
+    },
+    {
+        "id":  35,
+        "type":  "club",
+        "rating":  78,
+        "league":  "Belgian Pro League",
+        "name":  "Club Brugge",
+        "primaryColor":  "#0000FF",
+        "secondaryColor":  "#111111",
+        "country":  "Belgium",
+        "logo":  "assets/logos/club-brugge.png"
+    },
+    {
+        "id":  36,
+        "type":  "club",
+        "rating":  76,
+        "league":  "Swiss Super League",
+        "name":  "Young Boys",
+        "primaryColor":  "#FFE500",
+        "secondaryColor":  "#000000",
+        "country":  "Switzerland",
+        "logo":  "assets/logos/young-boys.svg"
+    },
+    {
+        "id":  37,
+        "type":  "club",
+        "rating":  75,
+        "league":  "Swiss Super League",
+        "name":  "Basel",
+        "primaryColor":  "#ED1C24",
+        "secondaryColor":  "#001489",
+        "country":  "Switzerland",
+        "logo":  "assets/logos/basel.png"
+    },
+    {
+        "id":  38,
+        "type":  "club",
+        "rating":  79,
+        "league":  "Scottish Premiership",
+        "name":  "Celtic",
+        "primaryColor":  "#018749",
+        "secondaryColor":  "#FFFFFF",
+        "country":  "Scotland",
+        "logo":  "assets/logos/celtic.png"
+    },
+    {
+        "id":  39,
+        "type":  "club",
+        "rating":  78,
+        "league":  "Scottish Premiership",
+        "name":  "Rangers",
+        "primaryColor":  "#1D4289",
+        "secondaryColor":  "#FFFFFF",
+        "country":  "Scotland",
+        "logo":  "assets/logos/rangers.png"
+    },
+    {
+        "id":  41,
+        "type":  "club",
+        "rating":  79,
+        "league":  "Saudi Pro League",
+        "name":  "Al Nassr",
+        "primaryColor":  "#FFD700",
+        "secondaryColor":  "#002B7F",
+        "country":  "Saudi Arabia",
+        "logo":  "assets/logos/al-nassr.png"
+    },
+    {
+        "id":  42,
+        "type":  "club",
+        "rating":  76,
+        "league":  "MLS",
+        "name":  "Inter Miami",
+        "primaryColor":  "#F7B5CD",
+        "secondaryColor":  "#231F20",
+        "country":  "United States",
+        "logo":  "assets/logos/inter-miami.png"
+    },
+    {
         "id":  101,
         "name":  "Germany",
         "type":  "nation",
@@ -658,5 +768,27 @@
         "secondaryColor":  "#D52B1E",
         "league":  "National Team",
         "country":  "Chile"
+    },
+    {
+        "id":  131,
+        "name":  "Scotland",
+        "type":  "nation",
+        "rating":  78,
+        "logo":  "https://flagcdn.com/w160/gb-sct.png",
+        "primaryColor":  "#005EB8",
+        "secondaryColor":  "#FFFFFF",
+        "league":  "National Team",
+        "country":  "Scotland"
+    },
+    {
+        "id":  132,
+        "name":  "Saudi Arabia",
+        "type":  "nation",
+        "rating":  76,
+        "logo":  "https://flagcdn.com/w160/sa.png",
+        "primaryColor":  "#006C35",
+        "secondaryColor":  "#FFFFFF",
+        "league":  "National Team",
+        "country":  "Saudi Arabia"
     }
 ]

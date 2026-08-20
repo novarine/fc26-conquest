@@ -59,22 +59,22 @@ void main() {
       }
     });
 
-    test('club mode supports all 30 club teams in a campaign', () async {
+    test('club mode supports all 40 club teams in a campaign', () async {
       final teams = await const SeedDataService().loadTeams();
       final clubs = teams.where((team) => team.type == TeamType.club).toList();
 
-      expect(clubs.length, 30,
-          reason: 'The club seed must contain all 30 clubs for 30-team campaign mode.');
+      expect(clubs.length, 40,
+          reason: 'The club seed must contain all 40 clubs for the full-size campaign mode.');
       expect(clubs.every((team) => Team.isValidLogo(team.logo)), isTrue,
-          reason: 'Every club logo must be valid when selecting the full 30-club set.');
+          reason: 'Every club logo must be valid when selecting the full 40-club set.');
     });
 
     test('every club logo is a bundled local asset, never a live remote URL', () async {
       final teams = await const SeedDataService().loadTeams();
       final clubs = teams.where((team) => team.type == TeamType.club).toList();
 
-      expect(clubs.length, 30,
-          reason: 'Expected all 30 clubs to be present in the seed data.');
+      expect(clubs.length, 40,
+          reason: 'Expected all 40 clubs to be present in the seed data.');
 
       for (final team in clubs) {
         expect(

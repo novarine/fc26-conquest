@@ -32,13 +32,24 @@ $logos = @(
   @{ id=27; slug='flamengo';           url='https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/Clube_de_Regatas_do_Flamengo_logo.svg/500px-Clube_de_Regatas_do_Flamengo_logo.svg.png' },
   @{ id=28; slug='palmeiras';          url='https://upload.wikimedia.org/wikipedia/commons/6/60/SE_Palmeiras_2025_crest.png' },
   @{ id=29; slug='boca-juniors';       url='https://upload.wikimedia.org/wikipedia/commons/thumb/e/e3/Boca_Juniors_logo18.svg/1280px-Boca_Juniors_logo18.svg.png' },
-  @{ id=30; slug='river-plate';        url='https://upload.wikimedia.org/wikipedia/commons/thumb/4/43/Club_Atl%C3%A9tico_River_Plate_logo.svg/1280px-Club_Atl%C3%A9tico_River_Plate_logo.svg.png' }
+  @{ id=30; slug='river-plate';        url='https://upload.wikimedia.org/wikipedia/commons/thumb/4/43/Club_Atl%C3%A9tico_River_Plate_logo.svg/1280px-Club_Atl%C3%A9tico_River_Plate_logo.svg.png' },
+  @{ id=31; slug='red-bull-salzburg';  url='https://upload.wikimedia.org/wikipedia/en/thumb/7/77/FC_Red_Bull_Salzburg_logo.svg/960px-FC_Red_Bull_Salzburg_logo.svg.png' },
+  @{ id=32; slug='rapid-wien';         url='https://upload.wikimedia.org/wikipedia/commons/thumb/b/bf/SK_Rapid_Wien_Logo.svg/960px-SK_Rapid_Wien_Logo.svg.png' },
+  @{ id=33; slug='lask';               url='https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/LASK-Logo_2023.svg/960px-LASK-Logo_2023.svg.png' },
+  @{ id=35; slug='club-brugge';        url='https://upload.wikimedia.org/wikipedia/commons/9/97/Club_brugge.png' },
+  @{ id=36; slug='young-boys';         url='https://upload.wikimedia.org/wikipedia/commons/c/c2/BSC_Young_Boys.svg'; ext='svg' },
+  @{ id=37; slug='basel';              url='https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/FC_Basel_crest.svg/960px-FC_Basel_crest.svg.png' },
+  @{ id=38; slug='celtic';             url='https://upload.wikimedia.org/wikipedia/en/thumb/7/71/Celtic_FC_crest.svg/960px-Celtic_FC_crest.svg.png' },
+  @{ id=39; slug='rangers';            url='https://upload.wikimedia.org/wikipedia/en/thumb/4/43/Rangers_FC.svg/960px-Rangers_FC.svg.png' },
+  @{ id=41; slug='al-nassr';           url='https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Nassr_FC_Logo.svg/960px-Nassr_FC_Logo.svg.png' },
+  @{ id=42; slug='inter-miami';        url='https://upload.wikimedia.org/wikipedia/en/thumb/5/5c/Inter_Miami_CF_logo.svg/960px-Inter_Miami_CF_logo.svg.png' }
 )
 
 $results = New-Object System.Collections.Generic.List[object]
 
 foreach ($logo in $logos) {
-  $dest = "assets/logos/$($logo.slug).png"
+  $extension = if ($logo.ContainsKey('ext')) { $logo.ext } else { 'png' }
+  $dest = "assets/logos/$($logo.slug).$extension"
   $ok = $false
   $lastError = ''
   for ($attempt = 1; $attempt -le 4; $attempt++) {
