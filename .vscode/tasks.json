@@ -1,0 +1,66 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Flutter: Analyze (flutter-clean)",
+			"type": "shell",
+			"command": "C:\\Users\\marti\\flutter-clean\\bin\\flutter.bat",
+			"args": [
+				"analyze"
+			],
+			"problemMatcher": [
+				"$dart-analyze"
+			],
+			"group": "test"
+		},
+		{
+			"label": "Flutter: Test (flutter-clean)",
+			"type": "shell",
+			"command": "C:\\Users\\marti\\flutter-clean\\bin\\flutter.bat",
+			"args": [
+				"test"
+			],
+			"problemMatcher": [],
+			"group": "test"
+		},
+		{
+			"label": "Flutter: Run Chrome (flutter-clean)",
+			"type": "shell",
+			"command": "C:\\Users\\marti\\flutter-clean\\bin\\flutter.bat",
+			"args": [
+				"run",
+				"-d",
+				"chrome"
+			],
+			"problemMatcher": [],
+			"isBackground": true,
+			"group": "build"
+		},
+		{
+			"label": "Verify Analyze Explicit SDK",
+			"type": "shell",
+			"command": "C:\\Users\\marti\\flutter-clean\\bin\\flutter.bat",
+			"args": [
+				"analyze"
+			],
+			"problemMatcher": [
+				"$dart-analyze"
+			],
+			"group": "test"
+		},
+		{
+			"label": "Flutter: Verify + Run Chrome (flutter-clean)",
+			"dependsOrder": "sequence",
+			"dependsOn": [
+				"Flutter: Analyze (flutter-clean)",
+				"Flutter: Test (flutter-clean)",
+				"Flutter: Run Chrome (flutter-clean)"
+			],
+			"problemMatcher": [],
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			}
+		}
+	]
+}

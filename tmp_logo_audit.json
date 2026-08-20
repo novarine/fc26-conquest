@@ -1,0 +1,482 @@
+﻿[
+    {
+        "id":  1,
+        "name":  "Liverpool",
+        "status":  404,
+        "final":  "https://commons.wikimedia.org/wiki/Special:Redirect/file/Liverpool_FC.svg",
+        "contentType":  "",
+        "logo":  "https://commons.wikimedia.org/wiki/Special:FilePath/Liverpool_FC.svg"
+    },
+    {
+        "id":  2,
+        "name":  "Bayern Munich",
+        "status":  200,
+        "final":  "https://upload.wikimedia.org/wikipedia/commons/8/8d/FC_Bayern_M%C3%BCnchen_logo_%282024%29.svg",
+        "contentType":  "image/svg+xml",
+        "logo":  "https://commons.wikimedia.org/wiki/Special:FilePath/FC_Bayern_M%C3%BCnchen_logo_(2024).svg"
+    },
+    {
+        "id":  3,
+        "name":  "Real Madrid",
+        "status":  404,
+        "final":  "https://commons.wikimedia.org/wiki/Special:Redirect/file/Real_Madrid_CF.svg",
+        "contentType":  "",
+        "logo":  "https://commons.wikimedia.org/wiki/Special:FilePath/Real_Madrid_CF.svg"
+    },
+    {
+        "id":  4,
+        "name":  "Chelsea",
+        "status":  404,
+        "final":  "https://commons.wikimedia.org/wiki/Special:Redirect/file/Chelsea_FC.svg",
+        "contentType":  "",
+        "logo":  "https://commons.wikimedia.org/wiki/Special:FilePath/Chelsea_FC.svg"
+    },
+    {
+        "id":  5,
+        "name":  "Inter",
+        "status":  200,
+        "final":  "https://upload.wikimedia.org/wikipedia/commons/0/05/FC_Internazionale_Milano_2021.svg",
+        "contentType":  "image/svg+xml",
+        "logo":  "https://commons.wikimedia.org/wiki/Special:FilePath/FC_Internazionale_Milano_2021.svg"
+    },
+    {
+        "id":  6,
+        "name":  "Ajax",
+        "status":  404,
+        "final":  "https://commons.wikimedia.org/wiki/Special:Redirect/file/Ajax_Amsterdam.svg",
+        "contentType":  "",
+        "logo":  "https://commons.wikimedia.org/wiki/Special:FilePath/Ajax_Amsterdam.svg"
+    },
+    {
+        "id":  7,
+        "name":  "Borussia Dortmund",
+        "status":  200,
+        "final":  "https://upload.wikimedia.org/wikipedia/commons/6/67/Borussia_Dortmund_logo.svg",
+        "contentType":  "image/svg+xml",
+        "logo":  "https://commons.wikimedia.org/wiki/Special:FilePath/Borussia_Dortmund_logo.svg"
+    },
+    {
+        "id":  8,
+        "name":  "Arsenal",
+        "status":  404,
+        "final":  "https://commons.wikimedia.org/wiki/Special:Redirect/file/Arsenal_FC.svg",
+        "contentType":  "",
+        "logo":  "https://commons.wikimedia.org/wiki/Special:FilePath/Arsenal_FC.svg"
+    },
+    {
+        "id":  9,
+        "name":  "Manchester City",
+        "status":  404,
+        "final":  "https://commons.wikimedia.org/wiki/Special:Redirect/file/Manchester_City_FC_badge.svg",
+        "contentType":  "",
+        "logo":  "https://commons.wikimedia.org/wiki/Special:FilePath/Manchester_City_FC_badge.svg"
+    },
+    {
+        "id":  10,
+        "name":  "Manchester United",
+        "status":  404,
+        "final":  "https://commons.wikimedia.org/wiki/Special:Redirect/file/Manchester_United_FC_crest.svg",
+        "contentType":  "",
+        "logo":  "https://commons.wikimedia.org/wiki/Special:FilePath/Manchester_United_FC_crest.svg"
+    },
+    {
+        "id":  11,
+        "name":  "Barcelona",
+        "status":  404,
+        "final":  "https://commons.wikimedia.org/wiki/Special:Redirect/file/FC_Barcelona_(crest).svg",
+        "contentType":  "",
+        "logo":  "https://commons.wikimedia.org/wiki/Special:FilePath/FC_Barcelona_(crest).svg"
+    },
+    {
+        "id":  12,
+        "name":  "Atletico Madrid",
+        "status":  404,
+        "final":  "https://commons.wikimedia.org/wiki/Special:Redirect/file/Atletico_Madrid_2017_logo.svg",
+        "contentType":  "",
+        "logo":  "https://commons.wikimedia.org/wiki/Special:FilePath/Atletico_Madrid_2017_logo.svg"
+    },
+    {
+        "id":  13,
+        "name":  "Juventus",
+        "status":  200,
+        "final":  "https://upload.wikimedia.org/wikipedia/commons/4/4e/Juventus_FC_-_logo_black_%28Italy%2C_2017%29.svg",
+        "contentType":  "image/svg+xml",
+        "logo":  "https://commons.wikimedia.org/wiki/Special:FilePath/Juventus_FC_2017_logo.svg"
+    },
+    {
+        "id":  14,
+        "name":  "AC Milan",
+        "status":  200,
+        "final":  "https://upload.wikimedia.org/wikipedia/commons/d/d0/Logo_of_AC_Milan.svg",
+        "contentType":  "image/svg+xml",
+        "logo":  "https://commons.wikimedia.org/wiki/Special:FilePath/Logo_of_AC_Milan.svg"
+    },
+    {
+        "id":  15,
+        "name":  "Napoli",
+        "status":  429,
+        "final":  "https://upload.wikimedia.org/wikipedia/commons/2/2d/SSC_Neapel.svg",
+        "contentType":  "",
+        "logo":  "https://commons.wikimedia.org/wiki/Special:FilePath/SSC_Neapel.svg"
+    },
+    {
+        "id":  16,
+        "name":  "Paris Saint-Germain",
+        "status":  404,
+        "final":  "https://commons.wikimedia.org/wiki/Special:Redirect/file/Paris_Saint-Germain_F.C.svg",
+        "contentType":  "",
+        "logo":  "https://commons.wikimedia.org/wiki/Special:FilePath/Paris_Saint-Germain_F.C.svg"
+    },
+    {
+        "id":  17,
+        "name":  "Marseille",
+        "status":  429,
+        "final":  "https://upload.wikimedia.org/wikipedia/commons/d/d8/Olympique_Marseille_logo.svg",
+        "contentType":  "",
+        "logo":  "https://commons.wikimedia.org/wiki/Special:FilePath/Olympique_Marseille_logo.svg"
+    },
+    {
+        "id":  18,
+        "name":  "RB Leipzig",
+        "status":  404,
+        "final":  "https://commons.wikimedia.org/wiki/Special:Redirect/file/RB_Leipzig_2014_logo.svg",
+        "contentType":  "",
+        "logo":  "https://commons.wikimedia.org/wiki/Special:FilePath/RB_Leipzig_2014_logo.svg"
+    },
+    {
+        "id":  19,
+        "name":  "Bayer Leverkusen",
+        "status":  404,
+        "final":  "https://commons.wikimedia.org/wiki/Special:Redirect/file/Bayer_04_Leverkusen_logo.svg",
+        "contentType":  "",
+        "logo":  "https://commons.wikimedia.org/wiki/Special:FilePath/Bayer_04_Leverkusen_logo.svg"
+    },
+    {
+        "id":  20,
+        "name":  "Benfica",
+        "status":  404,
+        "final":  "https://commons.wikimedia.org/wiki/Special:Redirect/file/SL_Benfica_logo.svg",
+        "contentType":  "",
+        "logo":  "https://commons.wikimedia.org/wiki/Special:FilePath/SL_Benfica_logo.svg"
+    },
+    {
+        "id":  21,
+        "name":  "Porto",
+        "status":  404,
+        "final":  "https://commons.wikimedia.org/wiki/Special:Redirect/file/FC_Porto.svg",
+        "contentType":  "",
+        "logo":  "https://commons.wikimedia.org/wiki/Special:FilePath/FC_Porto.svg"
+    },
+    {
+        "id":  22,
+        "name":  "Sporting CP",
+        "status":  404,
+        "final":  "https://commons.wikimedia.org/wiki/Special:Redirect/file/Sporting_Clube_de_Portugal_(Logo).svg",
+        "contentType":  "",
+        "logo":  "https://commons.wikimedia.org/wiki/Special:FilePath/Sporting_Clube_de_Portugal_(Logo).svg"
+    },
+    {
+        "id":  23,
+        "name":  "Feyenoord",
+        "status":  404,
+        "final":  "https://commons.wikimedia.org/wiki/Special:Redirect/file/Feyenoord_logo.svg",
+        "contentType":  "",
+        "logo":  "https://commons.wikimedia.org/wiki/Special:FilePath/Feyenoord_logo.svg"
+    },
+    {
+        "id":  24,
+        "name":  "PSV",
+        "status":  404,
+        "final":  "https://commons.wikimedia.org/wiki/Special:Redirect/file/PSV_Eindhoven.svg",
+        "contentType":  "",
+        "logo":  "https://commons.wikimedia.org/wiki/Special:FilePath/PSV_Eindhoven.svg"
+    },
+    {
+        "id":  25,
+        "name":  "Galatasaray",
+        "status":  200,
+        "final":  "https://upload.wikimedia.org/wikipedia/commons/f/f6/Galatasaray_Sports_Club_Logo.png",
+        "contentType":  "image/png",
+        "logo":  "https://commons.wikimedia.org/wiki/Special:FilePath/Galatasaray_Sports_Club_Logo.png"
+    },
+    {
+        "id":  26,
+        "name":  "Fenerbahce",
+        "status":  404,
+        "final":  "https://commons.wikimedia.org/wiki/Special:Redirect/file/Fenerbahce_SK.svg",
+        "contentType":  "",
+        "logo":  "https://commons.wikimedia.org/wiki/Special:FilePath/Fenerbahce_SK.svg"
+    },
+    {
+        "id":  27,
+        "name":  "Flamengo",
+        "status":  404,
+        "final":  "https://commons.wikimedia.org/wiki/Special:Redirect/file/CR_Flamengo_logo.svg",
+        "contentType":  "",
+        "logo":  "https://commons.wikimedia.org/wiki/Special:FilePath/CR_Flamengo_logo.svg"
+    },
+    {
+        "id":  28,
+        "name":  "Palmeiras",
+        "status":  429,
+        "final":  "https://upload.wikimedia.org/wikipedia/commons/1/10/Palmeiras_logo.svg",
+        "contentType":  "",
+        "logo":  "https://commons.wikimedia.org/wiki/Special:FilePath/Palmeiras_logo.svg"
+    },
+    {
+        "id":  29,
+        "name":  "Boca Juniors",
+        "status":  404,
+        "final":  "https://commons.wikimedia.org/wiki/Special:Redirect/file/Logo_del_Club_Atletico_Boca_Juniors.svg",
+        "contentType":  "",
+        "logo":  "https://commons.wikimedia.org/wiki/Special:FilePath/Logo_del_Club_Atletico_Boca_Juniors.svg"
+    },
+    {
+        "id":  30,
+        "name":  "River Plate",
+        "status":  404,
+        "final":  "https://commons.wikimedia.org/wiki/Special:Redirect/file/Logo_River_Plate.svg",
+        "contentType":  "",
+        "logo":  "https://commons.wikimedia.org/wiki/Special:FilePath/Logo_River_Plate.svg"
+    },
+    {
+        "id":  101,
+        "name":  "Germany",
+        "status":  200,
+        "final":  "https://flagcdn.com/w160/de.png",
+        "contentType":  "image/png",
+        "logo":  "https://flagcdn.com/w160/de.png"
+    },
+    {
+        "id":  102,
+        "name":  "Brazil",
+        "status":  200,
+        "final":  "https://flagcdn.com/w160/br.png",
+        "contentType":  "image/png",
+        "logo":  "https://flagcdn.com/w160/br.png"
+    },
+    {
+        "id":  103,
+        "name":  "Argentina",
+        "status":  200,
+        "final":  "https://flagcdn.com/w160/ar.png",
+        "contentType":  "image/png",
+        "logo":  "https://flagcdn.com/w160/ar.png"
+    },
+    {
+        "id":  104,
+        "name":  "France",
+        "status":  200,
+        "final":  "https://flagcdn.com/w160/fr.png",
+        "contentType":  "image/png",
+        "logo":  "https://flagcdn.com/w160/fr.png"
+    },
+    {
+        "id":  105,
+        "name":  "Spain",
+        "status":  200,
+        "final":  "https://flagcdn.com/w160/es.png",
+        "contentType":  "image/png",
+        "logo":  "https://flagcdn.com/w160/es.png"
+    },
+    {
+        "id":  106,
+        "name":  "Portugal",
+        "status":  200,
+        "final":  "https://flagcdn.com/w160/pt.png",
+        "contentType":  "image/png",
+        "logo":  "https://flagcdn.com/w160/pt.png"
+    },
+    {
+        "id":  107,
+        "name":  "Netherlands",
+        "status":  200,
+        "final":  "https://flagcdn.com/w160/nl.png",
+        "contentType":  "image/png",
+        "logo":  "https://flagcdn.com/w160/nl.png"
+    },
+    {
+        "id":  108,
+        "name":  "England",
+        "status":  200,
+        "final":  "https://flagcdn.com/w160/gb-eng.png",
+        "contentType":  "image/png",
+        "logo":  "https://flagcdn.com/w160/gb-eng.png"
+    },
+    {
+        "id":  109,
+        "name":  "Italy",
+        "status":  200,
+        "final":  "https://flagcdn.com/w160/it.png",
+        "contentType":  "image/png",
+        "logo":  "https://flagcdn.com/w160/it.png"
+    },
+    {
+        "id":  110,
+        "name":  "Belgium",
+        "status":  200,
+        "final":  "https://flagcdn.com/w160/be.png",
+        "contentType":  "image/png",
+        "logo":  "https://flagcdn.com/w160/be.png"
+    },
+    {
+        "id":  111,
+        "name":  "Croatia",
+        "status":  200,
+        "final":  "https://flagcdn.com/w160/hr.png",
+        "contentType":  "image/png",
+        "logo":  "https://flagcdn.com/w160/hr.png"
+    },
+    {
+        "id":  112,
+        "name":  "Uruguay",
+        "status":  200,
+        "final":  "https://flagcdn.com/w160/uy.png",
+        "contentType":  "image/png",
+        "logo":  "https://flagcdn.com/w160/uy.png"
+    },
+    {
+        "id":  113,
+        "name":  "USA",
+        "status":  200,
+        "final":  "https://flagcdn.com/w160/us.png",
+        "contentType":  "image/png",
+        "logo":  "https://flagcdn.com/w160/us.png"
+    },
+    {
+        "id":  114,
+        "name":  "Mexico",
+        "status":  200,
+        "final":  "https://flagcdn.com/w160/mx.png",
+        "contentType":  "image/png",
+        "logo":  "https://flagcdn.com/w160/mx.png"
+    },
+    {
+        "id":  115,
+        "name":  "Japan",
+        "status":  200,
+        "final":  "https://flagcdn.com/w160/jp.png",
+        "contentType":  "image/png",
+        "logo":  "https://flagcdn.com/w160/jp.png"
+    },
+    {
+        "id":  116,
+        "name":  "South Korea",
+        "status":  200,
+        "final":  "https://flagcdn.com/w160/kr.png",
+        "contentType":  "image/png",
+        "logo":  "https://flagcdn.com/w160/kr.png"
+    },
+    {
+        "id":  117,
+        "name":  "Morocco",
+        "status":  200,
+        "final":  "https://flagcdn.com/w160/ma.png",
+        "contentType":  "image/png",
+        "logo":  "https://flagcdn.com/w160/ma.png"
+    },
+    {
+        "id":  118,
+        "name":  "Nigeria",
+        "status":  200,
+        "final":  "https://flagcdn.com/w160/ng.png",
+        "contentType":  "image/png",
+        "logo":  "https://flagcdn.com/w160/ng.png"
+    },
+    {
+        "id":  119,
+        "name":  "Senegal",
+        "status":  200,
+        "final":  "https://flagcdn.com/w160/sn.png",
+        "contentType":  "image/png",
+        "logo":  "https://flagcdn.com/w160/sn.png"
+    },
+    {
+        "id":  120,
+        "name":  "Norway",
+        "status":  200,
+        "final":  "https://flagcdn.com/w160/no.png",
+        "contentType":  "image/png",
+        "logo":  "https://flagcdn.com/w160/no.png"
+    },
+    {
+        "id":  121,
+        "name":  "Sweden",
+        "status":  200,
+        "final":  "https://flagcdn.com/w160/se.png",
+        "contentType":  "image/png",
+        "logo":  "https://flagcdn.com/w160/se.png"
+    },
+    {
+        "id":  122,
+        "name":  "Denmark",
+        "status":  200,
+        "final":  "https://flagcdn.com/w160/dk.png",
+        "contentType":  "image/png",
+        "logo":  "https://flagcdn.com/w160/dk.png"
+    },
+    {
+        "id":  123,
+        "name":  "Switzerland",
+        "status":  200,
+        "final":  "https://flagcdn.com/w160/ch.png",
+        "contentType":  "image/png",
+        "logo":  "https://flagcdn.com/w160/ch.png"
+    },
+    {
+        "id":  124,
+        "name":  "Austria",
+        "status":  200,
+        "final":  "https://flagcdn.com/w160/at.png",
+        "contentType":  "image/png",
+        "logo":  "https://flagcdn.com/w160/at.png"
+    },
+    {
+        "id":  125,
+        "name":  "Poland",
+        "status":  200,
+        "final":  "https://flagcdn.com/w160/pl.png",
+        "contentType":  "image/png",
+        "logo":  "https://flagcdn.com/w160/pl.png"
+    },
+    {
+        "id":  126,
+        "name":  "Czechia",
+        "status":  200,
+        "final":  "https://flagcdn.com/w160/cz.png",
+        "contentType":  "image/png",
+        "logo":  "https://flagcdn.com/w160/cz.png"
+    },
+    {
+        "id":  127,
+        "name":  "Turkey",
+        "status":  200,
+        "final":  "https://flagcdn.com/w160/tr.png",
+        "contentType":  "image/png",
+        "logo":  "https://flagcdn.com/w160/tr.png"
+    },
+    {
+        "id":  128,
+        "name":  "Canada",
+        "status":  200,
+        "final":  "https://flagcdn.com/w160/ca.png",
+        "contentType":  "image/png",
+        "logo":  "https://flagcdn.com/w160/ca.png"
+    },
+    {
+        "id":  129,
+        "name":  "Colombia",
+        "status":  200,
+        "final":  "https://flagcdn.com/w160/co.png",
+        "contentType":  "image/png",
+        "logo":  "https://flagcdn.com/w160/co.png"
+    },
+    {
+        "id":  130,
+        "name":  "Chile",
+        "status":  200,
+        "final":  "https://flagcdn.com/w160/cl.png",
+        "contentType":  "image/png",
+        "logo":  "https://flagcdn.com/w160/cl.png"
+    }
+]

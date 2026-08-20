@@ -1,0 +1,310 @@
+﻿[
+    {
+        "id":  1,
+        "label":  "Region 1",
+        "ownerId":  101,
+        "neighbors":  [
+                          2,
+                          7
+                      ]
+    },
+    {
+        "id":  2,
+        "label":  "Region 2",
+        "ownerId":  102,
+        "neighbors":  [
+                          1,
+                          3,
+                          8
+                      ]
+    },
+    {
+        "id":  3,
+        "label":  "Region 3",
+        "ownerId":  103,
+        "neighbors":  [
+                          2,
+                          4,
+                          9
+                      ]
+    },
+    {
+        "id":  4,
+        "label":  "Region 4",
+        "ownerId":  104,
+        "neighbors":  [
+                          3,
+                          5,
+                          10
+                      ]
+    },
+    {
+        "id":  5,
+        "label":  "Region 5",
+        "ownerId":  105,
+        "neighbors":  [
+                          4,
+                          6,
+                          11
+                      ]
+    },
+    {
+        "id":  6,
+        "label":  "Region 6",
+        "ownerId":  106,
+        "neighbors":  [
+                          5,
+                          12
+                      ]
+    },
+    {
+        "id":  7,
+        "label":  "Region 7",
+        "ownerId":  107,
+        "neighbors":  [
+                          8,
+                          1,
+                          13
+                      ]
+    },
+    {
+        "id":  8,
+        "label":  "Region 8",
+        "ownerId":  108,
+        "neighbors":  [
+                          7,
+                          9,
+                          2,
+                          14
+                      ]
+    },
+    {
+        "id":  9,
+        "label":  "Region 9",
+        "ownerId":  109,
+        "neighbors":  [
+                          8,
+                          10,
+                          3,
+                          15
+                      ]
+    },
+    {
+        "id":  10,
+        "label":  "Region 10",
+        "ownerId":  110,
+        "neighbors":  [
+                          9,
+                          11,
+                          4,
+                          16
+                      ]
+    },
+    {
+        "id":  11,
+        "label":  "Region 11",
+        "ownerId":  111,
+        "neighbors":  [
+                          10,
+                          12,
+                          5,
+                          17
+                      ]
+    },
+    {
+        "id":  12,
+        "label":  "Region 12",
+        "ownerId":  112,
+        "neighbors":  [
+                          11,
+                          6,
+                          18
+                      ]
+    },
+    {
+        "id":  13,
+        "label":  "Region 13",
+        "ownerId":  113,
+        "neighbors":  [
+                          14,
+                          7,
+                          19
+                      ]
+    },
+    {
+        "id":  14,
+        "label":  "Region 14",
+        "ownerId":  114,
+        "neighbors":  [
+                          13,
+                          15,
+                          8,
+                          20
+                      ]
+    },
+    {
+        "id":  15,
+        "label":  "Region 15",
+        "ownerId":  115,
+        "neighbors":  [
+                          14,
+                          16,
+                          9,
+                          21
+                      ]
+    },
+    {
+        "id":  16,
+        "label":  "Region 16",
+        "ownerId":  116,
+        "neighbors":  [
+                          15,
+                          17,
+                          10,
+                          22
+                      ]
+    },
+    {
+        "id":  17,
+        "label":  "Region 17",
+        "ownerId":  117,
+        "neighbors":  [
+                          16,
+                          18,
+                          11,
+                          23
+                      ]
+    },
+    {
+        "id":  18,
+        "label":  "Region 18",
+        "ownerId":  118,
+        "neighbors":  [
+                          17,
+                          12,
+                          24
+                      ]
+    },
+    {
+        "id":  19,
+        "label":  "Region 19",
+        "ownerId":  119,
+        "neighbors":  [
+                          20,
+                          13,
+                          25
+                      ]
+    },
+    {
+        "id":  20,
+        "label":  "Region 20",
+        "ownerId":  120,
+        "neighbors":  [
+                          19,
+                          21,
+                          14,
+                          26
+                      ]
+    },
+    {
+        "id":  21,
+        "label":  "Region 21",
+        "ownerId":  121,
+        "neighbors":  [
+                          20,
+                          22,
+                          15,
+                          27
+                      ]
+    },
+    {
+        "id":  22,
+        "label":  "Region 22",
+        "ownerId":  122,
+        "neighbors":  [
+                          21,
+                          23,
+                          16,
+                          28
+                      ]
+    },
+    {
+        "id":  23,
+        "label":  "Region 23",
+        "ownerId":  123,
+        "neighbors":  [
+                          22,
+                          24,
+                          17,
+                          29
+                      ]
+    },
+    {
+        "id":  24,
+        "label":  "Region 24",
+        "ownerId":  124,
+        "neighbors":  [
+                          23,
+                          18,
+                          30
+                      ]
+    },
+    {
+        "id":  25,
+        "label":  "Region 25",
+        "ownerId":  125,
+        "neighbors":  [
+                          26,
+                          19
+                      ]
+    },
+    {
+        "id":  26,
+        "label":  "Region 26",
+        "ownerId":  126,
+        "neighbors":  [
+                          25,
+                          27,
+                          20
+                      ]
+    },
+    {
+        "id":  27,
+        "label":  "Region 27",
+        "ownerId":  127,
+        "neighbors":  [
+                          26,
+                          28,
+                          21
+                      ]
+    },
+    {
+        "id":  28,
+        "label":  "Region 28",
+        "ownerId":  128,
+        "neighbors":  [
+                          27,
+                          29,
+                          22
+                      ]
+    },
+    {
+        "id":  29,
+        "label":  "Region 29",
+        "ownerId":  129,
+        "neighbors":  [
+                          28,
+                          30,
+                          23
+                      ]
+    },
+    {
+        "id":  30,
+        "label":  "Region 30",
+        "ownerId":  130,
+        "neighbors":  [
+                          29,
+                          24
+                      ]
+    }
+]

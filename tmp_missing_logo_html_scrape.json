@@ -1,0 +1,22 @@
+﻿[
+    {
+        "page":  "https://en.wikipedia.org/wiki/Fenerbah%C3%A7e_S.K._(football)",
+        "status":  200,
+        "image":  "https://upload.wikimedia.org/wikipedia/en/thumb/3/39/Fenerbah%C3%A7e.svg/1280px-Fenerbah%C3%A7e.svg.png"
+    },
+    {
+        "page":  "https://en.wikipedia.org/wiki/SE_Palmeiras",
+        "status":  200,
+        "image":  "https://upload.wikimedia.org/wikipedia/commons/6/60/SE_Palmeiras_2025_crest.png"
+    },
+    {
+        "page":  "https://en.wikipedia.org/wiki/Boca_Juniors",
+        "status":  200,
+        "image":  "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e3/Boca_Juniors_logo18.svg/1280px-Boca_Juniors_logo18.svg.png"
+    },
+    {
+        "page":  "https://en.wikipedia.org/wiki/Club_Atl%C3%A9tico_River_Plate",
+        "status":  200,
+        "image":  "https://upload.wikimedia.org/wikipedia/commons/thumb/4/43/Club_Atl%C3%A9tico_River_Plate_logo.svg/1280px-Club_Atl%C3%A9tico_River_Plate_logo.svg.png"
+    }
+]

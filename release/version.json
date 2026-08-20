@@ -1,0 +1,6 @@
+{
+  "version": "1.0.1",
+  "installerUrl": "https://example.com/releases/fc26-conquest/FC26Conquest-Setup.exe",
+  "releaseUrl": "https://example.com/releases/fc26-conquest",
+  "releaseNotes": "- FC26 Conquest 1.0.1 release\n- invalid stale cached team data is now discarded and reloaded from the fresh seed set\n- missing club logos are blocked at the data-validation layer\n- Windows setup metadata and installer version corrected"
+}
