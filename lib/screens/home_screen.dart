@@ -37,6 +37,7 @@ class _HomeScreenState extends State<HomeScreen> {
   String _league = _noLeagueFilter;
   String _country = _noCountryFilter;
   RangeValues? _ratingRange;
+  bool _licensedOnly = false;
 
   List<Team> get _teamsForMode =>
       widget.teams.where((team) => team.type == _mode).toList();
@@ -59,6 +60,7 @@ class _HomeScreenState extends State<HomeScreen> {
       country: _mode == TeamType.club && _country != _noCountryFilter ? _country : null,
       minRating: range.start.round(),
       maxRating: range.end.round(),
+      licensedOnly: _licensedOnly,
     );
   }
 
@@ -66,6 +68,7 @@ class _HomeScreenState extends State<HomeScreen> {
     _league = _noLeagueFilter;
     _country = _noCountryFilter;
     _ratingRange = null;
+    _licensedOnly = false;
   }
 
   @override
@@ -249,6 +252,37 @@ class _HomeScreenState extends State<HomeScreen> {
                                   _ratingRange = value;
                                 }),
                               ),
+                              InkWell(
+                                onTap: () => setState(() {
+                                  _licensedOnly = !_licensedOnly;
+                                }),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Checkbox(
+                                      value: _licensedOnly,
+                                      onChanged: (value) => setState(() {
+                                        _licensedOnly = value ?? false;
+                                      }),
+                                    ),
+                                    Expanded(
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(top: 12),
+                                        child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: const [
+                                            Text('Nur FC 26 Lizenzteams'),
+                                            Text(
+                                              'Manuell gepflegte Bestenliste, nicht live mit aktuellen FC-26-Patches synchronisiert.',
+                                              style: TextStyle(fontSize: 12),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
                               const SizedBox(height: 12),
                               Text('Teamanzahl: $effectiveTeamCount von ${filteredTeams.length} verfuegbar'),
                               Slider(
@@ -282,6 +316,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                           : null,
                                       minRating: ratingRange.start.round(),
                                       maxRating: ratingRange.end.round(),
+                                      licensedOnly: _licensedOnly,
                                     ),
                                   ),
                           icon: const Icon(Icons.auto_awesome),

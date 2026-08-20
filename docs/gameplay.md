@@ -24,6 +24,8 @@
 - "Neue Kampagne" ist deaktiviert, wenn der gefilterte Team-Pool weniger als 2 Teams enthaelt.
 - Reine Filterlogik: [../lib/utils/team_filter.dart](../lib/utils/team_filter.dart)
 - Abgedeckte Ligen/Laender (Stand zuletzt erweitert): Premier League, Bundesliga, LaLiga, Serie A, Ligue 1, Eredivisie, Primeira Liga, Super Lig, Serie A Brazil, Primera Division, Austrian Bundesliga, Belgian Pro League, Swiss Super League, Scottish Premiership, Saudi Pro League, MLS.
+- Zusaetzlicher Schalter "Nur FC 26 Lizenzteams" (`Team.licensedInFc26`, Standard `true`): blendet Teams aus, die im offiziellen EA Sports FC 26 nicht unter ihrem echten Namen/Wappen verfuegbar sind (aktuell bekannt: Paris Saint-Germain, da Konami seit 2023 die exklusiven PSG-Rechte haelt).
+- WICHTIG: Diese Liste ist manuell anhand oeffentlich bekannter Lizenzinformationen gepflegt und wird nicht automatisch mit aktuellen FC-26-Patches synchronisiert (dafuer gibt es keine offizielle, programmatisch abrufbare Quelle). Bei Lizenzänderungen muss `licensedInFc26` in [../assets/data/teams_seed.json](../assets/data/teams_seed.json) manuell aktualisiert werden.
 
 ## Zufallsrad-Werkzeug
 

@@ -8,6 +8,7 @@ class CampaignSetup {
     this.country,
     this.minRating,
     this.maxRating,
+    this.licensedOnly = false,
   });
 
   final TeamType mode;
@@ -16,4 +17,5 @@ class CampaignSetup {
   final String? country;
   final int? minRating;
   final int? maxRating;
+  final bool licensedOnly;
 }

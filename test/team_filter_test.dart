@@ -34,12 +34,23 @@ const _teams = [
     league: 'Premier League',
     country: 'England',
   ),
+  Team(
+    id: 4,
+    name: 'Delta FC',
+    type: TeamType.club,
+    rating: 88,
+    logo: '',
+    primaryColor: '#000000',
+    league: 'Ligue 1',
+    country: 'France',
+    licensedInFc26: false,
+  ),
 ];
 
 void main() {
   group('filterTeams', () {
     test('returns all teams when no filters are set', () {
-      expect(filterTeams(_teams).length, 3);
+      expect(filterTeams(_teams).length, 4);
     });
 
     test('filters by league', () {
@@ -55,13 +66,19 @@ void main() {
 
     test('filters by rating range', () {
       final result = filterTeams(_teams, minRating: 65, maxRating: 95);
-      expect(result.map((team) => team.id), containsAll([1, 2]));
-      expect(result.length, 2);
+      expect(result.map((team) => team.id), containsAll([1, 2, 4]));
+      expect(result.length, 3);
     });
 
     test('combines filters and can return an empty list', () {
       final result = filterTeams(_teams, league: 'Bundesliga', minRating: 80);
       expect(result, isEmpty);
+    });
+
+    test('licensedOnly excludes teams not licensed in FC 26', () {
+      final result = filterTeams(_teams, licensedOnly: true);
+      expect(result.map((team) => team.id), containsAll([1, 2, 3]));
+      expect(result.any((team) => team.id == 4), isFalse);
     });
   });
 }

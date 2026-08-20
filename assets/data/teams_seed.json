@@ -173,7 +173,8 @@
         "primaryColor":  "#004170",
         "secondaryColor":  "#DA291C",
         "country":  "France",
-        "logo":  "assets/logos/psg.png"
+        "logo":  "assets/logos/psg.png",
+        "licensedInFc26":  false
     },
     {
         "id":  17,

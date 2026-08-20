@@ -109,6 +109,7 @@ class CampaignController extends ChangeNotifier {
         country: setup.country,
         minRating: setup.minRating,
         maxRating: setup.maxRating,
+        licensedOnly: setup.licensedOnly,
       );
       if (availableTeams.length < 2) {
         throw StateError('Nicht genug Teams fuer den gewaehlten Modus vorhanden.');

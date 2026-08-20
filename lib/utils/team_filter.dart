@@ -6,6 +6,7 @@ List<Team> filterTeams(
   String? country,
   int? minRating,
   int? maxRating,
+  bool licensedOnly = false,
 }) {
   return teams.where((team) {
     if (league != null && team.league != league) {
@@ -18,6 +19,9 @@ List<Team> filterTeams(
       return false;
     }
     if (maxRating != null && team.rating > maxRating) {
+      return false;
+    }
+    if (licensedOnly && !team.licensedInFc26) {
       return false;
     }
     return true;

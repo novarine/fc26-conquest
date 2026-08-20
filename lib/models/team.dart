@@ -13,6 +13,7 @@ class Team {
     this.secondaryColor,
     this.league,
     this.country,
+    this.licensedInFc26 = true,
   });
 
   final int id;
@@ -24,6 +25,9 @@ class Team {
   final String? secondaryColor;
   final String? league;
   final String? country;
+  // Manually curated best-effort flag: whether the team appears under its real name in EA Sports FC 26.
+  // Not synced automatically to live game patches; review and update by hand when licensing changes.
+  final bool licensedInFc26;
 
   factory Team.fromJson(Map<String, dynamic> json) {
     return Team(
@@ -36,6 +40,7 @@ class Team {
       secondaryColor: json['secondaryColor'] as String?,
       league: json['league'] as String?,
       country: json['country'] as String?,
+      licensedInFc26: json['licensedInFc26'] as bool? ?? true,
     );
   }
 
@@ -50,6 +55,7 @@ class Team {
       'secondaryColor': secondaryColor,
       'league': league,
       'country': country,
+      'licensedInFc26': licensedInFc26,
     };
   }
 
