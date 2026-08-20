@@ -22,6 +22,7 @@ void main() {
           availableNationTeams: 8,
           onNewCampaign: (CampaignSetup setup) async {},
           onContinue: () {},
+          onOpenCustomWheel: () {},
         ),
       ),
     );
@@ -30,5 +31,6 @@ void main() {
     expect(find.text('FC 26 Conquest'), findsOneWidget);
     expect(find.text('Neue Kampagne'), findsOneWidget);
     expect(find.text('Kampagne fortsetzen'), findsOneWidget);
+    expect(find.text('Zufallsrad-Werkzeug'), findsOneWidget);
   });
 }

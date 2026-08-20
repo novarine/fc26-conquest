@@ -11,6 +11,7 @@ class HomeScreen extends StatefulWidget {
     required this.onContinue,
     required this.availableClubTeams,
     required this.availableNationTeams,
+    required this.onOpenCustomWheel,
   });
 
   final bool hasCampaign;
@@ -18,6 +19,7 @@ class HomeScreen extends StatefulWidget {
   final VoidCallback onContinue;
   final int availableClubTeams;
   final int availableNationTeams;
+  final VoidCallback onOpenCustomWheel;
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -183,6 +185,12 @@ class _HomeScreenState extends State<HomeScreen> {
                           onPressed: widget.hasCampaign ? widget.onContinue : null,
                           icon: const Icon(Icons.play_arrow),
                           label: const Text('Kampagne fortsetzen'),
+                        ),
+                        const SizedBox(height: 12),
+                        TextButton.icon(
+                          onPressed: widget.onOpenCustomWheel,
+                          icon: const Icon(Icons.casino_outlined),
+                          label: const Text('Zufallsrad-Werkzeug'),
                         ),
                       ],
                     ),

@@ -8,6 +8,7 @@ import 'controllers/campaign_controller.dart';
 import 'models/campaign_setup.dart';
 import 'models/team.dart';
 import 'screens/battle_screen.dart';
+import 'screens/custom_wheel_screen.dart';
 import 'screens/home_screen.dart';
 import 'screens/map_screen.dart';
 import 'screens/stats_screen.dart';
@@ -69,6 +70,7 @@ class _Fc26ConquestAppState extends State<Fc26ConquestApp> {
   late final UpdateService _updateService;
   UpdateCheckResult? _updateCheckResult;
   bool _updateBannerDismissed = false;
+  bool _showCustomWheel = false;
 
   @override
   void initState() {
@@ -159,7 +161,11 @@ class _Fc26ConquestAppState extends State<Fc26ConquestApp> {
           shape: StadiumBorder(),
         ),
       ),
-      home: AnimatedBuilder(
+      home: _showCustomWheel
+          ? CustomWheelScreen(
+              onBack: () => setState(() => _showCustomWheel = false),
+            )
+          : AnimatedBuilder(
         animation: _controller,
         builder: (context, _) {
           if (_controller.isLoading) {
@@ -234,6 +240,7 @@ class _Fc26ConquestAppState extends State<Fc26ConquestApp> {
             setup: setup,
           ),
           onContinue: _controller.continueCampaign,
+          onOpenCustomWheel: () => setState(() => _showCustomWheel = true),
         );
       case AppPage.map:
         final campaign = _controller.campaign!;
