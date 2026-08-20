@@ -14,8 +14,9 @@ Die App ist als lokaler Flutter-MVP aufgebaut und trennt Modell, Logik, Persiste
    - Verzeichnis: [../lib/services](../lib/services)
    - `conquest_service.dart`: Spielregeln, Paarungen, Gebietseroberung, Statistiken.
    - `seed_data_service.dart`: Laden der Seed-Daten aus Assets.
-   - `storage_service.dart`: Persistenz (SharedPreferences).
+   - `storage_service.dart`: Persistenz (SharedPreferences), inklusive Kampagnenstand und Zufallsrad-Presets.
    - `app_logger.dart`: Einheitliches Logging.
+   - `../utils/team_filter.dart`: reine Filterfunktion fuer Liga/Land/Rating im Kampagnen-Setup.
 
 3. Controller
    - Datei: [../lib/controllers/campaign_controller.dart](../lib/controllers/campaign_controller.dart)
@@ -34,6 +35,7 @@ Die App ist als lokaler Flutter-MVP aufgebaut und trennt Modell, Logik, Persiste
   - `battle`
   - `stats`
 - `CampaignController` steuert Übergaenge und benennt Fehler fuer die UI.
+- Das Zufallsrad-Werkzeug ([../lib/screens/custom_wheel_screen.dart](../lib/screens/custom_wheel_screen.dart)) ist als lokales Overlay in `_Fc26ConquestAppState` verdrahtet und unabhaengig von `AppPage`/`CampaignController`, damit der Conquest-Flow unveraendert bleibt.
 
 ## Datenquellen
 

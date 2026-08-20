@@ -75,6 +75,8 @@ For a production Windows install, sign the app binary and the generated Inno Set
 
 - Local campaign state is stored and restored without a backend
 - Teams, regions, and player data are loaded from seeded JSON files
+- Campaign setup supports optional league/country/rating filters before picking teams
+- A standalone custom wheel tool (separate from the Conquest map) lets you create, spin, and delete named random-entry wheels for challenges, formations, or other video ideas
 - Battle outcomes are resolved by the conquest rules in [lib/services/conquest_service.dart](lib/services/conquest_service.dart)
 - Runtime and error logging are routed through [lib/services/app_logger.dart](lib/services/app_logger.dart)
 

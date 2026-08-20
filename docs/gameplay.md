@@ -16,6 +16,21 @@
 - Optionaler Transfer: Sieger kann einen Spieler des Verlierers uebernehmen.
 - Ende: Champion, wenn alle Regionen einem Team gehoeren.
 
+## Kampagnen-Setup-Filter
+
+- Beim Anlegen einer neuen Kampagne koennen Liga, Land und Rating-Bereich gefiltert werden, bevor Teams ausgewaehlt werden.
+- Liga-/Land-Filter stehen nur im Club-Modus zur Verfuegung (Nationen haben keine sinnvollen Liga-/Land-Gruppen in den Seed-Daten).
+- Der Rating-Bereich funktioniert in beiden Modi (Club und Nation).
+- "Neue Kampagne" ist deaktiviert, wenn der gefilterte Team-Pool weniger als 2 Teams enthaelt.
+- Reine Filterlogik: [../lib/utils/team_filter.dart](../lib/utils/team_filter.dart)
+
+## Zufallsrad-Werkzeug
+
+- Eigenstaendiges Werkzeug (erreichbar ueber den Home-Screen-Button "Zufallsrad-Werkzeug"), unabhaengig vom laufenden Conquest-Flow.
+- Nutzer koennen frei benannte Zufallsraeder mit eigenen Texteintraegen anlegen, drehen und wieder loeschen (z. B. Herausforderungen, Formationen, Regel-Modifikatoren).
+- Presets werden lokal per SharedPreferences gespeichert, getrennt vom Kampagnenstand.
+- Implementierung: [../lib/screens/custom_wheel_screen.dart](../lib/screens/custom_wheel_screen.dart), [../lib/widgets/generic_wheel_dialog.dart](../lib/widgets/generic_wheel_dialog.dart), [../lib/models/wheel_preset.dart](../lib/models/wheel_preset.dart)
+
 ## Wichtige Strukturen
 
 - `CampaignState`
