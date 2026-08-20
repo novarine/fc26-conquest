@@ -11,9 +11,9 @@ Practical working instructions for coding agents in this repository.
 ## Quick start
 
 - `flutter pub get`
-- `C:\Users\marti\flutter-clean\bin\flutter.bat analyze`
-- `C:\Users\marti\flutter-clean\bin\flutter.bat test`
-- `C:\Users\marti\flutter-clean\bin\flutter.bat run -d chrome`
+- `<flutter-sdk>\bin\flutter.bat analyze`
+- `<flutter-sdk>\bin\flutter.bat test`
+- `<flutter-sdk>\bin\flutter.bat run -d chrome`
 
 If platform files are missing or broken:
 

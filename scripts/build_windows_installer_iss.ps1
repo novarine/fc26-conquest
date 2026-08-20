@@ -1,6 +1,6 @@
 param(
-  [string]$ProjectRoot = "C:\Users\marti\fc26-conquest",
-  [string]$InnoSetupExe = "C:\Users\marti\AppData\Local\Programs\Inno Setup 6\ISCC.exe",
+  [string]$ProjectRoot = (Split-Path -Parent $PSScriptRoot),
+  [string]$InnoSetupExe = "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe",
   [string]$SigningCertificateSubject = "CN=7150945d-41c7-49cb-8842-d6dc2e4c1cc6",
   [string]$SigningCertificateThumbprint = "DD4F5A6E5A24097B0307CD02CABE3C383958791F"
 )
@@ -11,7 +11,7 @@ if (-not (Test-Path $InnoSetupExe)) {
   throw "Inno Setup not found at $InnoSetupExe"
 }
 
-$flutterExe = "C:\Users\marti\flutter-clean\bin\flutter.bat"
+$flutterExe = if ($env:FC26_FLUTTER_EXE) { $env:FC26_FLUTTER_EXE } else { "flutter" }
 $signTool = Get-ChildItem "C:\Program Files (x86)\Windows Kits\10\bin\" -Recurse -Filter signtool.exe |
   Sort-Object FullName -Descending |
   Select-Object -First 1 -ExpandProperty FullName

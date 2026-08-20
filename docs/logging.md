@@ -1,16 +1,16 @@
-# Logging und Diagnose
+# Logging and Diagnostics
 
-## Ziel
+## Goal
 
-Einheitliches, reproduzierbares Logging fuer Support und Fehleranalyse.
+Unified, reproducible logging for support and troubleshooting.
 
-## Implementierung
+## Implementation
 
 - Logger: [../lib/services/app_logger.dart](../lib/services/app_logger.dart)
-- Hooking in App-Start: [../lib/main.dart](../lib/main.dart)
-- Controller-Logs: [../lib/controllers/campaign_controller.dart](../lib/controllers/campaign_controller.dart)
+- Hooked in at app start: [../lib/main.dart](../lib/main.dart)
+- Controller logs: [../lib/controllers/campaign_controller.dart](../lib/controllers/campaign_controller.dart)
 
-## Log-Level
+## Log Levels
 
 - `debug`
 - `info`
@@ -21,15 +21,15 @@ Einheitliches, reproduzierbares Logging fuer Support und Fehleranalyse.
 
 `[timestamp] [LEVEL] [source] message | error: ... | stack: ...`
 
-## Speicherort
+## Storage
 
-- Laufzeit: Debug-Konsole (`debugPrint`)
-- Lokal persistent: SharedPreferences Key `fc26_app_logs`
-- Ringpuffer: max. 400 Eintraege
+- Runtime: debug console (`debugPrint`)
+- Local persistence: SharedPreferences key `fc26_app_logs`
+- Ring buffer: max. 400 entries
 
-## Empfehlung fuer neue Features
+## Recommendation for New Features
 
-1. Fuer wichtige User-Aktionen `info` loggen.
-2. Fuer recoverable Probleme `warning` loggen.
-3. Fuer Ausnahmen `error` mit StackTrace loggen.
-4. Keine verstreuten `print`-Statements verwenden.
+1. Log `info` for important user actions.
+2. Log `warning` for recoverable problems.
+3. Log `error` with a stack trace for exceptions.
+4. Do not use scattered `print` statements.

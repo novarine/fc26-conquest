@@ -16,16 +16,16 @@ Full project documentation is in [docs/README.md](docs/README.md).
 
 The project is working as a local Flutter app and can be built for Windows desktop. The verified validation commands are:
 
-1. `C:\Users\marti\flutter-clean\bin\flutter.bat analyze`
-2. `C:\Users\marti\flutter-clean\bin\flutter.bat test`
-3. `C:\Users\marti\flutter-clean\bin\flutter.bat build windows --release`
+1. `<flutter-sdk>\bin\flutter.bat analyze`
+2. `<flutter-sdk>\bin\flutter.bat test`
+3. `<flutter-sdk>\bin\flutter.bat build windows --release`
 4. `powershell -ExecutionPolicy Bypass -File .\scripts\build_windows_installer.ps1`
 
 ## Windows setup
 
-Use the explicit Flutter SDK path to avoid `.puro` path issues:
+Use an explicit Flutter SDK path to avoid `.puro` path issues, e.g.:
 
-- `C:\Users\marti\flutter-clean\bin\flutter.bat`
+- `<flutter-sdk>\bin\flutter.bat`
 
 If the Windows desktop toolchain is missing, install Visual Studio 2022 Build Tools and include:
 

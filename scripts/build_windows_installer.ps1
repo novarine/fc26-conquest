@@ -1,6 +1,6 @@
 param(
-  [string]$FlutterExe = "C:\Users\marti\flutter-clean\bin\flutter.bat",
-  [string]$ProjectRoot = "C:\Users\marti\fc26-conquest"
+  [string]$FlutterExe = $(if ($env:FC26_FLUTTER_EXE) { $env:FC26_FLUTTER_EXE } else { "flutter" }),
+  [string]$ProjectRoot = (Split-Path -Parent $PSScriptRoot)
 )
 
 $ErrorActionPreference = "Stop"

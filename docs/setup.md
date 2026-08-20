@@ -4,7 +4,7 @@
 
 - Windows 10/11
 - Git installed
-- Flutter SDK, recommended path: `C:\Users\marti\flutter-clean`
+- Flutter SDK, installed at a path of your choice (referred to below as `<flutter-sdk>`)
 - Visual Studio 2022 Build Tools for Windows desktop builds
 
 ## Initial setup
@@ -19,10 +19,10 @@
 
 Use the explicit Flutter binary to avoid `.puro` path issues:
 
-1. `C:\Users\marti\flutter-clean\bin\flutter.bat analyze`
-2. `C:\Users\marti\flutter-clean\bin\flutter.bat test`
-3. `C:\Users\marti\flutter-clean\bin\flutter.bat run -d chrome`
-4. `C:\Users\marti\flutter-clean\bin\flutter.bat build windows --release`
+1. `<flutter-sdk>\bin\flutter.bat analyze`
+2. `<flutter-sdk>\bin\flutter.bat test`
+3. `<flutter-sdk>\bin\flutter.bat run -d chrome`
+4. `<flutter-sdk>\bin\flutter.bat build windows --release`
 
 ## Required Windows desktop toolchain
 
@@ -35,8 +35,14 @@ For the Windows desktop release build, install the C++ workload and required com
 
 ## VS Code
 
-- SDK path: [../.vscode/settings.json](../.vscode/settings.json)
-- Reusable tasks: [../.vscode/tasks.json](../.vscode/tasks.json)
+The `.vscode/` folder is intentionally excluded from version control because it typically contains a machine-specific Flutter SDK path. To set up your own local editor config:
+
+- Create `.vscode/settings.json` with `"dart.flutterSdkPath": "<flutter-sdk>"` (adjust to your local install).
+- Create `.vscode/tasks.json` with shell tasks that call `<flutter-sdk>\bin\flutter.bat`.
+
+## Packaging scripts and local overrides
+
+The scripts in [../scripts](../scripts) default to `flutter` on your `PATH`. If you need to pin an explicit Flutter SDK (e.g. to avoid a `.puro` path conflict), set the `FC26_FLUTTER_EXE` environment variable to the full path of your `flutter.bat` before running the packaging scripts, instead of hardcoding it in tracked files.
 
 Recommended VS Code validation:
 

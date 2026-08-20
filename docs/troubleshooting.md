@@ -4,50 +4,50 @@
 
 Symptom:
 
-- `flutter run -d chrome` bricht mit `.puro`-bezogenem SDK-Pfad ab.
+- `flutter run -d chrome` fails with a `.puro`-related SDK path.
 
-Ursache:
+Cause:
 
-- In der aktuellen Terminal-Session wird ein falsches `flutter` Binary aufgerufen.
+- The current terminal session is invoking the wrong `flutter` binary.
 
-Loesung:
+Solution:
 
-1. Alle VS Code-Terminals schliessen.
-2. Neues Terminal oeffnen.
-3. Explizit starten:
-   - `C:\Users\marti\flutter-clean\bin\flutter.bat clean`
-   - `C:\Users\marti\flutter-clean\bin\flutter.bat pub get`
-   - `C:\Users\marti\flutter-clean\bin\flutter.bat run -d chrome`
-4. Optional: VS Code Task `Flutter: Verify + Run Chrome (flutter-clean)` verwenden.
+1. Close all VS Code terminals.
+2. Open a new terminal.
+3. Start explicitly using your Flutter SDK path, e.g.:
+   - `<flutter-sdk>\bin\flutter.bat clean`
+   - `<flutter-sdk>\bin\flutter.bat pub get`
+   - `<flutter-sdk>\bin\flutter.bat run -d chrome`
+4. Optional: use the VS Code task `Flutter: Verify + Run Chrome (flutter-clean)`.
 
-## 2) Unerklaerliche Compilerfehler in alten Dateistaenden
+## 2) Unexplained compiler errors on old file states
 
 Symptom:
 
-- Fehler passen nicht zum aktuellen Dateicontent.
+- Errors don't match the current file content.
 
-Loesung:
+Solution:
 
 1. `flutter clean`
 2. `flutter pub get`
-3. IDE neu starten
-4. Erneut `analyze`/`run` mit flutter-clean
+3. Restart the IDE
+4. Re-run `analyze`/`run` with your explicit Flutter SDK
 
-## 3) Keine gespeicherte Kampagne vorhanden
+## 3) No saved campaign present
 
 Symptom:
 
-- Weiterfuehren-Button ohne Kampagne.
+- "Continue" button shown without a campaign.
 
-Loesung:
+Solution:
 
-- Neue Kampagne starten, danach wird Zustand lokal persistiert.
+- Start a new campaign; state is then persisted locally.
 
-## 4) Fehleranalyse vorbereiten
+## 4) Preparing a bug report
 
-Bei Bugreport immer mitschicken:
+Always include with a bug report:
 
-1. Exakter Befehl
+1. Exact command
 2. Komplette Fehlermeldung
 3. Relevante Logs (source + timestamp)
 4. Aktiver SDK-Pfad aus [../.vscode/settings.json](../.vscode/settings.json)

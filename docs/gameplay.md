@@ -1,40 +1,40 @@
-# Gameplay und Datenmodell
+# Gameplay and Data Model
 
-## Kampagnen-Loop
+## Campaign Loop
 
-1. Neue Kampagne starten (`home`)
-2. Teams und Regionen initialisieren (`CampaignController.startNewCampaign`)
-3. Battle-Paarung erzeugen (manuell ueber Wheel oder zufaellig)
-4. Sieger eintragen (`battle`)
-5. Region uebernehmen, optional Spielertransfer
-6. Zurueck auf Karte (`map`) und Stats verfolgen (`stats`)
+1. Start a new campaign (`home`)
+2. Initialize teams and regions (`CampaignController.startNewCampaign`)
+3. Generate a battle pairing (manually via the wheel, or randomly)
+4. Record the winner (`battle`)
+5. Capture the region, optional player transfer
+6. Back to the map (`map`) and track stats (`stats`)
 
-## Zentrale Regeln
+## Core Rules
 
-- Nur gueltige Nachbar-Paarungen sind erlaubt.
-- Sieger erobert eine grenzende Region des Verlierers.
-- Optionaler Transfer: Sieger kann einen Spieler des Verlierers uebernehmen.
-- Ende: Champion, wenn alle Regionen einem Team gehoeren.
+- Only valid neighbor pairings are allowed.
+- The winner captures one bordering region of the loser.
+- Optional transfer: the winner can take over one player from the loser.
+- End: champion when all regions belong to a single team.
 
-## Kampagnen-Setup-Filter
+## Campaign Setup Filters
 
-- Beim Anlegen einer neuen Kampagne koennen Liga, Land und Rating-Bereich gefiltert werden, bevor Teams ausgewaehlt werden.
-- Liga-/Land-Filter stehen nur im Club-Modus zur Verfuegung (Nationen haben keine sinnvollen Liga-/Land-Gruppen in den Seed-Daten).
-- Der Rating-Bereich funktioniert in beiden Modi (Club und Nation).
-- "Neue Kampagne" ist deaktiviert, wenn der gefilterte Team-Pool weniger als 2 Teams enthaelt.
-- Reine Filterlogik: [../lib/utils/team_filter.dart](../lib/utils/team_filter.dart)
-- Abgedeckte Ligen/Laender (Stand zuletzt erweitert): Premier League, Bundesliga, LaLiga, Serie A, Ligue 1, Eredivisie, Primeira Liga, Super Lig, Serie A Brazil, Primera Division, Austrian Bundesliga, Belgian Pro League, Swiss Super League, Scottish Premiership, Saudi Pro League, MLS.
-- Zusaetzlicher Schalter "Nur FC 26 Lizenzteams" (`Team.licensedInFc26`, Standard `true`): blendet Teams aus, die im offiziellen EA Sports FC 26 nicht unter ihrem echten Namen/Wappen verfuegbar sind (aktuell bekannt: Paris Saint-Germain, da Konami seit 2023 die exklusiven PSG-Rechte haelt).
-- WICHTIG: Diese Liste ist manuell anhand oeffentlich bekannter Lizenzinformationen gepflegt und wird nicht automatisch mit aktuellen FC-26-Patches synchronisiert (dafuer gibt es keine offizielle, programmatisch abrufbare Quelle). Bei Lizenzänderungen muss `licensedInFc26` in [../assets/data/teams_seed.json](../assets/data/teams_seed.json) manuell aktualisiert werden.
+- When creating a new campaign, league, country, and rating range can be filtered before teams are selected.
+- League/country filters are only available in club mode (nations have no meaningful league/country groups in the seed data).
+- The rating range works in both modes (club and nation).
+- "New campaign" is disabled when the filtered team pool has fewer than 2 teams.
+- Pure filter logic: [../lib/utils/team_filter.dart](../lib/utils/team_filter.dart)
+- Covered leagues/countries (as of the last expansion): Premier League, Bundesliga, LaLiga, Serie A, Ligue 1, Eredivisie, Primeira Liga, Super Lig, Serie A Brazil, Primera Division, Austrian Bundesliga, Belgian Pro League, Swiss Super League, Scottish Premiership, Saudi Pro League, MLS.
+- Additional toggle "FC 26 licensed teams only" (`Team.licensedInFc26`, default `true`): hides teams that are not available under their real name/crest in official EA Sports FC 26 (currently known: Paris Saint-Germain, since Konami has held the exclusive PSG rights since 2023).
+- IMPORTANT: this list is manually maintained based on publicly known licensing information and is not automatically synced with current FC 26 patches (no official, programmatically accessible source exists for that). When licensing changes, `licensedInFc26` must be updated manually in [../assets/data/teams_seed.json](../assets/data/teams_seed.json).
 
-## Zufallsrad-Werkzeug
+## Custom Wheel Tool
 
-- Eigenstaendiges Werkzeug (erreichbar ueber den Home-Screen-Button "Zufallsrad-Werkzeug"), unabhaengig vom laufenden Conquest-Flow.
-- Nutzer koennen frei benannte Zufallsraeder mit eigenen Texteintraegen anlegen, drehen und wieder loeschen (z. B. Herausforderungen, Formationen, Regel-Modifikatoren).
-- Presets werden lokal per SharedPreferences gespeichert, getrennt vom Kampagnenstand.
-- Implementierung: [../lib/screens/custom_wheel_screen.dart](../lib/screens/custom_wheel_screen.dart), [../lib/widgets/generic_wheel_dialog.dart](../lib/widgets/generic_wheel_dialog.dart), [../lib/models/wheel_preset.dart](../lib/models/wheel_preset.dart)
+- Standalone tool (reachable via the "Custom Wheel Tool" button on the home screen), independent of the running Conquest flow.
+- Users can create freely named wheels with custom text entries, spin them, and delete them again (e.g. challenges, formations, rule modifiers).
+- Presets are stored locally via SharedPreferences, separate from the campaign state.
+- Implementation: [../lib/screens/custom_wheel_screen.dart](../lib/screens/custom_wheel_screen.dart), [../lib/widgets/generic_wheel_dialog.dart](../lib/widgets/generic_wheel_dialog.dart), [../lib/models/wheel_preset.dart](../lib/models/wheel_preset.dart)
 
-## Wichtige Strukturen
+## Key Structures
 
 - `CampaignState`
   - turn, matchesPlayed
@@ -44,9 +44,9 @@
 - `MatchRecord`
   - teamA, teamB, winner, capturedRegionId, transferredPlayerId, score
 
-## Relevante Implementierung
+## Relevant Implementation
 
-- Regeln: [../lib/services/conquest_service.dart](../lib/services/conquest_service.dart)
-- Orchestrierung: [../lib/controllers/campaign_controller.dart](../lib/controllers/campaign_controller.dart)
-- Kartenansicht: [../lib/widgets/world_map_board.dart](../lib/widgets/world_map_board.dart)
+- Rules: [../lib/services/conquest_service.dart](../lib/services/conquest_service.dart)
+- Orchestration: [../lib/controllers/campaign_controller.dart](../lib/controllers/campaign_controller.dart)
+- Map view: [../lib/widgets/world_map_board.dart](../lib/widgets/world_map_board.dart)
 - Wheel: [../lib/widgets/team_wheel_dialog.dart](../lib/widgets/team_wheel_dialog.dart)

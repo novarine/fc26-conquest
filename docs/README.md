@@ -1,17 +1,17 @@
-# FC 26 Conquest - Projektdokumentation
+# FC 26 Conquest - Project Documentation
 
-Diese Dokumentation beschreibt Setup, Architektur, Spielablauf und Betrieb des lokalen Flutter-MVPs.
+This documentation describes setup, architecture, gameplay flow, and operation of the local Flutter MVP.
 
-## Inhalte
+## Contents
 
-1. [Setup und Runbook](setup.md)
-2. [Architektur](architecture.md)
-3. [Gameplay und Datenmodell](gameplay.md)
-4. [Logging und Diagnose](logging.md)
+1. [Setup and Runbook](setup.md)
+2. [Architecture](architecture.md)
+3. [Gameplay and Data Model](gameplay.md)
+4. [Logging and Diagnostics](logging.md)
 5. [Troubleshooting](troubleshooting.md)
 
-## Zielgruppe
+## Audience
 
-- Entwicklerinnen und Entwickler, die lokal am Projekt arbeiten.
-- Personen, die Build-/Startprobleme reproduzierbar beheben wollen.
-- Maintainer, die die Regeln und Datenfluesse schnell nachvollziehen muessen.
+- Developers working on the project locally.
+- People who need to reproducibly fix build/startup issues.
+- Maintainers who need to quickly understand the rules and data flows.

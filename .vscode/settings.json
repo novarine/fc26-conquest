@@ -1,7 +1,0 @@
-{
-    "dart.flutterSdkPath": "C:\\Users\\marti\\flutter-clean",
-    "dart.sdkPath": "C:\\Users\\marti\\flutter-clean\\bin\\cache\\dart-sdk",
-    "terminal.integrated.env.windows": {
-        "PATH": "C:\\Program Files\\Git\\cmd;C:\\Users\\marti\\flutter-clean\\bin;${env:PATH}"
-    }
-}

@@ -1,49 +1,49 @@
-# Architektur
+# Architecture
 
-## Uebersicht
+## Overview
 
-Die App ist als lokaler Flutter-MVP aufgebaut und trennt Modell, Logik, Persistenz und UI.
+The app is built as a local Flutter MVP that separates model, logic, persistence, and UI.
 
-## Schichten
+## Layers
 
 1. Models
-   - Verzeichnis: [../lib/models](../lib/models)
-   - Enthalten Datenobjekte wie `CampaignState`, `Region`, `Player`, `Team`, `TeamStats`.
+   - Directory: [../lib/models](../lib/models)
+   - Contains data objects such as `CampaignState`, `Region`, `Player`, `Team`, `TeamStats`.
 
 2. Services
-   - Verzeichnis: [../lib/services](../lib/services)
-   - `conquest_service.dart`: Spielregeln, Paarungen, Gebietseroberung, Statistiken.
-   - `seed_data_service.dart`: Laden der Seed-Daten aus Assets.
-   - `storage_service.dart`: Persistenz (SharedPreferences), inklusive Kampagnenstand und Zufallsrad-Presets.
-   - `app_logger.dart`: Einheitliches Logging.
-   - `../utils/team_filter.dart`: reine Filterfunktion fuer Liga/Land/Rating im Kampagnen-Setup.
+   - Directory: [../lib/services](../lib/services)
+   - `conquest_service.dart`: game rules, pairings, region capture, statistics.
+   - `seed_data_service.dart`: loading seed data from assets.
+   - `storage_service.dart`: persistence (SharedPreferences), including campaign state and custom wheel presets.
+   - `app_logger.dart`: unified logging.
+   - `../utils/team_filter.dart`: pure filter function for league/country/rating in campaign setup.
 
 3. Controller
-   - Datei: [../lib/controllers/campaign_controller.dart](../lib/controllers/campaign_controller.dart)
-   - `ChangeNotifier`-Orchestrierung fuer Seitenfluss und Kampagnenzustand.
+   - File: [../lib/controllers/campaign_controller.dart](../lib/controllers/campaign_controller.dart)
+   - `ChangeNotifier` orchestration for page flow and campaign state.
 
 4. UI
-   - Verzeichnisse: [../lib/screens](../lib/screens), [../lib/widgets](../lib/widgets)
-   - `main.dart` verdrahtet Theme, Routing (AppPage) und Controller.
+   - Directories: [../lib/screens](../lib/screens), [../lib/widgets](../lib/widgets)
+   - `main.dart` wires up theme, routing (`AppPage`), and the controller.
 
-## Navigation und Stateflow
+## Navigation and State Flow
 
-- Einstieg in [../lib/main.dart](../lib/main.dart)
-- Seitenzustand per `AppPage`:
+- Entry point in [../lib/main.dart](../lib/main.dart)
+- Page state via `AppPage`:
   - `home`
   - `map`
   - `battle`
   - `stats`
-- `CampaignController` steuert Übergaenge und benennt Fehler fuer die UI.
-- Das Zufallsrad-Werkzeug ([../lib/screens/custom_wheel_screen.dart](../lib/screens/custom_wheel_screen.dart)) ist als lokales Overlay in `_Fc26ConquestAppState` verdrahtet und unabhaengig von `AppPage`/`CampaignController`, damit der Conquest-Flow unveraendert bleibt.
+- `CampaignController` drives transitions and surfaces errors to the UI.
+- The custom wheel tool ([../lib/screens/custom_wheel_screen.dart](../lib/screens/custom_wheel_screen.dart)) is wired as a local overlay in `_Fc26ConquestAppState` and is independent of `AppPage`/`CampaignController`, so the Conquest flow stays unchanged.
 
-## Datenquellen
+## Data Sources
 
-- Seed-Assets: [../assets/data](../assets/data)
-- Konfiguration in [../pubspec.yaml](../pubspec.yaml)
+- Seed assets: [../assets/data](../assets/data)
+- Configuration in [../pubspec.yaml](../pubspec.yaml)
 
-## Designentscheidungen
+## Design Decisions
 
-- Minimaler Stack: keine komplexen Frameworks fuer State-Management.
-- Lokale Persistenz statt Backend.
-- Spielregeln zentral im Service, nicht in Widgets.
+- Minimal stack: no complex state-management frameworks.
+- Local persistence instead of a backend.
+- Game rules live centrally in services, not in widgets.
