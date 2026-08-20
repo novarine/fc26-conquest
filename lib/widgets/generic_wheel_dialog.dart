@@ -2,12 +2,15 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
+import '../localization/app_strings.dart';
+
 /// Generic weighted-equal wheel for arbitrary text entries (challenges, rules,
 /// formations, etc.), independent from the Team-based conquest wheel.
 Future<String?> showGenericWheelDialog({
   required BuildContext context,
   required List<String> entries,
   required String title,
+  required AppStrings strings,
   String? subtitle,
 }) {
   return showDialog<String>(
@@ -18,6 +21,7 @@ Future<String?> showGenericWheelDialog({
         entries: entries,
         title: title,
         subtitle: subtitle,
+        strings: strings,
       );
     },
   );
@@ -38,12 +42,14 @@ class _GenericWheelDialog extends StatefulWidget {
   const _GenericWheelDialog({
     required this.entries,
     required this.title,
+    required this.strings,
     this.subtitle,
   });
 
   final List<String> entries;
   final String title;
   final String? subtitle;
+  final AppStrings strings;
 
   @override
   State<_GenericWheelDialog> createState() => _GenericWheelDialogState();
@@ -204,7 +210,7 @@ class _GenericWheelDialogState extends State<_GenericWheelDialog>
                   OutlinedButton.icon(
                     onPressed: _spinning ? null : () => Navigator.of(context).pop(),
                     icon: const Icon(Icons.close),
-                    label: const Text('Abbrechen'),
+                    label: Text(widget.strings.cancelButton),
                     style: OutlinedButton.styleFrom(
                       foregroundColor: Colors.white,
                       disabledForegroundColor: const Color(0xFFD1EAFE),
@@ -214,7 +220,7 @@ class _GenericWheelDialogState extends State<_GenericWheelDialog>
                   FilledButton.icon(
                     onPressed: _spinning ? null : _spin,
                     icon: const Icon(Icons.rotate_right),
-                    label: Text(_selectedIndex == null ? 'Drehen' : 'Nochmal drehen'),
+                    label: Text(_selectedIndex == null ? widget.strings.spinButton : widget.strings.spinAgainButton),
                     style: FilledButton.styleFrom(
                       disabledBackgroundColor: const Color(0xFF1D4F77),
                       disabledForegroundColor: const Color(0xFFD1EAFE),
@@ -225,7 +231,7 @@ class _GenericWheelDialogState extends State<_GenericWheelDialog>
                         ? null
                         : () => Navigator.of(context).pop(selectedEntry),
                     icon: const Icon(Icons.check),
-                    label: const Text('Bestaetigen'),
+                    label: Text(widget.strings.confirmButton),
                     style: FilledButton.styleFrom(
                       backgroundColor: const Color(0xFF22C55E),
                       disabledBackgroundColor: const Color(0xFF2E6D47),

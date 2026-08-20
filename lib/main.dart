@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'controllers/campaign_controller.dart';
+import 'localization/app_strings.dart';
 import 'models/campaign_setup.dart';
 import 'models/team.dart';
 import 'screens/battle_screen.dart';
@@ -68,9 +69,13 @@ class Fc26ConquestApp extends StatefulWidget {
 class _Fc26ConquestAppState extends State<Fc26ConquestApp> {
   late final CampaignController _controller;
   late final UpdateService _updateService;
+  final StorageService _storageService = StorageService();
   UpdateCheckResult? _updateCheckResult;
   bool _updateBannerDismissed = false;
   bool _showCustomWheel = false;
+  AppLanguage _language = AppLanguage.de;
+
+  AppStrings get _strings => AppStrings(_language);
 
   @override
   void initState() {
@@ -78,10 +83,29 @@ class _Fc26ConquestAppState extends State<Fc26ConquestApp> {
     _updateService = UpdateService();
     _controller = CampaignController(
       seedDataService: const SeedDataService(),
-      storageService: StorageService(),
+      storageService: _storageService,
       conquestService: ConquestService(),
     )..initialize();
+    unawaited(_loadLanguage());
     unawaited(_checkForUpdates());
+  }
+
+  Future<void> _loadLanguage() async {
+    final language = await _storageService.loadLanguage();
+    if (!mounted) {
+      return;
+    }
+    setState(() {
+      _language = language;
+    });
+  }
+
+  Future<void> _toggleLanguage() async {
+    final next = _language == AppLanguage.de ? AppLanguage.en : AppLanguage.de;
+    setState(() {
+      _language = next;
+    });
+    await _storageService.saveLanguage(next);
   }
 
   @override
@@ -163,6 +187,7 @@ class _Fc26ConquestAppState extends State<Fc26ConquestApp> {
       ),
       home: _showCustomWheel
           ? CustomWheelScreen(
+              strings: _strings,
               onBack: () => setState(() => _showCustomWheel = false),
             )
           : AnimatedBuilder(
@@ -189,6 +214,7 @@ class _Fc26ConquestAppState extends State<Fc26ConquestApp> {
                         latestVersion: _updateCheckResult!.latestVersion,
                         releaseNotes: _updateCheckResult!.releaseNotes,
                         onUpdate: _openUpdateLink,
+                        strings: _strings,
                         onDismiss: () {
                           setState(() {
                             _updateBannerDismissed = true;
@@ -199,6 +225,31 @@ class _Fc26ConquestAppState extends State<Fc26ConquestApp> {
                   ),
                 ),
               _buildPage(),
+              Positioned(
+                right: 12,
+                top: 12,
+                child: SafeArea(
+                  child: Tooltip(
+                    message: _strings.languageSwitcherTooltip,
+                    child: Material(
+                      color: Colors.white,
+                      shape: const StadiumBorder(),
+                      elevation: 2,
+                      child: InkWell(
+                        customBorder: const StadiumBorder(),
+                        onTap: _toggleLanguage,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                          child: Text(
+                            _language == AppLanguage.de ? 'DE' : 'EN',
+                            style: const TextStyle(fontWeight: FontWeight.w800),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
               if (error != null)
                 Align(
                   alignment: Alignment.bottomCenter,
@@ -237,6 +288,7 @@ class _Fc26ConquestAppState extends State<Fc26ConquestApp> {
           availableClubTeams: clubCount,
           availableNationTeams: nationCount,
           teams: _controller.teams,
+          strings: _strings,
           onNewCampaign: (CampaignSetup setup) => _controller.startNewCampaign(
             setup: setup,
           ),
@@ -253,6 +305,7 @@ class _Fc26ConquestAppState extends State<Fc26ConquestApp> {
           playerById: _controller.playerById,
           attackableTeams: _controller.attackableTeams,
           defenderCandidates: _controller.defenderCandidates,
+          strings: _strings,
           onSetBattlePairing: (attackerId, defenderId) => _controller.setManualBattlePairing(
             attackerId: attackerId,
             defenderId: defenderId,
@@ -274,6 +327,7 @@ class _Fc26ConquestAppState extends State<Fc26ConquestApp> {
           defenderSquad: _controller.squadForTeam(defender.id),
           attackerRegions: counts[battle.attackerId] ?? 0,
           defenderRegions: counts[battle.defenderId] ?? 0,
+          strings: _strings,
           onSubmit: (winnerId, transferredPlayerId, score) => _controller
               .submitBattleResult(
                 winnerId: winnerId,
@@ -286,6 +340,7 @@ class _Fc26ConquestAppState extends State<Fc26ConquestApp> {
         return StatsScreen(
           teams: _controller.teams,
           stats: _controller.stats,
+          strings: _strings,
           onBack: _controller.backToMap,
         );
     }

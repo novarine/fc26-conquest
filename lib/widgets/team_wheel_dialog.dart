@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
+import '../localization/app_strings.dart';
 import '../models/team.dart';
 import '../utils/color_utils.dart';
 import 'team_badge.dart';
@@ -10,6 +11,7 @@ Future<Team?> showTeamWheelDialog({
   required BuildContext context,
   required List<Team> teams,
   required String title,
+  required AppStrings strings,
   String? subtitle,
 }) {
   return showDialog<Team>(
@@ -20,6 +22,7 @@ Future<Team?> showTeamWheelDialog({
         teams: teams,
         title: title,
         subtitle: subtitle,
+        strings: strings,
       );
     },
   );
@@ -29,12 +32,14 @@ class _TeamWheelDialog extends StatefulWidget {
   const _TeamWheelDialog({
     required this.teams,
     required this.title,
+    required this.strings,
     this.subtitle,
   });
 
   final List<Team> teams;
   final String title;
   final String? subtitle;
+  final AppStrings strings;
 
   @override
   State<_TeamWheelDialog> createState() => _TeamWheelDialogState();
@@ -201,7 +206,7 @@ class _TeamWheelDialogState extends State<_TeamWheelDialog>
                   OutlinedButton.icon(
                     onPressed: _spinning ? null : () => Navigator.of(context).pop(),
                     icon: const Icon(Icons.close),
-                    label: const Text('Abbrechen'),
+                    label: Text(widget.strings.cancelButton),
                     style: OutlinedButton.styleFrom(
                       foregroundColor: Colors.white,
                       disabledForegroundColor: const Color(0xFFD1EAFE),
@@ -211,7 +216,7 @@ class _TeamWheelDialogState extends State<_TeamWheelDialog>
                   FilledButton.icon(
                     onPressed: _spinning ? null : _spin,
                     icon: const Icon(Icons.rotate_right),
-                    label: Text(_selectedIndex == null ? 'Drehen' : 'Nochmal drehen'),
+                    label: Text(_selectedIndex == null ? widget.strings.spinButton : widget.strings.spinAgainButton),
                     style: FilledButton.styleFrom(
                       disabledBackgroundColor: const Color(0xFF1D4F77),
                       disabledForegroundColor: const Color(0xFFD1EAFE),
@@ -222,7 +227,7 @@ class _TeamWheelDialogState extends State<_TeamWheelDialog>
                         ? null
                         : () => Navigator.of(context).pop(selectedTeam),
                     icon: const Icon(Icons.check),
-                    label: const Text('Team bestaetigen'),
+                    label: Text(widget.strings.confirmTeamButton),
                     style: FilledButton.styleFrom(
                       backgroundColor: const Color(0xFF22C55E),
                       disabledBackgroundColor: const Color(0xFF2E6D47),
