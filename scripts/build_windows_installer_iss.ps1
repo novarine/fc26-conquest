@@ -1,14 +1,23 @@
 param(
   [string]$ProjectRoot = (Split-Path -Parent $PSScriptRoot),
-  [string]$InnoSetupExe = "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe",
+  [string]$InnoSetupExe = "",
   [string]$SigningCertificateSubject = "CN=7150945d-41c7-49cb-8842-d6dc2e4c1cc6",
   [string]$SigningCertificateThumbprint = "DD4F5A6E5A24097B0307CD02CABE3C383958791F"
 )
 
 $ErrorActionPreference = "Stop"
 
-if (-not (Test-Path $InnoSetupExe)) {
-  throw "Inno Setup not found at $InnoSetupExe"
+if ([string]::IsNullOrWhiteSpace($InnoSetupExe)) {
+  $candidatePaths = @(
+    "$env:LOCALAPPDATA\Programs\Inno Setup 6\ISCC.exe",
+    "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe",
+    "$env:ProgramFiles\Inno Setup 6\ISCC.exe"
+  )
+  $InnoSetupExe = $candidatePaths | Where-Object { Test-Path $_ } | Select-Object -First 1
+}
+
+if (-not $InnoSetupExe -or -not (Test-Path $InnoSetupExe)) {
+  throw "Inno Setup not found. Pass -InnoSetupExe <path to ISCC.exe> explicitly."
 }
 
 $flutterExe = if ($env:FC26_FLUTTER_EXE) { $env:FC26_FLUTTER_EXE } else { "flutter" }

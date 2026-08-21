@@ -25,7 +25,8 @@ const _examplePresets = [
 ];
 
 class CustomWheelScreen extends StatefulWidget {
-  const CustomWheelScreen({super.key, required this.onBack, required this.strings});
+  const CustomWheelScreen(
+      {super.key, required this.onBack, required this.strings});
 
   final VoidCallback onBack;
   final AppStrings strings;
@@ -47,8 +48,10 @@ class _CustomWheelScreenState extends State<CustomWheelScreen> {
 
   Future<void> _loadPresets() async {
     final loaded = await _storage.loadWheelPresets();
-    if (loaded.isEmpty) {
+    final alreadySeeded = await _storage.hasSeededWheelPresets();
+    if (loaded.isEmpty && !alreadySeeded) {
       await _storage.saveWheelPresets(_examplePresets);
+      await _storage.markWheelPresetsSeeded();
       if (!mounted) {
         return;
       }
@@ -190,7 +193,8 @@ class _CustomWheelScreenState extends State<CustomWheelScreen> {
                     return Card(
                       child: ListTile(
                         title: Text(preset.name),
-                        subtitle: Text(strings.entriesCount(preset.entries.length)),
+                        subtitle:
+                            Text(strings.entriesCount(preset.entries.length)),
                         onTap: () => _spinPreset(preset),
                         trailing: Row(
                           mainAxisSize: MainAxisSize.min,
