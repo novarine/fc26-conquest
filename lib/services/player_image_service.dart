@@ -49,6 +49,14 @@ class PlayerImageService {
     if (url == null || url.isEmpty) {
       return false;
     }
+    final uri = Uri.tryParse(url);
+    if (uri == null || uri.scheme != 'https' || uri.host.isEmpty) {
+      return false;
+    }
+    final host = uri.host.toLowerCase();
+    if (host.endsWith('.local') || host == 'localhost' || host.startsWith('127.') || host.startsWith('10.') || host.startsWith('192.168.')) {
+      return false;
+    }
     final lower = url.toLowerCase();
     return !lower.contains('robohash') && !lower.contains('dicebear');
   }
@@ -82,7 +90,10 @@ class PlayerImageService {
         ]);
 
         if (image != null) {
-          return image;
+          final sanitized = _sanitizeImageUrl(image);
+          if (sanitized != null) {
+            return sanitized;
+          }
         }
       }
     } catch (_) {
@@ -112,7 +123,7 @@ class PlayerImageService {
       if (source == null || source.trim().isEmpty) {
         return null;
       }
-      return source.trim();
+      return _sanitizeImageUrl(source.trim());
     } catch (_) {
       return null;
     }
@@ -148,5 +159,28 @@ class PlayerImageService {
       }
     }
     return null;
+  }
+
+  static String? _sanitizeImageUrl(String value) {
+    final uri = Uri.tryParse(value);
+    if (uri == null || uri.scheme != 'https' || uri.host.isEmpty) {
+      return null;
+    }
+
+    final host = uri.host.toLowerCase();
+    if (host == 'localhost' ||
+        host.endsWith('.local') ||
+        host.startsWith('127.') ||
+        host.startsWith('10.') ||
+        host.startsWith('192.168.') ||
+        host.startsWith('172.16.') ||
+        host.startsWith('172.17.') ||
+        host.startsWith('172.18.') ||
+        host.startsWith('172.19.') ||
+        host.startsWith('172.2')) {
+      return null;
+    }
+
+    return uri.toString();
   }
 }

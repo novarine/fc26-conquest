@@ -126,7 +126,16 @@ class _Fc26ConquestAppState extends State<Fc26ConquestApp> {
 
   Future<void> _openUpdateLink() async {
     final targetUrl = _updateCheckResult?.downloadUrl ?? UpdateService.downloadUrl;
-    final url = Uri.parse(targetUrl);
+    final url = Uri.tryParse(targetUrl);
+    if (url == null || url.scheme != 'https' || url.host != Uri.parse(UpdateService.defaultUpdateCheckUrl).host) {
+      unawaited(
+        AppLogger.instance.warning(
+          'Update',
+          'Blocked unsafe update URL: $targetUrl',
+        ),
+      );
+      return;
+    }
     final launched = await launchUrl(url, mode: LaunchMode.externalApplication);
     if (!launched) {
       unawaited(
