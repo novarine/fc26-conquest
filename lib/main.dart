@@ -226,7 +226,7 @@ class _Fc26ConquestAppState extends State<Fc26ConquestApp> {
                 ),
               _buildPage(),
               Positioned(
-                right: 12,
+                right: 82,
                 top: 12,
                 child: SafeArea(
                   child: Tooltip(

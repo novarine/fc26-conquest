@@ -48,6 +48,25 @@ void main() {
       expect(reloaded[1].entries, ['x', 'y', 'z']);
       expect(await storage.loadCampaign(), isNull);
     });
+
+    test('seeded flag defaults to false and can be marked true', () async {
+      final storage = StorageService();
+      expect(await storage.hasSeededWheelPresets(), isFalse);
+
+      await storage.markWheelPresetsSeeded();
+      expect(await storage.hasSeededWheelPresets(), isTrue);
+    });
+
+    test('corrupted stored data does not throw and leaves raw value untouched', () async {
+      SharedPreferences.setMockInitialValues({'custom_wheel_presets_v1': 'not-valid-json'});
+      final storage = StorageService();
+
+      final presets = await storage.loadWheelPresets();
+      expect(presets, isEmpty);
+
+      final preferences = await SharedPreferences.getInstance();
+      expect(preferences.getString('custom_wheel_presets_v1'), 'not-valid-json');
+    });
   });
 
   group('StorageService language', () {

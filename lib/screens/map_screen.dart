@@ -34,7 +34,8 @@ class MapScreen extends StatefulWidget {
   final List<Team> Function() attackableTeams;
   final List<Team> Function(int attackerId) defenderCandidates;
   final AppStrings strings;
-  final Future<void> Function(int attackerId, int defenderId) onSetBattlePairing;
+  final Future<void> Function(int attackerId, int defenderId)
+      onSetBattlePairing;
   final VoidCallback onOpenStats;
   final Future<void> Function() onResetCampaign;
 
@@ -51,7 +52,9 @@ class _MapScreenState extends State<MapScreen> {
   void didUpdateWidget(covariant MapScreen oldWidget) {
     super.didUpdateWidget(oldWidget);
     final champion = widget.champion;
-    if (champion != null && champion.id != _shownChampionId && !_showingChampionOverlay) {
+    if (champion != null &&
+        champion.id != _shownChampionId &&
+        !_showingChampionOverlay) {
       _showingChampionOverlay = true;
       WidgetsBinding.instance.addPostFrameCallback((_) async {
         if (!mounted) {
@@ -71,9 +74,12 @@ class _MapScreenState extends State<MapScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final activeTeamIds = widget.campaign.regions.map((region) => region.ownerId).toSet();
-    final activeTeams = widget.teams.where((team) => activeTeamIds.contains(team.id)).toList();
-    final lastMatch = widget.campaign.history.isEmpty ? null : widget.campaign.history.last;
+    final activeTeamIds =
+        widget.campaign.regions.map((region) => region.ownerId).toSet();
+    final activeTeams =
+        widget.teams.where((team) => activeTeamIds.contains(team.id)).toList();
+    final lastMatch =
+        widget.campaign.history.isEmpty ? null : widget.campaign.history.last;
     final transferredPlayer = lastMatch?.transferredPlayerId == null
         ? null
         : widget.playerById(lastMatch!.transferredPlayerId!);
@@ -109,84 +115,99 @@ class _MapScreenState extends State<MapScreen> {
             child: LayoutBuilder(
               builder: (context, constraints) {
                 final compact = constraints.maxWidth < 1160;
+                final dashboardHeight =
+                    math.max(560.0, constraints.maxHeight - 90);
 
-                return Column(
-                  children: [
-                    _TopStrip(
-                      champion: widget.champion,
-                      lastWinner: lastWinner,
-                      lastTransfer: transferredPlayer,
-                      remainingTeams: widget.remainingTeams,
-                      matchesPlayed: widget.campaign.matchesPlayed,
-                      strings: widget.strings,
+                return SingleChildScrollView(
+                  child: ConstrainedBox(
+                    constraints:
+                        BoxConstraints(minHeight: constraints.maxHeight),
+                    child: Column(
+                      children: [
+                        _TopStrip(
+                          champion: widget.champion,
+                          lastWinner: lastWinner,
+                          lastTransfer: transferredPlayer,
+                          remainingTeams: widget.remainingTeams,
+                          matchesPlayed: widget.campaign.matchesPlayed,
+                          strings: widget.strings,
+                        ),
+                        const SizedBox(height: 12),
+                        SizedBox(
+                          height: dashboardHeight,
+                          child: compact
+                              ? Column(
+                                  children: [
+                                    Expanded(
+                                      flex: 7,
+                                      child: WorldMapBoard(
+                                        campaign: widget.campaign,
+                                        teams: widget.teams,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 10),
+                                    Expanded(
+                                      flex: 4,
+                                      child: widget.champion != null
+                                          ? _ChampionSidePanel(
+                                              champion: widget.champion!,
+                                              squad: widget.campaign.players
+                                                  .where((player) =>
+                                                      player.currentTeamId ==
+                                                      widget.champion!.id)
+                                                  .take(6)
+                                                  .toList(),
+                                              onResetCampaign:
+                                                  widget.onResetCampaign,
+                                              strings: widget.strings,
+                                            )
+                                          : _RightPanel(
+                                              teams: activeTeams,
+                                              wheelBusy: _wheelBusy,
+                                              onSpin: _openWheelFlow,
+                                              strings: widget.strings,
+                                            ),
+                                    ),
+                                  ],
+                                )
+                              : Row(
+                                  children: [
+                                    Expanded(
+                                      flex: 7,
+                                      child: WorldMapBoard(
+                                        campaign: widget.campaign,
+                                        teams: widget.teams,
+                                      ),
+                                    ),
+                                    const SizedBox(width: 12),
+                                    Expanded(
+                                      flex: 4,
+                                      child: widget.champion != null
+                                          ? _ChampionSidePanel(
+                                              champion: widget.champion!,
+                                              squad: widget.campaign.players
+                                                  .where((player) =>
+                                                      player.currentTeamId ==
+                                                      widget.champion!.id)
+                                                  .take(6)
+                                                  .toList(),
+                                              onResetCampaign:
+                                                  widget.onResetCampaign,
+                                              strings: widget.strings,
+                                            )
+                                          : _RightPanel(
+                                              teams: activeTeams,
+                                              wheelBusy: _wheelBusy,
+                                              onSpin: _openWheelFlow,
+                                              strings: widget.strings,
+                                            ),
+                                    ),
+                                  ],
+                                ),
+                        ),
+                      ],
                     ),
-                    const SizedBox(height: 12),
-                    Expanded(
-                      child: compact
-                          ? Column(
-                              children: [
-                                Expanded(
-                                  flex: 7,
-                                  child: WorldMapBoard(
-                                    campaign: widget.campaign,
-                                    teams: widget.teams,
-                                  ),
-                                ),
-                                const SizedBox(height: 10),
-                                Expanded(
-                                  flex: 4,
-                                  child: widget.champion != null
-                                      ? _ChampionSidePanel(
-                                          champion: widget.champion!,
-                                          squad: widget.campaign.players
-                                              .where((player) => player.currentTeamId == widget.champion!.id)
-                                              .take(6)
-                                              .toList(),
-                                          onResetCampaign: widget.onResetCampaign,
-                                          strings: widget.strings,
-                                        )
-                                      : _RightPanel(
-                                          teams: activeTeams,
-                                          wheelBusy: _wheelBusy,
-                                          onSpin: _openWheelFlow,
-                                          strings: widget.strings,
-                                        ),
-                                ),
-                              ],
-                            )
-                          : Row(
-                              children: [
-                                Expanded(
-                                  flex: 7,
-                                  child: WorldMapBoard(
-                                    campaign: widget.campaign,
-                                    teams: widget.teams,
-                                  ),
-                                ),
-                                const SizedBox(width: 12),
-                                Expanded(
-                                  flex: 4,
-                                  child: widget.champion != null
-                                      ? _ChampionSidePanel(
-                                          champion: widget.champion!,
-                                          squad: widget.campaign.players
-                                              .where((player) => player.currentTeamId == widget.champion!.id)
-                                              .take(6)
-                                              .toList(),
-                                          onResetCampaign: widget.onResetCampaign,
-                                          strings: widget.strings,
-                                        )
-                                      : _RightPanel(
-                                          teams: activeTeams,
-                                          wheelBusy: _wheelBusy,
-                                          onSpin: _openWheelFlow,
-                                          strings: widget.strings,
-                                        ),
-                                ),
-                              ],
-                            ),
-                    ),
-                  ],
+                  ),
                 );
               },
             ),
@@ -315,7 +336,11 @@ class _MapScreenState extends State<MapScreen> {
                     TeamBadge(team: teamA, size: 58),
                     const Padding(
                       padding: EdgeInsets.symmetric(horizontal: 12),
-                      child: Text('VS', style: TextStyle(color: Colors.white, fontSize: 26, fontWeight: FontWeight.w900)),
+                      child: Text('VS',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 26,
+                              fontWeight: FontWeight.w900)),
                     ),
                     TeamBadge(team: teamB, size: 58),
                   ],
@@ -323,7 +348,8 @@ class _MapScreenState extends State<MapScreen> {
                 const SizedBox(height: 12),
                 Text(
                   '${teamA.name} vs ${teamB.name}',
-                  style: const TextStyle(color: Color(0xFFBFDBFE), fontWeight: FontWeight.w700),
+                  style: const TextStyle(
+                      color: Color(0xFFBFDBFE), fontWeight: FontWeight.w700),
                 ),
               ],
             ),
@@ -365,7 +391,8 @@ class _ChampionCelebrationDialog extends StatefulWidget {
   final AppStrings strings;
 
   @override
-  State<_ChampionCelebrationDialog> createState() => _ChampionCelebrationDialogState();
+  State<_ChampionCelebrationDialog> createState() =>
+      _ChampionCelebrationDialogState();
 }
 
 class _ChampionCelebrationDialogState extends State<_ChampionCelebrationDialog>
@@ -394,14 +421,21 @@ class _ChampionCelebrationDialogState extends State<_ChampionCelebrationDialog>
       CurvedAnimation(parent: _introController, curve: Curves.easeOutCubic),
     );
     _trophyScale = TweenSequence<double>([
-      TweenSequenceItem(tween: Tween<double>(begin: 0.68, end: 1.16), weight: 55),
-      TweenSequenceItem(tween: Tween<double>(begin: 1.16, end: 1.0), weight: 45),
-    ]).animate(CurvedAnimation(parent: _introController, curve: Curves.easeOut));
+      TweenSequenceItem(
+          tween: Tween<double>(begin: 0.68, end: 1.16), weight: 55),
+      TweenSequenceItem(
+          tween: Tween<double>(begin: 1.16, end: 1.0), weight: 45),
+    ]).animate(
+        CurvedAnimation(parent: _introController, curve: Curves.easeOut));
     _glintX = Tween<double>(begin: -120, end: 120).animate(
-      CurvedAnimation(parent: _introController, curve: const Interval(0.28, 0.92, curve: Curves.easeInOut)),
+      CurvedAnimation(
+          parent: _introController,
+          curve: const Interval(0.28, 0.92, curve: Curves.easeInOut)),
     );
     _introOpacity = Tween<double>(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(parent: _introController, curve: const Interval(0.15, 0.85, curve: Curves.easeOut)),
+      CurvedAnimation(
+          parent: _introController,
+          curve: const Interval(0.15, 0.85, curve: Curves.easeOut)),
     );
   }
 
@@ -429,7 +463,8 @@ class _ChampionCelebrationDialogState extends State<_ChampionCelebrationDialog>
                   margin: const EdgeInsets.all(18),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(26),
-                    border: Border.all(color: const Color(0xFF7DD3FC), width: 2),
+                    border:
+                        Border.all(color: const Color(0xFF7DD3FC), width: 2),
                   ),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(24),
@@ -438,7 +473,11 @@ class _ChampionCelebrationDialogState extends State<_ChampionCelebrationDialog>
                         Container(
                           decoration: const BoxDecoration(
                             gradient: LinearGradient(
-                              colors: [Color(0xFF0A1C2F), Color(0xFF153A5B), Color(0xFF1B6B3A)],
+                              colors: [
+                                Color(0xFF0A1C2F),
+                                Color(0xFF153A5B),
+                                Color(0xFF1B6B3A)
+                              ],
                               begin: Alignment.topCenter,
                               end: Alignment.bottomCenter,
                             ),
@@ -448,7 +487,8 @@ class _ChampionCelebrationDialogState extends State<_ChampionCelebrationDialog>
                           animation: _controller,
                           builder: (context, _) {
                             return CustomPaint(
-                              painter: _ConfettiPainter(progress: _controller.value),
+                              painter:
+                                  _ConfettiPainter(progress: _controller.value),
                               size: Size.infinite,
                             );
                           },
@@ -472,7 +512,8 @@ class _ChampionCelebrationDialogState extends State<_ChampionCelebrationDialog>
                                 children: [
                                   Transform.scale(
                                     scale: _trophyScale.value,
-                                    child: const Icon(Icons.emoji_events, size: 76, color: Color(0xFFFACC15)),
+                                    child: const Icon(Icons.emoji_events,
+                                        size: 76, color: Color(0xFFFACC15)),
                                   ),
                                   ClipRRect(
                                     borderRadius: BorderRadius.circular(40),
@@ -485,7 +526,8 @@ class _ChampionCelebrationDialogState extends State<_ChampionCelebrationDialog>
                                           gradient: LinearGradient(
                                             colors: [
                                               Colors.white.withValues(alpha: 0),
-                                              Colors.white.withValues(alpha: 0.65),
+                                              Colors.white
+                                                  .withValues(alpha: 0.65),
                                               Colors.white.withValues(alpha: 0),
                                             ],
                                           ),
@@ -508,8 +550,10 @@ class _ChampionCelebrationDialogState extends State<_ChampionCelebrationDialog>
                               ),
                               const SizedBox(height: 16),
                               Container(
-                                margin: const EdgeInsets.symmetric(horizontal: 20),
-                                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                                margin:
+                                    const EdgeInsets.symmetric(horizontal: 20),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 14, vertical: 10),
                                 decoration: BoxDecoration(
                                   color: Colors.black.withValues(alpha: 0.25),
                                   borderRadius: BorderRadius.circular(14),
@@ -521,10 +565,13 @@ class _ChampionCelebrationDialogState extends State<_ChampionCelebrationDialog>
                                   children: [
                                     for (final player in widget.squad)
                                       Container(
-                                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 10, vertical: 6),
                                         decoration: BoxDecoration(
-                                          color: Colors.white.withValues(alpha: 0.14),
-                                          borderRadius: BorderRadius.circular(999),
+                                          color: Colors.white
+                                              .withValues(alpha: 0.14),
+                                          borderRadius:
+                                              BorderRadius.circular(999),
                                         ),
                                         child: Text(
                                           player.name,
@@ -597,17 +644,21 @@ class _ConfettiPainter extends CustomPainter {
     for (var i = 0; i < 120; i++) {
       final startX = random.nextDouble() * size.width;
       final drift = (random.nextDouble() - 0.5) * 120;
-      final yBase = (random.nextDouble() * size.height * 0.3) + (size.height * progress);
+      final yBase =
+          (random.nextDouble() * size.height * 0.3) + (size.height * progress);
       final y = (yBase + (i * 7)) % (size.height + 30) - 30;
       final x = startX + (drift * progress);
-      final rect = Rect.fromLTWH(x, y, 5 + random.nextDouble() * 4, 10 + random.nextDouble() * 6);
+      final rect = Rect.fromLTWH(
+          x, y, 5 + random.nextDouble() * 4, 10 + random.nextDouble() * 6);
 
-      final paint = Paint()..color = colors[i % colors.length].withValues(alpha: 0.9);
+      final paint = Paint()
+        ..color = colors[i % colors.length].withValues(alpha: 0.9);
       canvas.save();
       canvas.translate(rect.center.dx, rect.center.dy);
       canvas.rotate((progress * math.pi * 2) + i);
       canvas.drawRect(
-        Rect.fromCenter(center: Offset.zero, width: rect.width, height: rect.height),
+        Rect.fromCenter(
+            center: Offset.zero, width: rect.width, height: rect.height),
         paint,
       );
       canvas.restore();
@@ -652,9 +703,11 @@ class _TopStrip extends StatelessWidget {
         children: [
           _tile(strings.statTeams, '$remainingTeams'),
           _tile(strings.statMatches, '$matchesPlayed'),
-          _tile(strings.statChampion, champion?.name ?? strings.championPending),
+          _tile(
+              strings.statChampion, champion?.name ?? strings.championPending),
           _tile(strings.statLastWinner, lastWinner?.name ?? strings.noneYet),
-          _tile(strings.statPlayerTransfer, lastTransfer?.name ?? strings.noneLabel),
+          _tile(strings.statPlayerTransfer,
+              lastTransfer?.name ?? strings.noneLabel),
         ],
       ),
     );
@@ -672,7 +725,8 @@ class _TopStrip extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(title, style: const TextStyle(color: Color(0xFFB6D3F5), fontSize: 12)),
+          Text(title,
+              style: const TextStyle(color: Color(0xFFB6D3F5), fontSize: 12)),
           const SizedBox(height: 3),
           Text(
             value,
@@ -739,7 +793,8 @@ class _RightPanel extends StatelessWidget {
                       child: CircularProgressIndicator(strokeWidth: 2),
                     )
                   : const Icon(Icons.casino_rounded),
-              label: Text(wheelBusy ? strings.wheelSpinning : strings.startWheelButton),
+              label: Text(
+                  wheelBusy ? strings.wheelSpinning : strings.startWheelButton),
               style: FilledButton.styleFrom(
                 backgroundColor: const Color(0xFF06B6D4),
                 foregroundColor: const Color(0xFF06213A),
@@ -749,7 +804,8 @@ class _RightPanel extends StatelessWidget {
           const SizedBox(height: 14),
           Text(
             strings.activeTeams,
-            style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w800),
+            style: const TextStyle(
+                color: Colors.white, fontWeight: FontWeight.w800),
           ),
           const SizedBox(height: 10),
           Expanded(
@@ -765,7 +821,8 @@ class _RightPanel extends StatelessWidget {
               itemBuilder: (context, index) {
                 final team = teams[index];
                 return Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
                   decoration: BoxDecoration(
                     color: Colors.white.withValues(alpha: 0.08),
                     borderRadius: BorderRadius.circular(12),
@@ -859,7 +916,8 @@ class _ChampionSidePanelState extends State<_ChampionSidePanel>
         children: [
           Row(
             children: [
-              const Icon(Icons.emoji_events, color: Color(0xFFFACC15), size: 28),
+              const Icon(Icons.emoji_events,
+                  color: Color(0xFFFACC15), size: 28),
               const SizedBox(width: 10),
               Expanded(
                 child: Text(
@@ -901,7 +959,8 @@ class _ChampionSidePanelState extends State<_ChampionSidePanel>
                     ),
                     boxShadow: [
                       BoxShadow(
-                        color: const Color(0xFFFACC15).withValues(alpha: 0.26 + (_glowController.value * 0.24)),
+                        color: const Color(0xFFFACC15).withValues(
+                            alpha: 0.26 + (_glowController.value * 0.24)),
                         blurRadius: 24 + (_glowController.value * 18),
                         spreadRadius: spread,
                       ),
@@ -952,11 +1011,13 @@ class _ChampionSidePanelState extends State<_ChampionSidePanel>
             children: [
               for (final player in widget.squad)
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
                   decoration: BoxDecoration(
                     color: const Color(0x33FACC15),
                     borderRadius: BorderRadius.circular(999),
-                    border: Border.all(color: Colors.white.withValues(alpha: 0.12)),
+                    border:
+                        Border.all(color: Colors.white.withValues(alpha: 0.12)),
                   ),
                   child: Text(
                     player.name,
