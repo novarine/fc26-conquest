@@ -52,6 +52,7 @@ class _TeamWheelDialogState extends State<_TeamWheelDialog>
   late final AnimationController _controller;
   late Animation<double> _animation;
   final Random _random = Random();
+  final ScrollController _scrollController = ScrollController();
 
   double _rotation = 0;
   int? _selectedIndex;
@@ -70,6 +71,7 @@ class _TeamWheelDialogState extends State<_TeamWheelDialog>
   @override
   void dispose() {
     _controller.dispose();
+    _scrollController.dispose();
     super.dispose();
   }
 
@@ -112,6 +114,7 @@ class _TeamWheelDialogState extends State<_TeamWheelDialog>
             ],
           ),
           child: SingleChildScrollView(
+            controller: _scrollController,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -292,6 +295,18 @@ class _TeamWheelDialogState extends State<_TeamWheelDialog>
       _rotation = _normalizeAngle(end);
       _selectedIndex = _indexAtPointer(_rotation);
       _spinning = false;
+    });
+
+    // Reveal the confirm button on small screens without requiring a manual scroll.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted || !_scrollController.hasClients) {
+        return;
+      }
+      _scrollController.animateTo(
+        _scrollController.position.maxScrollExtent,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeOut,
+      );
     });
   }
 

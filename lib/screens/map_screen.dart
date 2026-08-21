@@ -893,158 +893,182 @@ class _ChampionSidePanelState extends State<_ChampionSidePanel>
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(18),
-      decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          colors: [Color(0xFF0F2238), Color(0xFF15304E), Color(0xFF3A2E10)],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-        borderRadius: BorderRadius.circular(22),
-        border: Border.all(color: const Color(0xFFFACC15), width: 1.6),
-        boxShadow: const [
-          BoxShadow(
-            color: Color(0x55111627),
-            blurRadius: 24,
-            offset: Offset(0, 16),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              const Icon(Icons.emoji_events,
-                  color: Color(0xFFFACC15), size: 28),
-              const SizedBox(width: 10),
-              Expanded(
-                child: Text(
-                  widget.strings.tournamentEnded,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w900,
-                    fontSize: 24,
-                  ),
-                ),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return Container(
+          decoration: BoxDecoration(
+            gradient: const LinearGradient(
+              colors: [Color(0xFF0F2238), Color(0xFF15304E), Color(0xFF3A2E10)],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+            borderRadius: BorderRadius.circular(22),
+            border: Border.all(color: const Color(0xFFFACC15), width: 1.6),
+            boxShadow: const [
+              BoxShadow(
+                color: Color(0x55111627),
+                blurRadius: 24,
+                offset: Offset(0, 16),
               ),
             ],
           ),
-          const SizedBox(height: 10),
-          Text(
-            widget.strings.championSubtitle(widget.champion.name),
-            style: const TextStyle(
-              color: Color(0xFFF8E7A1),
-              fontWeight: FontWeight.w700,
-              height: 1.4,
-            ),
-          ),
-          const SizedBox(height: 18),
-          Center(
-            child: AnimatedBuilder(
-              animation: _glowController,
-              builder: (context, _) {
-                final glow = 0.75 + (_glowController.value * 0.45);
-                final spread = 3.0 + (_glowController.value * 6.0);
-                return Container(
-                  padding: const EdgeInsets.all(14),
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    gradient: RadialGradient(
-                      colors: [
-                        const Color(0x66FACC15).withValues(alpha: glow),
-                        const Color(0x00FACC15),
-                      ],
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: const Color(0xFFFACC15).withValues(
-                            alpha: 0.26 + (_glowController.value * 0.24)),
-                        blurRadius: 24 + (_glowController.value * 18),
-                        spreadRadius: spread,
+          // Scrolls internally on short screens instead of clipping/overflowing;
+          // IntrinsicHeight keeps the Spacer-based bottom-pinned button layout
+          // unchanged whenever there is enough room (desktop/tablet).
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(22),
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.all(18),
+              child: ConstrainedBox(
+                constraints:
+                    BoxConstraints(minHeight: constraints.maxHeight - 36),
+                child: IntrinsicHeight(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          const Icon(Icons.emoji_events,
+                              color: Color(0xFFFACC15), size: 28),
+                          const SizedBox(width: 10),
+                          Expanded(
+                            child: Text(
+                              widget.strings.tournamentEnded,
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w900,
+                                fontSize: 24,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 10),
+                      Text(
+                        widget.strings.championSubtitle(widget.champion.name),
+                        style: const TextStyle(
+                          color: Color(0xFFF8E7A1),
+                          fontWeight: FontWeight.w700,
+                          height: 1.4,
+                        ),
+                      ),
+                      const SizedBox(height: 18),
+                      Center(
+                        child: AnimatedBuilder(
+                          animation: _glowController,
+                          builder: (context, _) {
+                            final glow = 0.75 + (_glowController.value * 0.45);
+                            final spread = 3.0 + (_glowController.value * 6.0);
+                            return Container(
+                              padding: const EdgeInsets.all(14),
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                gradient: RadialGradient(
+                                  colors: [
+                                    const Color(0x66FACC15)
+                                        .withValues(alpha: glow),
+                                    const Color(0x00FACC15),
+                                  ],
+                                ),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: const Color(0xFFFACC15).withValues(
+                                        alpha: 0.26 +
+                                            (_glowController.value * 0.24)),
+                                    blurRadius:
+                                        24 + (_glowController.value * 18),
+                                    spreadRadius: spread,
+                                  ),
+                                ],
+                              ),
+                              child:
+                                  TeamBadge(team: widget.champion, size: 124),
+                            );
+                          },
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      Center(
+                        child: Text(
+                          widget.champion.name,
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w900,
+                            fontSize: 28,
+                            letterSpacing: 0.3,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 6),
+                      Center(
+                        child: Text(
+                          widget.strings.championCrowned,
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            color: Color(0xFFBFDBFE),
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 18),
+                      Text(
+                        widget.strings.finalHeroes,
+                        style: const TextStyle(
+                          color: Color(0xFFFFF3C4),
+                          fontWeight: FontWeight.w900,
+                          fontSize: 18,
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      Wrap(
+                        spacing: 8,
+                        runSpacing: 8,
+                        children: [
+                          for (final player in widget.squad)
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 7),
+                              decoration: BoxDecoration(
+                                color: const Color(0x33FACC15),
+                                borderRadius: BorderRadius.circular(999),
+                                border: Border.all(
+                                    color:
+                                        Colors.white.withValues(alpha: 0.12)),
+                              ),
+                              child: Text(
+                                player.name,
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                            ),
+                        ],
+                      ),
+                      const Spacer(),
+                      SizedBox(
+                        width: double.infinity,
+                        child: FilledButton.icon(
+                          onPressed: widget.onResetCampaign,
+                          icon: const Icon(Icons.restart_alt),
+                          label: Text(widget.strings.startNewCampaignButton),
+                          style: FilledButton.styleFrom(
+                            backgroundColor: const Color(0xFFFACC15),
+                            foregroundColor: const Color(0xFF10253A),
+                            textStyle:
+                                const TextStyle(fontWeight: FontWeight.w900),
+                          ),
+                        ),
                       ),
                     ],
                   ),
-                  child: TeamBadge(team: widget.champion, size: 124),
-                );
-              },
-            ),
-          ),
-          const SizedBox(height: 12),
-          Center(
-            child: Text(
-              widget.champion.name,
-              textAlign: TextAlign.center,
-              style: const TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.w900,
-                fontSize: 28,
-                letterSpacing: 0.3,
-              ),
-            ),
-          ),
-          const SizedBox(height: 6),
-          Center(
-            child: Text(
-              widget.strings.championCrowned,
-              textAlign: TextAlign.center,
-              style: const TextStyle(
-                color: Color(0xFFBFDBFE),
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-          ),
-          const SizedBox(height: 18),
-          Text(
-            widget.strings.finalHeroes,
-            style: const TextStyle(
-              color: Color(0xFFFFF3C4),
-              fontWeight: FontWeight.w900,
-              fontSize: 18,
-            ),
-          ),
-          const SizedBox(height: 10),
-          Wrap(
-            spacing: 8,
-            runSpacing: 8,
-            children: [
-              for (final player in widget.squad)
-                Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
-                  decoration: BoxDecoration(
-                    color: const Color(0x33FACC15),
-                    borderRadius: BorderRadius.circular(999),
-                    border:
-                        Border.all(color: Colors.white.withValues(alpha: 0.12)),
-                  ),
-                  child: Text(
-                    player.name,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
                 ),
-            ],
-          ),
-          const Spacer(),
-          SizedBox(
-            width: double.infinity,
-            child: FilledButton.icon(
-              onPressed: widget.onResetCampaign,
-              icon: const Icon(Icons.restart_alt),
-              label: Text(widget.strings.startNewCampaignButton),
-              style: FilledButton.styleFrom(
-                backgroundColor: const Color(0xFFFACC15),
-                foregroundColor: const Color(0xFF10253A),
-                textStyle: const TextStyle(fontWeight: FontWeight.w900),
               ),
             ),
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 }
