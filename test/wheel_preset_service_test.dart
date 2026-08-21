@@ -33,7 +33,8 @@ void main() {
       expect(presets, isEmpty);
     });
 
-    test('persists and reloads presets without affecting campaign storage', () async {
+    test('persists and reloads presets without affecting campaign storage',
+        () async {
       final storage = StorageService();
       const presets = [
         WheelPreset(id: 'a', name: 'Rad A', entries: ['1', '2']),
@@ -57,15 +58,18 @@ void main() {
       expect(await storage.hasSeededWheelPresets(), isTrue);
     });
 
-    test('corrupted stored data does not throw and leaves raw value untouched', () async {
-      SharedPreferences.setMockInitialValues({'custom_wheel_presets_v1': 'not-valid-json'});
+    test('corrupted stored data does not throw and leaves raw value untouched',
+        () async {
+      SharedPreferences.setMockInitialValues(
+          {'custom_wheel_presets_v1': 'not-valid-json'});
       final storage = StorageService();
 
       final presets = await storage.loadWheelPresets();
       expect(presets, isEmpty);
 
       final preferences = await SharedPreferences.getInstance();
-      expect(preferences.getString('custom_wheel_presets_v1'), 'not-valid-json');
+      expect(
+          preferences.getString('custom_wheel_presets_v1'), 'not-valid-json');
     });
   });
 

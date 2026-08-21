@@ -66,7 +66,8 @@ class SeedDataService {
   Future<List<Player>> loadPlayers() async {
     final preferences = await SharedPreferences.getInstance();
     final cached = preferences.getString(_playersCacheKey);
-    final raw = cached ?? await rootBundle.loadString('assets/data/players_seed.json');
+    final raw =
+        cached ?? await rootBundle.loadString('assets/data/players_seed.json');
     if (cached == null) {
       await preferences.setString(_playersCacheKey, raw);
     }

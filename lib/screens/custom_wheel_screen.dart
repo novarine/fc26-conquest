@@ -5,8 +5,8 @@ import '../models/wheel_preset.dart';
 import '../services/storage_service.dart';
 import '../widgets/generic_wheel_dialog.dart';
 
-const _examplePresets = [
-  WheelPreset(
+final _examplePresets = [
+  const WheelPreset(
     id: 'example-challenges',
     name: 'Zufalls-Herausforderungen',
     entries: [
@@ -17,10 +17,15 @@ const _examplePresets = [
       'Nur Systemwechsel',
     ],
   ),
-  WheelPreset(
+  const WheelPreset(
     id: 'example-formations',
     name: 'Formations-Zufall',
     entries: ['4-3-3', '4-4-2', '3-5-2', '4-2-3-1', '5-3-2'],
+  ),
+  WheelPreset(
+    id: 'example-jersey-numbers',
+    name: 'Trikotnummern-Rad',
+    entries: List.generate(23, (i) => '${i + 1}'),
   ),
 ];
 

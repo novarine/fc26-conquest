@@ -54,7 +54,11 @@ class PlayerImageService {
       return false;
     }
     final host = uri.host.toLowerCase();
-    if (host.endsWith('.local') || host == 'localhost' || host.startsWith('127.') || host.startsWith('10.') || host.startsWith('192.168.')) {
+    if (host.endsWith('.local') ||
+        host == 'localhost' ||
+        host.startsWith('127.') ||
+        host.startsWith('10.') ||
+        host.startsWith('192.168.')) {
       return false;
     }
     final lower = url.toLowerCase();
@@ -109,7 +113,8 @@ class PlayerImageService {
       return null;
     }
 
-    final uri = Uri.parse('https://en.wikipedia.org/api/rest_v1/page/summary/$normalized');
+    final uri = Uri.parse(
+        'https://en.wikipedia.org/api/rest_v1/page/summary/$normalized');
 
     try {
       final response = await http.get(uri);

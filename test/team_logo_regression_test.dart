@@ -16,7 +16,8 @@ void main() {
   group('team logo regression', () {
     test('valid logo URLs are preserved and malformed ones are rejected', () {
       expect(
-        Team.normalizeLogo('https://upload.wikimedia.org/wikipedia/en/thumb/0/0c/Liverpool_FC.svg/250px-Liverpool_FC.svg.png'),
+        Team.normalizeLogo(
+            'https://upload.wikimedia.org/wikipedia/en/thumb/0/0c/Liverpool_FC.svg/250px-Liverpool_FC.svg.png'),
         isNotEmpty,
       );
       expect(
@@ -27,12 +28,21 @@ void main() {
       expect(Team.normalizeLogo(null), isEmpty);
     });
 
-    test('stale cached team data is rejected and reloaded from the fresh seed set', () async {
+    test(
+        'stale cached team data is rejected and reloaded from the fresh seed set',
+        () async {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setString(
         'fc26_catalog_teams',
         jsonEncode([
-          {'id': 1, 'name': 'Old Club', 'type': 'club', 'rating': 70, 'logo': 'https://example.com/old-club.png', 'primaryColor': '#ff0000'},
+          {
+            'id': 1,
+            'name': 'Old Club',
+            'type': 'club',
+            'rating': 70,
+            'logo': 'https://example.com/old-club.png',
+            'primaryColor': '#ff0000'
+          },
         ]),
       );
       await prefs.setInt('fc26_catalog_teams_version', 7);
@@ -54,7 +64,8 @@ void main() {
         expect(
           Team.isValidLogo(team.logo),
           isTrue,
-          reason: '${team.name} has an invalid or unsafe logo URL: ${team.logo}',
+          reason:
+              '${team.name} has an invalid or unsafe logo URL: ${team.logo}',
         );
       }
     });
@@ -64,12 +75,15 @@ void main() {
       final clubs = teams.where((team) => team.type == TeamType.club).toList();
 
       expect(clubs.length, 40,
-          reason: 'The club seed must contain all 40 clubs for the full-size campaign mode.');
+          reason:
+              'The club seed must contain all 40 clubs for the full-size campaign mode.');
       expect(clubs.every((team) => Team.isValidLogo(team.logo)), isTrue,
-          reason: 'Every club logo must be valid when selecting the full 40-club set.');
+          reason:
+              'Every club logo must be valid when selecting the full 40-club set.');
     });
 
-    test('every club logo is a bundled local asset, never a live remote URL', () async {
+    test('every club logo is a bundled local asset, never a live remote URL',
+        () async {
       final teams = await const SeedDataService().loadTeams();
       final clubs = teams.where((team) => team.type == TeamType.club).toList();
 
@@ -89,17 +103,21 @@ void main() {
         expect(
           file.existsSync(),
           isTrue,
-          reason: '${team.name} references "${team.logo}" but that file does not exist under assets/logos/.',
+          reason:
+              '${team.name} references "${team.logo}" but that file does not exist under assets/logos/.',
         );
         expect(
           file.lengthSync(),
           greaterThan(500),
-          reason: '${team.name} logo asset "${team.logo}" is empty or corrupted.',
+          reason:
+              '${team.name} logo asset "${team.logo}" is empty or corrupted.',
         );
       }
     });
 
-    testWidgets('invalid external logo renders a deterministic local fallback badge', (tester) async {
+    testWidgets(
+        'invalid external logo renders a deterministic local fallback badge',
+        (tester) async {
       final team = Team(
         id: 999,
         name: 'Manchester City',

@@ -96,7 +96,8 @@ class TeamBadge extends StatelessWidget {
       final rasterFallback = _preferredRasterUrl(team.logo);
       if (isSvg) {
         if (kIsWeb) {
-          return _networkRaster(rasterFallback ?? team.logo, baseColor, withGeneratedFallback: true);
+          return _networkRaster(rasterFallback ?? team.logo, baseColor,
+              withGeneratedFallback: true);
         }
 
         return FutureBuilder<String?>(
@@ -111,9 +112,11 @@ class TeamBadge extends StatelessWidget {
               );
             }
 
-            final fallbackUrl = rasterFallback ?? _wikimediaSvgPngThumbUrl(team.logo);
+            final fallbackUrl =
+                rasterFallback ?? _wikimediaSvgPngThumbUrl(team.logo);
             if (fallbackUrl != null && fallbackUrl.isNotEmpty) {
-              return _networkRaster(fallbackUrl, baseColor, withGeneratedFallback: true);
+              return _networkRaster(fallbackUrl, baseColor,
+                  withGeneratedFallback: true);
             }
 
             return _generatedBadge(baseColor);
@@ -121,7 +124,8 @@ class TeamBadge extends StatelessWidget {
         );
       }
 
-      return _networkRaster(rasterFallback ?? team.logo, baseColor, withGeneratedFallback: true);
+      return _networkRaster(rasterFallback ?? team.logo, baseColor,
+          withGeneratedFallback: true);
     }
 
     if (isSvg) {
@@ -158,11 +162,14 @@ class TeamBadge extends StatelessWidget {
     return null;
   }
 
-  Widget _networkRaster(String url, Color baseColor, {bool withGeneratedFallback = false}) {
+  Widget _networkRaster(String url, Color baseColor,
+      {bool withGeneratedFallback = false}) {
     return Image.network(
       url,
       fit: BoxFit.contain,
-      errorBuilder: (_, __, ___) => withGeneratedFallback ? _generatedBadge(baseColor) : _fallbackLabel(baseColor),
+      errorBuilder: (_, __, ___) => withGeneratedFallback
+          ? _generatedBadge(baseColor)
+          : _fallbackLabel(baseColor),
     );
   }
 
@@ -191,7 +198,8 @@ class TeamBadge extends StatelessWidget {
 
       final body = response.body;
       final normalized = body.trimLeft();
-      final looksLikeSvg = normalized.startsWith('<svg') || normalized.startsWith('<?xml');
+      final looksLikeSvg =
+          normalized.startsWith('<svg') || normalized.startsWith('<?xml');
       if (!looksLikeSvg || !body.contains('</svg>')) {
         _svgCache[url] = null;
         return null;
@@ -239,7 +247,8 @@ class TeamBadge extends StatelessWidget {
   Widget _fallbackLabel(Color baseColor) {
     return Center(
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: size * 0.08, vertical: size * 0.04),
+        padding: EdgeInsets.symmetric(
+            horizontal: size * 0.08, vertical: size * 0.04),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(8),
@@ -265,7 +274,9 @@ class TeamBadge extends StatelessWidget {
       return 'FC';
     }
     if (parts.length == 1) {
-      return parts.first.substring(0, parts.first.length.clamp(0, 2)).toUpperCase();
+      return parts.first
+          .substring(0, parts.first.length.clamp(0, 2))
+          .toUpperCase();
     }
     return (parts.first[0] + parts.last[0]).toUpperCase();
   }

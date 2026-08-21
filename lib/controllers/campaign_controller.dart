@@ -59,7 +59,8 @@ class CampaignController extends ChangeNotifier {
       _teams = await _seedDataService.loadTeams();
       _campaign = await _storageService.loadCampaign();
       if (_campaign != null) {
-        final teamIds = _campaign!.regions.map((region) => region.ownerId).toSet();
+        final teamIds =
+            _campaign!.regions.map((region) => region.ownerId).toSet();
         final teamNameById = {
           for (final team in _teams) team.id: team.name,
         };
@@ -112,7 +113,8 @@ class CampaignController extends ChangeNotifier {
         licensedOnly: setup.licensedOnly,
       );
       if (availableTeams.length < 2) {
-        throw StateError('Nicht genug Teams fuer den gewaehlten Modus vorhanden.');
+        throw StateError(
+            'Nicht genug Teams fuer den gewaehlten Modus vorhanden.');
       }
 
       final selectedTeams = availableTeams.take(setup.teamCount).toList();
@@ -134,7 +136,8 @@ class CampaignController extends ChangeNotifier {
       await _storageService.saveCampaign(_campaign!);
       _page = AppPage.map;
       _error = null;
-      await AppLogger.instance.info('CampaignController', 'startNewCampaign() success');
+      await AppLogger.instance
+          .info('CampaignController', 'startNewCampaign() success');
     } catch (exception) {
       _error = 'Neue Kampagne konnte nicht erstellt werden: $exception';
       await AppLogger.instance.error(
@@ -150,14 +153,16 @@ class CampaignController extends ChangeNotifier {
     if (_campaign == null) {
       _error = 'Es ist keine gespeicherte Kampagne vorhanden.';
       unawaited(
-        AppLogger.instance.warning('CampaignController', 'continueCampaign() without campaign'),
+        AppLogger.instance.warning(
+            'CampaignController', 'continueCampaign() without campaign'),
       );
       notifyListeners();
       return;
     }
     _page = AppPage.map;
     _error = null;
-    unawaited(AppLogger.instance.info('CampaignController', 'continueCampaign() -> map'));
+    unawaited(AppLogger.instance
+        .info('CampaignController', 'continueCampaign() -> map'));
     notifyListeners();
   }
 
@@ -171,7 +176,8 @@ class CampaignController extends ChangeNotifier {
     if (battle == null) {
       _error = 'Keine gueltige Paarung mehr verfuegbar.';
       unawaited(
-        AppLogger.instance.warning('CampaignController', 'rollBattle() produced no battle'),
+        AppLogger.instance
+            .warning('CampaignController', 'rollBattle() produced no battle'),
       );
       notifyListeners();
       return;
@@ -303,7 +309,8 @@ class CampaignController extends ChangeNotifier {
 
   void backToMap() {
     _page = hasCampaign ? AppPage.map : AppPage.home;
-    unawaited(AppLogger.instance.debug('CampaignController', 'backToMap() -> $_page'));
+    unawaited(AppLogger.instance
+        .debug('CampaignController', 'backToMap() -> $_page'));
     notifyListeners();
   }
 

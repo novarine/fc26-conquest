@@ -50,7 +50,7 @@ class CampaignState {
       regions: (json['regions'] as List<dynamic>)
           .map((entry) => Region.fromJson(entry as Map<String, dynamic>))
           .toList(),
-        players: ((json['players'] as List<dynamic>?) ?? const [])
+      players: ((json['players'] as List<dynamic>?) ?? const [])
           .map((entry) => Player.fromJson(entry as Map<String, dynamic>))
           .toList(),
       history: (json['history'] as List<dynamic>)

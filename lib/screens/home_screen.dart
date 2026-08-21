@@ -16,6 +16,7 @@ class HomeScreen extends StatefulWidget {
     required this.teams,
     required this.strings,
     required this.onOpenCustomWheel,
+    required this.onOpenBracketMode,
   });
 
   final bool hasCampaign;
@@ -26,6 +27,7 @@ class HomeScreen extends StatefulWidget {
   final List<Team> teams;
   final AppStrings strings;
   final VoidCallback onOpenCustomWheel;
+  final VoidCallback onOpenBracketMode;
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -388,6 +390,12 @@ class _HomeScreenState extends State<HomeScreen> {
                               onPressed: widget.onOpenCustomWheel,
                               icon: const Icon(Icons.casino_outlined),
                               label: Text(strings.customWheelToolButton),
+                            ),
+                            const SizedBox(height: 4),
+                            TextButton.icon(
+                              onPressed: widget.onOpenBracketMode,
+                              icon: const Icon(Icons.emoji_events_outlined),
+                              label: Text(strings.bracketModeButton),
                             ),
                           ],
                         ),

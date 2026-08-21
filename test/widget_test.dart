@@ -47,7 +47,8 @@ const _sampleTeams = [
 ];
 
 void main() {
-  testWidgets('home screen shows campaign actions', (WidgetTester tester) async {
+  testWidgets('home screen shows campaign actions',
+      (WidgetTester tester) async {
     tester.view.physicalSize = const Size(1440, 2200);
     tester.view.devicePixelRatio = 1.0;
     addTearDown(() {
@@ -66,6 +67,7 @@ void main() {
           onNewCampaign: (CampaignSetup setup) async {},
           onContinue: () {},
           onOpenCustomWheel: () {},
+          onOpenBracketMode: () {},
         ),
       ),
     );

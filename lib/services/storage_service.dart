@@ -3,12 +3,14 @@ import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../localization/app_strings.dart';
+import '../models/bracket_state.dart';
 import '../models/campaign_state.dart';
 import '../models/wheel_preset.dart';
 import 'app_logger.dart';
 
 class StorageService {
   static const _campaignKey = 'fc26_conquest_campaign';
+  static const _bracketKey = 'fc26_conquest_bracket';
   static const _wheelPresetsKey = 'custom_wheel_presets_v1';
   static const _wheelPresetsSeededKey = 'custom_wheel_presets_seeded_v1';
   static const _languageKey = 'fc26_ui_language';
@@ -32,6 +34,37 @@ class StorageService {
   Future<void> clearCampaign() async {
     final preferences = await SharedPreferences.getInstance();
     await preferences.remove(_campaignKey);
+  }
+
+  Future<void> saveBracket(BracketState state) async {
+    final preferences = await SharedPreferences.getInstance();
+    await preferences.setString(_bracketKey, jsonEncode(state.toJson()));
+  }
+
+  Future<BracketState?> loadBracket() async {
+    final preferences = await SharedPreferences.getInstance();
+    final raw = preferences.getString(_bracketKey);
+    if (raw == null || raw.isEmpty) {
+      return null;
+    }
+
+    try {
+      final decoded = jsonDecode(raw) as Map<String, dynamic>;
+      return BracketState.fromJson(decoded);
+    } catch (exception, stackTrace) {
+      await AppLogger.instance.error(
+        'StorageService',
+        'Failed to decode stored bracket; leaving raw data untouched',
+        error: exception,
+        stackTrace: stackTrace,
+      );
+      return null;
+    }
+  }
+
+  Future<void> clearBracket() async {
+    final preferences = await SharedPreferences.getInstance();
+    await preferences.remove(_bracketKey);
   }
 
   Future<List<WheelPreset>> loadWheelPresets() async {

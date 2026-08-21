@@ -44,7 +44,8 @@ void main() {
       const manifest = {
         'version': '1.3.0',
         'installerUrl': 'https://example.com/releases/fc26-conquest-setup.exe',
-        'releaseNotes': '- fixed missing club logos\n- improved Windows installer flow',
+        'releaseNotes':
+            '- fixed missing club logos\n- improved Windows installer flow',
       };
 
       expect(UpdateService.extractReleaseNotesFromManifest(manifest),

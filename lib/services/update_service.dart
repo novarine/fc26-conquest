@@ -150,8 +150,8 @@ class UpdateService {
   Future<UpdateCheckResult> checkForUpdates() async {
     try {
       final response = await _client.get(Uri.parse(updateCheckUrl)).timeout(
-        const Duration(seconds: 5),
-      );
+            const Duration(seconds: 5),
+          );
 
       if (response.statusCode != 200) {
         return UpdateCheckResult(
@@ -204,7 +204,8 @@ class UpdateService {
 
   Future<void> markLastUpdateCheck(DateTime checkedAt) async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setString('fc26_update_last_checked', checkedAt.toUtc().toIso8601String());
+    await prefs.setString(
+        'fc26_update_last_checked', checkedAt.toUtc().toIso8601String());
   }
 
   Future<DateTime?> lastUpdateCheck() async {

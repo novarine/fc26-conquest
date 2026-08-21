@@ -95,7 +95,8 @@ class FortuneWheelPreview extends StatelessWidget {
             children: teams.take(8).map((team) {
               final isHighlight = team.id == highlightTeamId;
               return Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                 decoration: BoxDecoration(
                   color: isHighlight
                       ? parseHexColor(team.primaryColor).withValues(alpha: 0.16)
@@ -180,7 +181,8 @@ class _WheelPainter extends CustomPainter {
       canvas.save();
       canvas.translate(labelOffset.dx, labelOffset.dy);
       canvas.rotate(angle + pi / 2);
-      textPainter.paint(canvas, Offset(-textPainter.width / 2, -textPainter.height / 2));
+      textPainter.paint(
+          canvas, Offset(-textPainter.width / 2, -textPainter.height / 2));
       canvas.restore();
 
       start += sweep;

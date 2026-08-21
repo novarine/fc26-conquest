@@ -63,7 +63,8 @@ class ConquestService {
 
     final playersByTeam = <int, int>{};
     for (final player in normalizedPlayers) {
-      playersByTeam.update(player.originTeamId, (value) => value + 1, ifAbsent: () => 1);
+      playersByTeam.update(player.originTeamId, (value) => value + 1,
+          ifAbsent: () => 1);
     }
 
     final missingTeamIds = selectedTeamIds
@@ -112,7 +113,8 @@ class ConquestService {
           .firstMatch(normalizedName);
       if (match != null) {
         final role = match.group(1) ?? normalizedName;
-        return player.copyWith(name: _profileNameOrFallback(teamName, role, profile));
+        return player.copyWith(
+            name: _profileNameOrFallback(teamName, role, profile));
       }
 
       final directRole = _extractGeneratedRole(normalizedName, teamName);
@@ -126,7 +128,8 @@ class ConquestService {
     }).toList();
     final playersByTeam = <int, int>{};
     for (final player in players) {
-      playersByTeam.update(player.currentTeamId, (value) => value + 1, ifAbsent: () => 1);
+      playersByTeam.update(player.currentTeamId, (value) => value + 1,
+          ifAbsent: () => 1);
     }
 
     var nextGeneratedId = players.isEmpty
@@ -185,23 +188,23 @@ class ConquestService {
 
     final defenders = defenderOptions(state, attackerId);
     if (!defenders.contains(defenderId)) {
-      throw StateError('Selected defender is not a valid neighboring opponent.');
+      throw StateError(
+          'Selected defender is not a valid neighboring opponent.');
     }
 
     return BattlePairing(attackerId: attackerId, defenderId: defenderId);
   }
 
   List<Player> playersForTeam(CampaignState state, int teamId) {
-    final players = state.players
-        .where((player) => player.currentTeamId == teamId)
-        .toList()
-      ..sort((left, right) {
-        final ratingCompare = right.rating.compareTo(left.rating);
-        if (ratingCompare != 0) {
-          return ratingCompare;
-        }
-        return left.name.compareTo(right.name);
-      });
+    final players =
+        state.players.where((player) => player.currentTeamId == teamId).toList()
+          ..sort((left, right) {
+            final ratingCompare = right.rating.compareTo(left.rating);
+            if (ratingCompare != 0) {
+              return ratingCompare;
+            }
+            return left.name.compareTo(right.name);
+          });
     return players;
   }
 
@@ -225,7 +228,8 @@ class ConquestService {
     final regionById = {for (final region in state.regions) region.id: region};
     final defenders = <int>{};
 
-    for (final region in state.regions.where((entry) => entry.ownerId == attackerId)) {
+    for (final region
+        in state.regions.where((entry) => entry.ownerId == attackerId)) {
       for (final neighborId in region.neighbors) {
         final neighbor = regionById[neighborId];
         if (neighbor == null || neighbor.ownerId == attackerId) {
@@ -270,22 +274,23 @@ class ConquestService {
         throw StateError('Selected transfer player does not exist.');
       }
       if (candidate.currentTeamId != loserId) {
-        throw StateError('Selected transfer player no longer belongs to the losing team.');
+        throw StateError(
+            'Selected transfer player no longer belongs to the losing team.');
       }
       transferredPlayer = candidate.copyWith(currentTeamId: winnerId);
     }
 
-    final updatedRegions = state.regions
-        .map(
-          (region) {
-            final shouldTransfer = region.ownerId == loserId;
-            return shouldTransfer ? region.copyWith(ownerId: winnerId) : region;
-          },
-        )
-        .toList();
+    final updatedRegions = state.regions.map(
+      (region) {
+        final shouldTransfer = region.ownerId == loserId;
+        return shouldTransfer ? region.copyWith(ownerId: winnerId) : region;
+      },
+    ).toList();
 
     final updatedPlayers = state.players
-        .map((player) => player.id == transferredPlayerId ? player.copyWith(currentTeamId: winnerId) : player)
+        .map((player) => player.id == transferredPlayerId
+            ? player.copyWith(currentTeamId: winnerId)
+            : player)
         .toList();
 
     final match = MatchRecord(
@@ -344,7 +349,8 @@ class ConquestService {
     };
 
     for (final player in state.players) {
-      squadCounts.update(player.currentTeamId, (value) => value + 1, ifAbsent: () => 1);
+      squadCounts.update(player.currentTeamId, (value) => value + 1,
+          ifAbsent: () => 1);
     }
 
     for (final match in state.history) {
@@ -352,7 +358,8 @@ class ConquestService {
       final loser = match.winner == match.teamA ? match.teamB : match.teamA;
       losses.update(loser, (value) => value + 1, ifAbsent: () => 1);
       if (match.transferredPlayerId != null) {
-        transfersIn.update(match.winner, (value) => value + 1, ifAbsent: () => 1);
+        transfersIn.update(match.winner, (value) => value + 1,
+            ifAbsent: () => 1);
       }
     }
 
@@ -405,7 +412,8 @@ class ConquestService {
     final regionById = {for (final region in state.regions) region.id: region};
     final frontier = <Region>[];
 
-    for (final region in state.regions.where((entry) => entry.ownerId == loserId)) {
+    for (final region
+        in state.regions.where((entry) => entry.ownerId == loserId)) {
       final touchesWinner = region.neighbors.any((neighborId) {
         final neighbor = regionById[neighborId];
         return neighbor != null && neighbor.ownerId == winnerId;
@@ -458,7 +466,8 @@ class ConquestService {
         dribbling: 64 + _random.nextInt(26),
         defending: 58 + _random.nextInt(28),
         physical: 62 + _random.nextInt(24),
-        face: 'https://api.dicebear.com/9.x/adventurer/png?seed=team-$teamId-$index',
+        face:
+            'https://api.dicebear.com/9.x/adventurer/png?seed=team-$teamId-$index',
       );
     });
   }
@@ -516,7 +525,10 @@ class ConquestService {
 
           final nextRow = row + rowOffset;
           final nextCol = col + colOffset;
-          if (nextRow < 0 || nextCol < 0 || nextRow >= rows || nextCol >= cols) {
+          if (nextRow < 0 ||
+              nextCol < 0 ||
+              nextRow >= rows ||
+              nextCol >= cols) {
             continue;
           }
 

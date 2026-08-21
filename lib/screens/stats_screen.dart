@@ -22,7 +22,8 @@ class StatsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final ordered = stats.values.toList()
       ..sort((left, right) {
-        final regionCompare = right.currentRegions.compareTo(left.currentRegions);
+        final regionCompare =
+            right.currentRegions.compareTo(left.currentRegions);
         if (regionCompare != 0) {
           return regionCompare;
         }

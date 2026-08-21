@@ -59,9 +59,8 @@ void main() {
         score: '2:0',
       );
 
-      final ownedByWinner = result.state.regions
-          .where((region) => region.ownerId == 1)
-          .length;
+      final ownedByWinner =
+          result.state.regions.where((region) => region.ownerId == 1).length;
 
       expect(ownedByWinner, 4);
       expect(result.state.matchesPlayed, 1);
@@ -77,8 +76,8 @@ void main() {
         transferredPlayerId: 21,
       );
 
-      final transferred = result.state.players
-          .firstWhere((player) => player.id == 21);
+      final transferred =
+          result.state.players.firstWhere((player) => player.id == 21);
 
       expect(transferred.currentTeamId, 1);
       expect(result.state.history.single.transferredPlayerId, 21);
