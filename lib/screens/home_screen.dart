@@ -109,286 +109,296 @@ class _HomeScreenState extends State<HomeScreen> {
             end: Alignment.bottomRight,
           ),
         ),
-        child: Stack(
-          children: [
-            Positioned(
-              left: -20,
-              top: 70,
-              child: _cloud(const Size(140, 70)),
-            ),
-            Positioned(
-              right: 12,
-              top: 110,
-              child: _cloud(const Size(90, 52)),
-            ),
-            Center(
-              child: SingleChildScrollView(
-                child: ConstrainedBox(
-                  constraints: const BoxConstraints(maxWidth: 720),
-                  child: Padding(
-                    padding: const EdgeInsets.all(24),
-                    child: Container(
-                      padding: const EdgeInsets.all(28),
-                      decoration: BoxDecoration(
-                        color: Colors.white.withValues(alpha: 0.9),
-                        borderRadius: BorderRadius.circular(36),
-                        border: Border.all(color: Colors.white, width: 3),
-                        boxShadow: const [
-                          BoxShadow(
-                            color: Color(0x22000000),
-                            blurRadius: 24,
-                            offset: Offset(0, 16),
-                          ),
-                        ],
-                      ),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 14, vertical: 8),
-                            decoration: BoxDecoration(
-                              color: const Color(0xFFE0F2FE),
-                              borderRadius: BorderRadius.circular(999),
+        child: LayoutBuilder(builder: (context, constraints) {
+          // Tighter padding on narrow phone screens so more content width
+          // is available before the card edges.
+          final isCompact = constraints.maxWidth < 480;
+          final outerPadding = isCompact ? 12.0 : 24.0;
+          final cardPadding = isCompact ? 16.0 : 28.0;
+          return Stack(
+            children: [
+              Positioned(
+                left: -20,
+                top: 70,
+                child: _cloud(const Size(140, 70)),
+              ),
+              Positioned(
+                right: 12,
+                top: 110,
+                child: _cloud(const Size(90, 52)),
+              ),
+              Center(
+                child: SingleChildScrollView(
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: 720),
+                    child: Padding(
+                      padding: EdgeInsets.all(outerPadding),
+                      child: Container(
+                        padding: EdgeInsets.all(cardPadding),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withValues(alpha: 0.9),
+                          borderRadius: BorderRadius.circular(36),
+                          border: Border.all(color: Colors.white, width: 3),
+                          boxShadow: const [
+                            BoxShadow(
+                              color: Color(0x22000000),
+                              blurRadius: 24,
+                              offset: Offset(0, 16),
                             ),
-                            child: Text(
-                              strings.homeBadge,
-                              style:
-                                  const TextStyle(fontWeight: FontWeight.w800),
+                          ],
+                        ),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 14, vertical: 8),
+                              decoration: BoxDecoration(
+                                color: const Color(0xFFE0F2FE),
+                                borderRadius: BorderRadius.circular(999),
+                              ),
+                              child: Text(
+                                strings.homeBadge,
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.w800),
+                              ),
                             ),
-                          ),
-                          const SizedBox(height: 18),
-                          Text('FC 26 Conquest',
-                              style: theme.textTheme.displaySmall),
-                          const SizedBox(height: 10),
-                          Text(
-                            strings.homeHeadline,
-                            style: theme.textTheme.headlineSmall?.copyWith(
-                              color: const Color(0xFF0F172A),
-                              fontWeight: FontWeight.w900,
+                            const SizedBox(height: 18),
+                            Text('FC 26 Conquest',
+                                style: theme.textTheme.displaySmall),
+                            const SizedBox(height: 10),
+                            Text(
+                              strings.homeHeadline,
+                              style: theme.textTheme.headlineSmall?.copyWith(
+                                color: const Color(0xFF0F172A),
+                                fontWeight: FontWeight.w900,
+                              ),
                             ),
-                          ),
-                          const SizedBox(height: 16),
-                          Text(
-                            strings.homeDescription,
-                            style: const TextStyle(fontSize: 16, height: 1.4),
-                          ),
-                          const SizedBox(height: 24),
-                          Wrap(
-                            spacing: 12,
-                            runSpacing: 12,
-                            children: [
-                              _MiniFeature(
-                                  icon: Icons.casino_rounded,
-                                  label: strings.featureWheel),
-                              _MiniFeature(
-                                  icon: Icons.flag_circle,
-                                  label: strings.featureBadges),
-                              _MiniFeature(
-                                  icon: Icons.map_rounded,
-                                  label: strings.featureMap),
-                            ],
-                          ),
-                          const SizedBox(height: 24),
-                          Container(
-                            padding: const EdgeInsets.all(16),
-                            decoration: BoxDecoration(
-                              color: const Color(0xFFF8FAFC),
-                              borderRadius: BorderRadius.circular(20),
+                            const SizedBox(height: 16),
+                            Text(
+                              strings.homeDescription,
+                              style: const TextStyle(fontSize: 16, height: 1.4),
                             ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                            const SizedBox(height: 24),
+                            Wrap(
+                              spacing: 12,
+                              runSpacing: 12,
                               children: [
-                                Text(
-                                  strings.setupHeading,
-                                  style: theme.textTheme.titleMedium?.copyWith(
-                                    fontWeight: FontWeight.w900,
+                                _MiniFeature(
+                                    icon: Icons.casino_rounded,
+                                    label: strings.featureWheel),
+                                _MiniFeature(
+                                    icon: Icons.flag_circle,
+                                    label: strings.featureBadges),
+                                _MiniFeature(
+                                    icon: Icons.map_rounded,
+                                    label: strings.featureMap),
+                              ],
+                            ),
+                            const SizedBox(height: 24),
+                            Container(
+                              padding: const EdgeInsets.all(16),
+                              decoration: BoxDecoration(
+                                color: const Color(0xFFF8FAFC),
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    strings.setupHeading,
+                                    style:
+                                        theme.textTheme.titleMedium?.copyWith(
+                                      fontWeight: FontWeight.w900,
+                                    ),
                                   ),
-                                ),
-                                const SizedBox(height: 12),
-                                Wrap(
-                                  spacing: 10,
-                                  runSpacing: 10,
-                                  children: [
-                                    ChoiceChip(
-                                      label: Text(strings.clubsChip(
-                                          widget.availableClubTeams)),
-                                      selected: _mode == TeamType.club,
-                                      onSelected: (_) => setState(() {
-                                        _mode = TeamType.club;
-                                        _resetFilters();
-                                      }),
-                                    ),
-                                    ChoiceChip(
-                                      label: Text(strings.nationsChip(
-                                          widget.availableNationTeams)),
-                                      selected: _mode == TeamType.nation,
-                                      onSelected: (_) => setState(() {
-                                        _mode = TeamType.nation;
-                                        _resetFilters();
-                                      }),
-                                    ),
-                                  ],
-                                ),
-                                if (_mode == TeamType.club) ...[
                                   const SizedBox(height: 12),
                                   Wrap(
                                     spacing: 10,
                                     runSpacing: 10,
                                     children: [
-                                      DropdownButton<String?>(
-                                        value: _league,
-                                        items: [
-                                          DropdownMenuItem<String?>(
-                                              value: null,
-                                              child: Text(strings.allLeagues)),
-                                          ...leagues.map((value) =>
-                                              DropdownMenuItem<String?>(
-                                                  value: value,
-                                                  child: Text(value))),
-                                        ],
-                                        onChanged: (value) => setState(() {
-                                          _league = value;
+                                      ChoiceChip(
+                                        label: Text(strings.clubsChip(
+                                            widget.availableClubTeams)),
+                                        selected: _mode == TeamType.club,
+                                        onSelected: (_) => setState(() {
+                                          _mode = TeamType.club;
+                                          _resetFilters();
                                         }),
                                       ),
-                                      DropdownButton<String?>(
-                                        value: _country,
-                                        items: [
-                                          DropdownMenuItem<String?>(
-                                              value: null,
-                                              child:
-                                                  Text(strings.allCountries)),
-                                          ...countries.map((value) =>
-                                              DropdownMenuItem<String?>(
-                                                  value: value,
-                                                  child: Text(value))),
-                                        ],
-                                        onChanged: (value) => setState(() {
-                                          _country = value;
+                                      ChoiceChip(
+                                        label: Text(strings.nationsChip(
+                                            widget.availableNationTeams)),
+                                        selected: _mode == TeamType.nation,
+                                        onSelected: (_) => setState(() {
+                                          _mode = TeamType.nation;
+                                          _resetFilters();
                                         }),
                                       ),
                                     ],
                                   ),
-                                ],
-                                const SizedBox(height: 12),
-                                Text(
-                                  strings.ratingRangeLabel(
-                                      ratingRange.start.round(),
-                                      ratingRange.end.round()),
-                                ),
-                                RangeSlider(
-                                  values: ratingRange,
-                                  min: bounds.min.toDouble(),
-                                  max: bounds.max.toDouble(),
-                                  divisions: (bounds.max - bounds.min) > 0
-                                      ? bounds.max - bounds.min
-                                      : null,
-                                  labels: RangeLabels(
-                                    ratingRange.start.round().toString(),
-                                    ratingRange.end.round().toString(),
+                                  if (_mode == TeamType.club) ...[
+                                    const SizedBox(height: 12),
+                                    Wrap(
+                                      spacing: 10,
+                                      runSpacing: 10,
+                                      children: [
+                                        DropdownButton<String?>(
+                                          value: _league,
+                                          items: [
+                                            DropdownMenuItem<String?>(
+                                                value: null,
+                                                child:
+                                                    Text(strings.allLeagues)),
+                                            ...leagues.map((value) =>
+                                                DropdownMenuItem<String?>(
+                                                    value: value,
+                                                    child: Text(value))),
+                                          ],
+                                          onChanged: (value) => setState(() {
+                                            _league = value;
+                                          }),
+                                        ),
+                                        DropdownButton<String?>(
+                                          value: _country,
+                                          items: [
+                                            DropdownMenuItem<String?>(
+                                                value: null,
+                                                child:
+                                                    Text(strings.allCountries)),
+                                            ...countries.map((value) =>
+                                                DropdownMenuItem<String?>(
+                                                    value: value,
+                                                    child: Text(value))),
+                                          ],
+                                          onChanged: (value) => setState(() {
+                                            _country = value;
+                                          }),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                  const SizedBox(height: 12),
+                                  Text(
+                                    strings.ratingRangeLabel(
+                                        ratingRange.start.round(),
+                                        ratingRange.end.round()),
                                   ),
-                                  onChanged: (value) => setState(() {
-                                    _ratingRange = value;
-                                  }),
-                                ),
-                                InkWell(
-                                  onTap: () => setState(() {
-                                    _licensedOnly = !_licensedOnly;
-                                  }),
-                                  child: Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Checkbox(
-                                        value: _licensedOnly,
-                                        onChanged: (value) => setState(() {
-                                          _licensedOnly = value ?? false;
-                                        }),
-                                      ),
-                                      Expanded(
-                                        child: Padding(
-                                          padding:
-                                              const EdgeInsets.only(top: 12),
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Text(strings.licensedOnlyTitle),
-                                              Text(
-                                                strings.licensedOnlySubtitle,
-                                                style: const TextStyle(
-                                                    fontSize: 12),
-                                              ),
-                                            ],
+                                  RangeSlider(
+                                    values: ratingRange,
+                                    min: bounds.min.toDouble(),
+                                    max: bounds.max.toDouble(),
+                                    divisions: (bounds.max - bounds.min) > 0
+                                        ? bounds.max - bounds.min
+                                        : null,
+                                    labels: RangeLabels(
+                                      ratingRange.start.round().toString(),
+                                      ratingRange.end.round().toString(),
+                                    ),
+                                    onChanged: (value) => setState(() {
+                                      _ratingRange = value;
+                                    }),
+                                  ),
+                                  InkWell(
+                                    onTap: () => setState(() {
+                                      _licensedOnly = !_licensedOnly;
+                                    }),
+                                    child: Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Checkbox(
+                                          value: _licensedOnly,
+                                          onChanged: (value) => setState(() {
+                                            _licensedOnly = value ?? false;
+                                          }),
+                                        ),
+                                        Expanded(
+                                          child: Padding(
+                                            padding:
+                                                const EdgeInsets.only(top: 12),
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(strings.licensedOnlyTitle),
+                                                Text(
+                                                  strings.licensedOnlySubtitle,
+                                                  style: const TextStyle(
+                                                      fontSize: 12),
+                                                ),
+                                              ],
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                const SizedBox(height: 12),
-                                Text(strings.teamCountLabel(
-                                    effectiveTeamCount, filteredTeams.length)),
-                                Slider(
-                                  value: effectiveTeamCount.toDouble(),
-                                  min: 2,
-                                  max: safeMax.toDouble(),
-                                  divisions: safeMax > 2 ? safeMax - 2 : null,
-                                  label: '$effectiveTeamCount',
-                                  onChanged: (value) {
-                                    setState(() {
-                                      _teamCount = value.round();
-                                    });
-                                  },
-                                ),
-                              ],
-                            ),
-                          ),
-                          const SizedBox(height: 20),
-                          FilledButton.icon(
-                            onPressed: filteredTeams.length < 2
-                                ? null
-                                : () => widget.onNewCampaign(
-                                      CampaignSetup(
-                                        mode: _mode,
-                                        teamCount: effectiveTeamCount,
-                                        league: _mode == TeamType.club
-                                            ? _league
-                                            : null,
-                                        country: _mode == TeamType.club
-                                            ? _country
-                                            : null,
-                                        minRating: ratingRange.start.round(),
-                                        maxRating: ratingRange.end.round(),
-                                        licensedOnly: _licensedOnly,
-                                      ),
+                                      ],
                                     ),
-                            icon: const Icon(Icons.auto_awesome),
-                            label: Text(strings.newCampaignButton),
-                          ),
-                          const SizedBox(height: 12),
-                          OutlinedButton.icon(
-                            onPressed:
-                                widget.hasCampaign ? widget.onContinue : null,
-                            icon: const Icon(Icons.play_arrow),
-                            label: Text(strings.continueCampaignButton),
-                          ),
-                          const SizedBox(height: 12),
-                          TextButton.icon(
-                            onPressed: widget.onOpenCustomWheel,
-                            icon: const Icon(Icons.casino_outlined),
-                            label: Text(strings.customWheelToolButton),
-                          ),
-                        ],
+                                  ),
+                                  const SizedBox(height: 12),
+                                  Text(strings.teamCountLabel(
+                                      effectiveTeamCount,
+                                      filteredTeams.length)),
+                                  Slider(
+                                    value: effectiveTeamCount.toDouble(),
+                                    min: 2,
+                                    max: safeMax.toDouble(),
+                                    divisions: safeMax > 2 ? safeMax - 2 : null,
+                                    label: '$effectiveTeamCount',
+                                    onChanged: (value) {
+                                      setState(() {
+                                        _teamCount = value.round();
+                                      });
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(height: 20),
+                            FilledButton.icon(
+                              onPressed: filteredTeams.length < 2
+                                  ? null
+                                  : () => widget.onNewCampaign(
+                                        CampaignSetup(
+                                          mode: _mode,
+                                          teamCount: effectiveTeamCount,
+                                          league: _mode == TeamType.club
+                                              ? _league
+                                              : null,
+                                          country: _mode == TeamType.club
+                                              ? _country
+                                              : null,
+                                          minRating: ratingRange.start.round(),
+                                          maxRating: ratingRange.end.round(),
+                                          licensedOnly: _licensedOnly,
+                                        ),
+                                      ),
+                              icon: const Icon(Icons.auto_awesome),
+                              label: Text(strings.newCampaignButton),
+                            ),
+                            const SizedBox(height: 12),
+                            OutlinedButton.icon(
+                              onPressed:
+                                  widget.hasCampaign ? widget.onContinue : null,
+                              icon: const Icon(Icons.play_arrow),
+                              label: Text(strings.continueCampaignButton),
+                            ),
+                            const SizedBox(height: 12),
+                            TextButton.icon(
+                              onPressed: widget.onOpenCustomWheel,
+                              icon: const Icon(Icons.casino_outlined),
+                              label: Text(strings.customWheelToolButton),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
                 ),
               ),
-            ),
-          ],
-        ),
+            ],
+          );
+        }),
       ),
     );
   }

@@ -8,6 +8,10 @@ import '../models/team.dart';
 import '../utils/color_utils.dart';
 import 'team_badge.dart';
 
+// Fixed outer margin reserved around the region grid (must match _BoardLayout sizing).
+const _boardMarginLeft = 72.0;
+const _boardMarginTop = 70.0;
+
 class WorldMapBoard extends StatefulWidget {
   const WorldMapBoard({
     super.key,
@@ -37,8 +41,24 @@ class _WorldMapBoardState extends State<WorldMapBoard> {
 
   @override
   Widget build(BuildContext context) {
-    final regions = [...widget.campaign.regions]..sort((a, b) => a.id.compareTo(b.id));
-    final layout = _BoardLayout.fromRegionCount(regions.length, zoom: _zoom);
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final regions = [...widget.campaign.regions]
+          ..sort((a, b) => a.id.compareTo(b.id));
+        final layout = _BoardLayout.fromRegionCount(
+          regions.length,
+          zoom: _zoom,
+          maxWidth: constraints.hasBoundedWidth ? constraints.maxWidth : null,
+          maxHeight:
+              constraints.hasBoundedHeight ? constraints.maxHeight : null,
+        );
+        return _buildBoard(context, regions, layout);
+      },
+    );
+  }
+
+  Widget _buildBoard(
+      BuildContext context, List<Region> regions, _BoardLayout layout) {
     final boardSize = layout.boardSize;
     final shapes = _buildShapes(regions, layout);
     final territories = _buildTerritories(regions, shapes);
@@ -88,7 +108,12 @@ class _WorldMapBoardState extends State<WorldMapBoard> {
                         }
 
                         final center = territory.center;
-                        final badgeSize = territory.regionIds.length >= 4 ? 74.0 : 64.0;
+                        final idealBadgeSize =
+                            territory.regionIds.length >= 4 ? 74.0 : 64.0;
+                        final badgeSize = math
+                            .min(idealBadgeSize,
+                                layout.cellSize.shortestSide * 0.62)
+                            .clamp(32.0, idealBadgeSize);
                         return Positioned(
                           left: center.dx - (badgeSize / 2),
                           top: center.dy - (badgeSize / 2),
@@ -96,11 +121,13 @@ class _WorldMapBoardState extends State<WorldMapBoard> {
                             onEnter: (_) {
                               if (territory.regionIds.isNotEmpty) {
                                 setState(() {
-                                  _hoveredRegionIds = territory.regionIds.toSet();
+                                  _hoveredRegionIds =
+                                      territory.regionIds.toSet();
                                 });
                               }
                             },
-                            onExit: (_) => setState(() => _hoveredRegionIds = const {}),
+                            onExit: (_) =>
+                                setState(() => _hoveredRegionIds = const {}),
                             child: Tooltip(
                               preferBelow: false,
                               richMessage: TextSpan(
@@ -112,16 +139,20 @@ class _WorldMapBoardState extends State<WorldMapBoard> {
                                 ),
                                 children: [
                                   TextSpan(
-                                    text: 'Gebiete: ${territory.regionIds.length}\n',
-                                    style: const TextStyle(fontWeight: FontWeight.w700),
+                                    text:
+                                        'Gebiete: ${territory.regionIds.length}\n',
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.w700),
                                   ),
                                   TextSpan(
                                     text: 'Team Rating: ${team.rating}',
-                                    style: const TextStyle(fontWeight: FontWeight.w600),
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.w600),
                                   ),
                                 ],
                               ),
-                              child: TeamBadge(team: team, size: badgeSize, showFrame: true),
+                              child: TeamBadge(
+                                  team: team, size: badgeSize, showFrame: true),
                             ),
                           ),
                         );
@@ -146,7 +177,8 @@ class _WorldMapBoardState extends State<WorldMapBoard> {
                         right: 12,
                         bottom: 12,
                         child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 8),
                           decoration: BoxDecoration(
                             color: Colors.black.withValues(alpha: 0.45),
                             borderRadius: BorderRadius.circular(12),
@@ -180,15 +212,16 @@ class _WorldMapBoardState extends State<WorldMapBoard> {
     return null;
   }
 
-  Map<int, _RegionShape> _buildShapes(List<Region> regions, _BoardLayout layout) {
+  Map<int, _RegionShape> _buildShapes(
+      List<Region> regions, _BoardLayout layout) {
     if (regions.isEmpty) {
       return const {};
     }
 
-    final left = 72.0;
-    final top = 70.0;
-    final right = layout.boardSize.width - 72;
-    final bottom = layout.boardSize.height - 70;
+    final left = _boardMarginLeft;
+    final top = _boardMarginTop;
+    final right = layout.boardSize.width - _boardMarginLeft;
+    final bottom = layout.boardSize.height - _boardMarginTop;
 
     final cellWidth = (right - left) / layout.cols;
     final cellHeight = (bottom - top) / layout.rows;
@@ -264,7 +297,9 @@ class _WorldMapBoardState extends State<WorldMapBoard> {
 
         for (final neighborId in current.neighbors) {
           final neighbor = regionById[neighborId];
-          if (neighbor == null || neighbor.ownerId != ownerId || visited.contains(neighborId)) {
+          if (neighbor == null ||
+              neighbor.ownerId != ownerId ||
+              visited.contains(neighborId)) {
             continue;
           }
           stack.add(neighborId);
@@ -291,7 +326,8 @@ class _WorldMapBoardState extends State<WorldMapBoard> {
         count++;
       }
 
-      final averageCenter = count == 0 ? const Offset(0, 0) : Offset(cx / count, cy / count);
+      final averageCenter =
+          count == 0 ? const Offset(0, 0) : Offset(cx / count, cy / count);
       Offset stableCenter = averageCenter;
       if (regionCenters.isNotEmpty) {
         stableCenter = regionCenters.reduce((best, current) {
@@ -314,7 +350,8 @@ class _WorldMapBoardState extends State<WorldMapBoard> {
   }
 
   double _noise(int row, int col, double phase) {
-    final value = math.sin((row + 1) * 11.137 + (col + 1) * 83.971 + phase * 37.0);
+    final value =
+        math.sin((row + 1) * 11.137 + (col + 1) * 83.971 + phase * 37.0);
     return value.clamp(-1.0, 1.0);
   }
 
@@ -502,12 +539,52 @@ class _BoardLayout {
   final int rows;
   final Size boardSize;
 
-  factory _BoardLayout.fromRegionCount(int regionCount, {required double zoom}) {
+  // Cell size derived from the board size and shared margins, used to scale badges.
+  Size get cellSize => Size(
+        (boardSize.width - (_boardMarginLeft * 2)) / cols,
+        (boardSize.height - (_boardMarginTop * 2)) / rows,
+      );
+
+  // maxWidth/maxHeight (from the parent LayoutBuilder) let the board shrink to fit
+  // phones/tablets instead of always using the desktop-sized minimums.
+  factory _BoardLayout.fromRegionCount(
+    int regionCount, {
+    required double zoom,
+    double? maxWidth,
+    double? maxHeight,
+  }) {
+    const idealCellWidth = 240.0;
+    const idealCellHeight = 220.0;
+    const minCellWidth = 96.0;
+    const minCellHeight = 90.0;
+
     final cols = math.max(2, math.sqrt(regionCount).ceil());
     final rows = (regionCount / cols).ceil();
 
-    final baseWidth = math.max(580.0, (cols * 240).toDouble());
-    final baseHeight = math.max(420.0, (rows * 220).toDouble());
+    var cellWidth = idealCellWidth;
+    var cellHeight = idealCellHeight;
+
+    if (maxWidth != null) {
+      final availableForCells = maxWidth - (_boardMarginLeft * 2);
+      if (availableForCells > 0) {
+        cellWidth =
+            (availableForCells / cols).clamp(minCellWidth, idealCellWidth);
+      } else {
+        cellWidth = minCellWidth;
+      }
+    }
+    if (maxHeight != null) {
+      final availableForCells = maxHeight - (_boardMarginTop * 2);
+      if (availableForCells > 0) {
+        cellHeight =
+            (availableForCells / rows).clamp(minCellHeight, idealCellHeight);
+      } else {
+        cellHeight = minCellHeight;
+      }
+    }
+
+    final baseWidth = (_boardMarginLeft * 2) + (cellWidth * cols);
+    final baseHeight = (_boardMarginTop * 2) + (cellHeight * rows);
     final width = baseWidth * zoom;
     final height = baseHeight * zoom;
     return _BoardLayout(
@@ -549,7 +626,8 @@ class _ZoomControls extends StatelessWidget {
           ),
           Text(
             '${(zoom * 100).round()}%',
-            style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w800),
+            style: const TextStyle(
+                color: Colors.white, fontWeight: FontWeight.w800),
           ),
           IconButton(
             onPressed: onZoomIn,

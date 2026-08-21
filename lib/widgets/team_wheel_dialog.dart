@@ -75,16 +75,25 @@ class _TeamWheelDialogState extends State<_TeamWheelDialog>
 
   @override
   Widget build(BuildContext context) {
-    final availableWidth = MediaQuery.of(context).size.width;
+    final mediaSize = MediaQuery.of(context).size;
+    final availableWidth = mediaSize.width;
+    final availableHeight = mediaSize.height;
     final dialogWidth = min(1120.0, availableWidth - 28);
-    final wheelSize = availableWidth > 1500 ? 460.0 : 420.0;
-    final selectedTeam = _selectedIndex == null ? null : widget.teams[_selectedIndex!];
+    final idealWheelSize = availableWidth > 1500 ? 460.0 : 420.0;
+    // Shrink the wheel to fit narrow phone dialogs and short viewports.
+    var wheelSize = min(idealWheelSize, dialogWidth - 40);
+    wheelSize = min(wheelSize, availableHeight - 260);
+    wheelSize = max(wheelSize, 160.0);
+    final titleFontSize = dialogWidth < 360 ? 19.0 : 24.0;
+    final selectedTeam =
+        _selectedIndex == null ? null : widget.teams[_selectedIndex!];
 
     return Dialog.fullscreen(
       backgroundColor: Colors.black.withValues(alpha: 0.35),
       child: Center(
         child: Container(
           width: dialogWidth,
+          constraints: BoxConstraints(maxHeight: availableHeight - 24),
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
             gradient: const LinearGradient(
@@ -102,141 +111,149 @@ class _TeamWheelDialogState extends State<_TeamWheelDialog>
               ),
             ],
           ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                widget.title,
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 24,
-                  fontWeight: FontWeight.w900,
-                ),
-              ),
-              if (widget.subtitle != null) ...[
-                const SizedBox(height: 8),
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
                 Text(
-                  widget.subtitle!,
+                  widget.title,
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    color: Colors.white.withValues(alpha: 0.85),
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
+                    color: Colors.white,
+                    fontSize: titleFontSize,
+                    fontWeight: FontWeight.w900,
                   ),
                 ),
-              ],
-              const SizedBox(height: 18),
-              SizedBox(
-                width: wheelSize,
-                height: wheelSize,
-                child: Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    Positioned(
-                      left: 0,
-                      child: _LeftWheelPointer(size: wheelSize),
+                if (widget.subtitle != null) ...[
+                  const SizedBox(height: 8),
+                  Text(
+                    widget.subtitle!,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Colors.white.withValues(alpha: 0.85),
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
                     ),
-                    AnimatedBuilder(
-                      animation: _animation,
-                      builder: (context, _) {
-                        return Transform.rotate(
-                          angle: _animation.value,
-                          child: _WheelDisk(
-                            teams: widget.teams,
-                            selectedIndex: _selectedIndex,
-                            wheelSize: wheelSize,
-                          ),
-                        );
-                      },
-                    ),
-                    Container(
-                      width: 96,
-                      height: 96,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: const Color(0xFFE0F2FE),
-                        border: Border.all(color: Colors.white, width: 4),
-                        boxShadow: const [
-                          BoxShadow(
-                            color: Color(0x55000000),
-                            blurRadius: 14,
-                          ),
-                        ],
-                      ),
-                      child: const Icon(
-                        Icons.sports_soccer,
-                        size: 42,
-                        color: Color(0xFF0F172A),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 16),
-              if (selectedTeam != null)
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-                  decoration: BoxDecoration(
-                    color: Colors.white.withValues(alpha: 0.15),
-                    borderRadius: BorderRadius.circular(999),
-                    border: Border.all(color: Colors.white.withValues(alpha: 0.35)),
                   ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
+                ],
+                const SizedBox(height: 18),
+                SizedBox(
+                  width: wheelSize,
+                  height: wheelSize,
+                  child: Stack(
+                    alignment: Alignment.center,
                     children: [
-                      TeamBadge(team: selectedTeam, size: 52, showFrame: true),
-                      const SizedBox(width: 10),
-                      Text(
-                        selectedTeam.name,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w800,
+                      Positioned(
+                        left: 0,
+                        child: _LeftWheelPointer(size: wheelSize),
+                      ),
+                      AnimatedBuilder(
+                        animation: _animation,
+                        builder: (context, _) {
+                          return Transform.rotate(
+                            angle: _animation.value,
+                            child: _WheelDisk(
+                              teams: widget.teams,
+                              selectedIndex: _selectedIndex,
+                              wheelSize: wheelSize,
+                            ),
+                          );
+                        },
+                      ),
+                      Container(
+                        width: 96,
+                        height: 96,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: const Color(0xFFE0F2FE),
+                          border: Border.all(color: Colors.white, width: 4),
+                          boxShadow: const [
+                            BoxShadow(
+                              color: Color(0x55000000),
+                              blurRadius: 14,
+                            ),
+                          ],
+                        ),
+                        child: const Icon(
+                          Icons.sports_soccer,
+                          size: 42,
+                          color: Color(0xFF0F172A),
                         ),
                       ),
                     ],
                   ),
                 ),
-              const SizedBox(height: 18),
-              Wrap(
-                alignment: WrapAlignment.center,
-                spacing: 10,
-                runSpacing: 10,
-                children: [
-                  OutlinedButton.icon(
-                    onPressed: _spinning ? null : () => Navigator.of(context).pop(),
-                    icon: const Icon(Icons.close),
-                    label: Text(widget.strings.cancelButton),
-                    style: OutlinedButton.styleFrom(
-                      foregroundColor: Colors.white,
-                      disabledForegroundColor: const Color(0xFFD1EAFE),
-                      side: const BorderSide(color: Color(0xFF7DD3FC)),
+                const SizedBox(height: 16),
+                if (selectedTeam != null)
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 14, vertical: 10),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withValues(alpha: 0.15),
+                      borderRadius: BorderRadius.circular(999),
+                      border: Border.all(
+                          color: Colors.white.withValues(alpha: 0.35)),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        TeamBadge(
+                            team: selectedTeam, size: 52, showFrame: true),
+                        const SizedBox(width: 10),
+                        Text(
+                          selectedTeam.name,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w800,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                  FilledButton.icon(
-                    onPressed: _spinning ? null : _spin,
-                    icon: const Icon(Icons.rotate_right),
-                    label: Text(_selectedIndex == null ? widget.strings.spinButton : widget.strings.spinAgainButton),
-                    style: FilledButton.styleFrom(
-                      disabledBackgroundColor: const Color(0xFF1D4F77),
-                      disabledForegroundColor: const Color(0xFFD1EAFE),
+                const SizedBox(height: 18),
+                Wrap(
+                  alignment: WrapAlignment.center,
+                  spacing: 10,
+                  runSpacing: 10,
+                  children: [
+                    OutlinedButton.icon(
+                      onPressed:
+                          _spinning ? null : () => Navigator.of(context).pop(),
+                      icon: const Icon(Icons.close),
+                      label: Text(widget.strings.cancelButton),
+                      style: OutlinedButton.styleFrom(
+                        foregroundColor: Colors.white,
+                        disabledForegroundColor: const Color(0xFFD1EAFE),
+                        side: const BorderSide(color: Color(0xFF7DD3FC)),
+                      ),
                     ),
-                  ),
-                  FilledButton.icon(
-                    onPressed: _selectedIndex == null || _spinning
-                        ? null
-                        : () => Navigator.of(context).pop(selectedTeam),
-                    icon: const Icon(Icons.check),
-                    label: Text(widget.strings.confirmTeamButton),
-                    style: FilledButton.styleFrom(
-                      backgroundColor: const Color(0xFF22C55E),
-                      disabledBackgroundColor: const Color(0xFF2E6D47),
-                      disabledForegroundColor: const Color(0xFFE2FBEA),
+                    FilledButton.icon(
+                      onPressed: _spinning ? null : _spin,
+                      icon: const Icon(Icons.rotate_right),
+                      label: Text(_selectedIndex == null
+                          ? widget.strings.spinButton
+                          : widget.strings.spinAgainButton),
+                      style: FilledButton.styleFrom(
+                        disabledBackgroundColor: const Color(0xFF1D4F77),
+                        disabledForegroundColor: const Color(0xFFD1EAFE),
+                      ),
                     ),
-                  ),
-                ],
-              ),
-            ],
+                    FilledButton.icon(
+                      onPressed: _selectedIndex == null || _spinning
+                          ? null
+                          : () => Navigator.of(context).pop(selectedTeam),
+                      icon: const Icon(Icons.check),
+                      label: Text(widget.strings.confirmTeamButton),
+                      style: FilledButton.styleFrom(
+                        backgroundColor: const Color(0xFF22C55E),
+                        disabledBackgroundColor: const Color(0xFF2E6D47),
+                        disabledForegroundColor: const Color(0xFFE2FBEA),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -255,9 +272,11 @@ class _TeamWheelDialogState extends State<_TeamWheelDialog>
     final sweep = (pi * 2) / widget.teams.length;
     final winner = _random.nextInt(widget.teams.length);
     final winnerCenterAngle = (-pi / 2) + (winner * sweep) + (sweep / 2);
-    final targetRotationNorm = _normalizeAngle(_pointerAngle - winnerCenterAngle);
+    final targetRotationNorm =
+        _normalizeAngle(_pointerAngle - winnerCenterAngle);
     final currentRotationNorm = _normalizeAngle(_rotation);
-    final deltaToTarget = _normalizeAngle(targetRotationNorm - currentRotationNorm);
+    final deltaToTarget =
+        _normalizeAngle(targetRotationNorm - currentRotationNorm);
     final turns = (pi * 2 * (5 + _random.nextInt(3))) + deltaToTarget;
 
     final begin = _rotation;
@@ -397,7 +416,8 @@ class _WheelPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant _WheelPainter oldDelegate) {
-    return oldDelegate.teams != teams || oldDelegate.selectedIndex != selectedIndex;
+    return oldDelegate.teams != teams ||
+        oldDelegate.selectedIndex != selectedIndex;
   }
 }
 

@@ -125,9 +125,12 @@ class _Fc26ConquestAppState extends State<Fc26ConquestApp> {
   }
 
   Future<void> _openUpdateLink() async {
-    final targetUrl = _updateCheckResult?.downloadUrl ?? UpdateService.downloadUrl;
+    final targetUrl =
+        _updateCheckResult?.downloadUrl ?? UpdateService.downloadUrl;
     final url = Uri.tryParse(targetUrl);
-    if (url == null || url.scheme != 'https' || url.host != Uri.parse(UpdateService.defaultUpdateCheckUrl).host) {
+    if (url == null ||
+        url.scheme != 'https' ||
+        url.host != Uri.parse(UpdateService.defaultUpdateCheckUrl).host) {
       unawaited(
         AppLogger.instance.warning(
           'Update',
@@ -200,90 +203,95 @@ class _Fc26ConquestAppState extends State<Fc26ConquestApp> {
               onBack: () => setState(() => _showCustomWheel = false),
             )
           : AnimatedBuilder(
-        animation: _controller,
-        builder: (context, _) {
-          if (_controller.isLoading) {
-            return const Scaffold(
-              body: Center(child: CircularProgressIndicator()),
-            );
-          }
+              animation: _controller,
+              builder: (context, _) {
+                if (_controller.isLoading) {
+                  return const Scaffold(
+                    body: Center(child: CircularProgressIndicator()),
+                  );
+                }
 
-          final error = _controller.error;
-          return Stack(
-            children: [
-              if (_updateCheckResult != null &&
-                  _updateCheckResult!.hasUpdate &&
-                  !_updateBannerDismissed)
-                Align(
-                  alignment: Alignment.topCenter,
-                  child: SafeArea(
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
-                      child: UpdateBanner(
-                        latestVersion: _updateCheckResult!.latestVersion,
-                        releaseNotes: _updateCheckResult!.releaseNotes,
-                        onUpdate: _openUpdateLink,
-                        strings: _strings,
-                        onDismiss: () {
-                          setState(() {
-                            _updateBannerDismissed = true;
-                          });
-                        },
+                final error = _controller.error;
+                return Stack(
+                  children: [
+                    if (_updateCheckResult != null &&
+                        _updateCheckResult!.hasUpdate &&
+                        !_updateBannerDismissed)
+                      Align(
+                        alignment: Alignment.topCenter,
+                        child: SafeArea(
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+                            child: UpdateBanner(
+                              latestVersion: _updateCheckResult!.latestVersion,
+                              releaseNotes: _updateCheckResult!.releaseNotes,
+                              onUpdate: _openUpdateLink,
+                              strings: _strings,
+                              onDismiss: () {
+                                setState(() {
+                                  _updateBannerDismissed = true;
+                                });
+                              },
+                            ),
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                ),
-              _buildPage(),
-              Positioned(
-                right: 82,
-                top: 12,
-                child: SafeArea(
-                  child: Tooltip(
-                    message: _strings.languageSwitcherTooltip,
-                    child: Material(
-                      color: Colors.white,
-                      shape: const StadiumBorder(),
-                      elevation: 2,
-                      child: InkWell(
-                        customBorder: const StadiumBorder(),
-                        onTap: _toggleLanguage,
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-                          child: Text(
-                            _language == AppLanguage.de ? 'DE' : 'EN',
-                            style: const TextStyle(fontWeight: FontWeight.w800),
+                    _buildPage(),
+                    Positioned(
+                      // MapScreen has 2 AppBar action icons on the right; other pages
+                      // only have a leading back button (or no AppBar at all), so the
+                      // language switcher needs less clearance there.
+                      right: _controller.page == AppPage.map ? 100 : 16,
+                      top: 12,
+                      child: SafeArea(
+                        child: Tooltip(
+                          message: _strings.languageSwitcherTooltip,
+                          child: Material(
+                            color: Colors.white,
+                            shape: const StadiumBorder(),
+                            elevation: 2,
+                            child: InkWell(
+                              customBorder: const StadiumBorder(),
+                              onTap: _toggleLanguage,
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 14, vertical: 8),
+                                child: Text(
+                                  _language == AppLanguage.de ? 'DE' : 'EN',
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.w800),
+                                ),
+                              ),
+                            ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                ),
-              ),
-              if (error != null)
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Material(
-                      color: Colors.red.shade700,
-                      borderRadius: BorderRadius.circular(12),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 12,
-                        ),
-                        child: Text(
-                          error,
-                          style: const TextStyle(color: Colors.white),
+                    if (error != null)
+                      Align(
+                        alignment: Alignment.bottomCenter,
+                        child: Padding(
+                          padding: const EdgeInsets.all(16),
+                          child: Material(
+                            color: Colors.red.shade700,
+                            borderRadius: BorderRadius.circular(12),
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 16,
+                                vertical: 12,
+                              ),
+                              child: Text(
+                                error,
+                                style: const TextStyle(color: Colors.white),
+                              ),
+                            ),
+                          ),
                         ),
                       ),
-                    ),
-                  ),
-                ),
-            ],
-          );
-        },
-      ),
+                  ],
+                );
+              },
+            ),
     );
   }
 
@@ -315,7 +323,8 @@ class _Fc26ConquestAppState extends State<Fc26ConquestApp> {
           attackableTeams: _controller.attackableTeams,
           defenderCandidates: _controller.defenderCandidates,
           strings: _strings,
-          onSetBattlePairing: (attackerId, defenderId) => _controller.setManualBattlePairing(
+          onSetBattlePairing: (attackerId, defenderId) =>
+              _controller.setManualBattlePairing(
             attackerId: attackerId,
             defenderId: defenderId,
           ),
@@ -337,12 +346,12 @@ class _Fc26ConquestAppState extends State<Fc26ConquestApp> {
           attackerRegions: counts[battle.attackerId] ?? 0,
           defenderRegions: counts[battle.defenderId] ?? 0,
           strings: _strings,
-          onSubmit: (winnerId, transferredPlayerId, score) => _controller
-              .submitBattleResult(
-                winnerId: winnerId,
-                transferredPlayerId: transferredPlayerId,
-                score: score,
-              ),
+          onSubmit: (winnerId, transferredPlayerId, score) =>
+              _controller.submitBattleResult(
+            winnerId: winnerId,
+            transferredPlayerId: transferredPlayerId,
+            score: score,
+          ),
           onCancel: _controller.backToMap,
         );
       case AppPage.stats:

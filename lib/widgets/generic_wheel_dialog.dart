@@ -85,16 +85,25 @@ class _GenericWheelDialogState extends State<_GenericWheelDialog>
 
   @override
   Widget build(BuildContext context) {
-    final availableWidth = MediaQuery.of(context).size.width;
+    final mediaSize = MediaQuery.of(context).size;
+    final availableWidth = mediaSize.width;
+    final availableHeight = mediaSize.height;
     final dialogWidth = min(1120.0, availableWidth - 28);
-    final wheelSize = availableWidth > 1500 ? 460.0 : 420.0;
-    final selectedEntry = _selectedIndex == null ? null : widget.entries[_selectedIndex!];
+    final idealWheelSize = availableWidth > 1500 ? 460.0 : 420.0;
+    // Shrink the wheel to fit narrow phone dialogs and short viewports.
+    var wheelSize = min(idealWheelSize, dialogWidth - 40);
+    wheelSize = min(wheelSize, availableHeight - 260);
+    wheelSize = max(wheelSize, 160.0);
+    final titleFontSize = dialogWidth < 360 ? 19.0 : 24.0;
+    final selectedEntry =
+        _selectedIndex == null ? null : widget.entries[_selectedIndex!];
 
     return Dialog.fullscreen(
       backgroundColor: Colors.black.withValues(alpha: 0.35),
       child: Center(
         child: Container(
           width: dialogWidth,
+          constraints: BoxConstraints(maxHeight: availableHeight - 24),
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
             gradient: const LinearGradient(
@@ -112,135 +121,142 @@ class _GenericWheelDialogState extends State<_GenericWheelDialog>
               ),
             ],
           ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                widget.title,
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 24,
-                  fontWeight: FontWeight.w900,
-                ),
-              ),
-              if (widget.subtitle != null) ...[
-                const SizedBox(height: 8),
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
                 Text(
-                  widget.subtitle!,
+                  widget.title,
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    color: Colors.white.withValues(alpha: 0.85),
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
+                    color: Colors.white,
+                    fontSize: titleFontSize,
+                    fontWeight: FontWeight.w900,
                   ),
                 ),
-              ],
-              const SizedBox(height: 18),
-              SizedBox(
-                width: wheelSize,
-                height: wheelSize,
-                child: Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    Positioned(
-                      left: 0,
-                      child: _LeftPointer(size: wheelSize),
+                if (widget.subtitle != null) ...[
+                  const SizedBox(height: 8),
+                  Text(
+                    widget.subtitle!,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Colors.white.withValues(alpha: 0.85),
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
                     ),
-                    AnimatedBuilder(
-                      animation: _animation,
-                      builder: (context, _) {
-                        return Transform.rotate(
-                          angle: _animation.value,
-                          child: _GenericWheelDisk(
-                            entries: widget.entries,
-                            selectedIndex: _selectedIndex,
-                            wheelSize: wheelSize,
-                          ),
-                        );
-                      },
-                    ),
-                    Container(
-                      width: 96,
-                      height: 96,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: const Color(0xFFE0F2FE),
-                        border: Border.all(color: Colors.white, width: 4),
-                        boxShadow: const [
-                          BoxShadow(
-                            color: Color(0x55000000),
-                            blurRadius: 14,
-                          ),
-                        ],
+                  ),
+                ],
+                const SizedBox(height: 18),
+                SizedBox(
+                  width: wheelSize,
+                  height: wheelSize,
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      Positioned(
+                        left: 0,
+                        child: _LeftPointer(size: wheelSize),
                       ),
-                      child: const Icon(
-                        Icons.casino,
-                        size: 42,
-                        color: Color(0xFF0F172A),
+                      AnimatedBuilder(
+                        animation: _animation,
+                        builder: (context, _) {
+                          return Transform.rotate(
+                            angle: _animation.value,
+                            child: _GenericWheelDisk(
+                              entries: widget.entries,
+                              selectedIndex: _selectedIndex,
+                              wheelSize: wheelSize,
+                            ),
+                          );
+                        },
+                      ),
+                      Container(
+                        width: 96,
+                        height: 96,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: const Color(0xFFE0F2FE),
+                          border: Border.all(color: Colors.white, width: 4),
+                          boxShadow: const [
+                            BoxShadow(
+                              color: Color(0x55000000),
+                              blurRadius: 14,
+                            ),
+                          ],
+                        ),
+                        child: const Icon(
+                          Icons.casino,
+                          size: 42,
+                          color: Color(0xFF0F172A),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 16),
+                if (selectedEntry != null)
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 14, vertical: 10),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withValues(alpha: 0.15),
+                      borderRadius: BorderRadius.circular(999),
+                      border: Border.all(
+                          color: Colors.white.withValues(alpha: 0.35)),
+                    ),
+                    child: Text(
+                      selectedEntry,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w800,
+                      ),
+                    ),
+                  ),
+                const SizedBox(height: 18),
+                Wrap(
+                  alignment: WrapAlignment.center,
+                  spacing: 10,
+                  runSpacing: 10,
+                  children: [
+                    OutlinedButton.icon(
+                      onPressed:
+                          _spinning ? null : () => Navigator.of(context).pop(),
+                      icon: const Icon(Icons.close),
+                      label: Text(widget.strings.cancelButton),
+                      style: OutlinedButton.styleFrom(
+                        foregroundColor: Colors.white,
+                        disabledForegroundColor: const Color(0xFFD1EAFE),
+                        side: const BorderSide(color: Color(0xFF7DD3FC)),
+                      ),
+                    ),
+                    FilledButton.icon(
+                      onPressed: _spinning ? null : _spin,
+                      icon: const Icon(Icons.rotate_right),
+                      label: Text(_selectedIndex == null
+                          ? widget.strings.spinButton
+                          : widget.strings.spinAgainButton),
+                      style: FilledButton.styleFrom(
+                        disabledBackgroundColor: const Color(0xFF1D4F77),
+                        disabledForegroundColor: const Color(0xFFD1EAFE),
+                      ),
+                    ),
+                    FilledButton.icon(
+                      onPressed: _selectedIndex == null || _spinning
+                          ? null
+                          : () => Navigator.of(context).pop(selectedEntry),
+                      icon: const Icon(Icons.check),
+                      label: Text(widget.strings.confirmButton),
+                      style: FilledButton.styleFrom(
+                        backgroundColor: const Color(0xFF22C55E),
+                        disabledBackgroundColor: const Color(0xFF2E6D47),
+                        disabledForegroundColor: const Color(0xFFE2FBEA),
                       ),
                     ),
                   ],
                 ),
-              ),
-              const SizedBox(height: 16),
-              if (selectedEntry != null)
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-                  decoration: BoxDecoration(
-                    color: Colors.white.withValues(alpha: 0.15),
-                    borderRadius: BorderRadius.circular(999),
-                    border: Border.all(color: Colors.white.withValues(alpha: 0.35)),
-                  ),
-                  child: Text(
-                    selectedEntry,
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w800,
-                    ),
-                  ),
-                ),
-              const SizedBox(height: 18),
-              Wrap(
-                alignment: WrapAlignment.center,
-                spacing: 10,
-                runSpacing: 10,
-                children: [
-                  OutlinedButton.icon(
-                    onPressed: _spinning ? null : () => Navigator.of(context).pop(),
-                    icon: const Icon(Icons.close),
-                    label: Text(widget.strings.cancelButton),
-                    style: OutlinedButton.styleFrom(
-                      foregroundColor: Colors.white,
-                      disabledForegroundColor: const Color(0xFFD1EAFE),
-                      side: const BorderSide(color: Color(0xFF7DD3FC)),
-                    ),
-                  ),
-                  FilledButton.icon(
-                    onPressed: _spinning ? null : _spin,
-                    icon: const Icon(Icons.rotate_right),
-                    label: Text(_selectedIndex == null ? widget.strings.spinButton : widget.strings.spinAgainButton),
-                    style: FilledButton.styleFrom(
-                      disabledBackgroundColor: const Color(0xFF1D4F77),
-                      disabledForegroundColor: const Color(0xFFD1EAFE),
-                    ),
-                  ),
-                  FilledButton.icon(
-                    onPressed: _selectedIndex == null || _spinning
-                        ? null
-                        : () => Navigator.of(context).pop(selectedEntry),
-                    icon: const Icon(Icons.check),
-                    label: Text(widget.strings.confirmButton),
-                    style: FilledButton.styleFrom(
-                      backgroundColor: const Color(0xFF22C55E),
-                      disabledBackgroundColor: const Color(0xFF2E6D47),
-                      disabledForegroundColor: const Color(0xFFE2FBEA),
-                    ),
-                  ),
-                ],
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -259,9 +275,11 @@ class _GenericWheelDialogState extends State<_GenericWheelDialog>
     final sweep = (pi * 2) / widget.entries.length;
     final winner = _random.nextInt(widget.entries.length);
     final winnerCenterAngle = (-pi / 2) + (winner * sweep) + (sweep / 2);
-    final targetRotationNorm = _normalizeAngle(_pointerAngle - winnerCenterAngle);
+    final targetRotationNorm =
+        _normalizeAngle(_pointerAngle - winnerCenterAngle);
     final currentRotationNorm = _normalizeAngle(_rotation);
-    final deltaToTarget = _normalizeAngle(targetRotationNorm - currentRotationNorm);
+    final deltaToTarget =
+        _normalizeAngle(targetRotationNorm - currentRotationNorm);
     final turns = (pi * 2 * (5 + _random.nextInt(3))) + deltaToTarget;
 
     final begin = _rotation;
@@ -310,7 +328,8 @@ class _GenericWheelDisk extends StatelessWidget {
     return SizedBox.expand(
       child: CustomPaint(
         size: Size.square(wheelSize),
-        painter: _GenericWheelPainter(entries: entries, selectedIndex: selectedIndex),
+        painter: _GenericWheelPainter(
+            entries: entries, selectedIndex: selectedIndex),
       ),
     );
   }
@@ -377,7 +396,8 @@ class _GenericWheelPainter extends CustomPainter {
       canvas.save();
       canvas.translate(labelOffset.dx, labelOffset.dy);
       canvas.rotate(labelAngle + pi / 2);
-      textPainter.paint(canvas, Offset(-textPainter.width / 2, -textPainter.height / 2));
+      textPainter.paint(
+          canvas, Offset(-textPainter.width / 2, -textPainter.height / 2));
       canvas.restore();
 
       start += sweep;
@@ -386,7 +406,8 @@ class _GenericWheelPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant _GenericWheelPainter oldDelegate) {
-    return oldDelegate.entries != entries || oldDelegate.selectedIndex != selectedIndex;
+    return oldDelegate.entries != entries ||
+        oldDelegate.selectedIndex != selectedIndex;
   }
 }
 

@@ -30,8 +30,8 @@ class BattleScreen extends StatefulWidget {
   final int attackerRegions;
   final int defenderRegions;
   final AppStrings strings;
-  final Future<void> Function(int winnerId, int? transferredPlayerId, String? score)
-      onSubmit;
+  final Future<void> Function(
+      int winnerId, int? transferredPlayerId, String? score) onSubmit;
   final VoidCallback onCancel;
 
   @override
@@ -79,7 +79,8 @@ class _BattleScreenState extends State<BattleScreen> {
               return SingleChildScrollView(
                 padding: const EdgeInsets.all(16),
                 child: ConstrainedBox(
-                  constraints: BoxConstraints(minHeight: constraints.maxHeight - 32),
+                  constraints:
+                      BoxConstraints(minHeight: constraints.maxHeight - 32),
                   child: IntrinsicHeight(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -118,34 +119,42 @@ class _BattleScreenState extends State<BattleScreen> {
                           style: const TextStyle(color: Colors.white),
                           decoration: InputDecoration(
                             labelText: strings.optionalScoreLabel,
-                            labelStyle: const TextStyle(color: Color(0xFF93C5FD)),
+                            labelStyle:
+                                const TextStyle(color: Color(0xFF93C5FD)),
                             hintText: strings.scoreHint,
-                            hintStyle: const TextStyle(color: Color(0xFF60A5FA)),
+                            hintStyle:
+                                const TextStyle(color: Color(0xFF60A5FA)),
                             filled: true,
                             fillColor: Colors.white.withValues(alpha: 0.08),
                             enabledBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(14),
-                              borderSide: const BorderSide(color: Color(0xFF1E3A5F)),
+                              borderSide:
+                                  const BorderSide(color: Color(0xFF1E3A5F)),
                             ),
                             focusedBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(14),
-                              borderSide: const BorderSide(color: Color(0xFF38BDF8), width: 1.8),
+                              borderSide: const BorderSide(
+                                  color: Color(0xFF38BDF8), width: 1.8),
                             ),
                           ),
                         ),
                         const Spacer(),
                         const SizedBox(height: 22),
-                        Row(
+                        Wrap(
+                          alignment: WrapAlignment.end,
+                          crossAxisAlignment: WrapCrossAlignment.center,
+                          spacing: 12,
+                          runSpacing: 12,
                           children: [
                             OutlinedButton(
                               onPressed: widget.onCancel,
                               style: OutlinedButton.styleFrom(
                                 foregroundColor: Colors.white,
-                                side: const BorderSide(color: Color(0xFF60A5FA)),
+                                side:
+                                    const BorderSide(color: Color(0xFF60A5FA)),
                               ),
                               child: Text(strings.cancelButton),
                             ),
-                            const SizedBox(width: 12),
                             FilledButton.icon(
                               onPressed: _selectedWinnerId == null
                                   ? null
@@ -186,9 +195,7 @@ class _BattleScreenState extends State<BattleScreen> {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         decoration: BoxDecoration(
-          color: selected
-              ? const Color(0xFF38BDF8)
-              : const Color(0xFF1E3A5B),
+          color: selected ? const Color(0xFF38BDF8) : const Color(0xFF1E3A5B),
           borderRadius: BorderRadius.circular(999),
           border: Border.all(
             color: selected ? const Color(0xFF7DD3FC) : const Color(0xFF426489),
@@ -245,7 +252,8 @@ class _BattleScreenState extends State<BattleScreen> {
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
-                borderSide: const BorderSide(color: Color(0xFF38BDF8), width: 1.7),
+                borderSide:
+                    const BorderSide(color: Color(0xFF38BDF8), width: 1.7),
               ),
               filled: true,
               fillColor: Colors.white.withValues(alpha: 0.06),
@@ -262,7 +270,8 @@ class _BattleScreenState extends State<BattleScreen> {
               ..._losingSquad.map(
                 (player) => DropdownMenuItem<int?>(
                   value: player.id,
-                  child: Text('${player.name} | ${player.position} | ${player.rating}'),
+                  child: Text(
+                      '${player.name} | ${player.position} | ${player.rating}'),
                 ),
               ),
             ],
@@ -279,7 +288,8 @@ class _BattleScreenState extends State<BattleScreen> {
               runSpacing: 8,
               children: _losingSquad.take(4).map((player) {
                 return Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                   decoration: BoxDecoration(
                     color: Colors.white.withValues(alpha: 0.08),
                     borderRadius: BorderRadius.circular(999),
@@ -379,7 +389,8 @@ class _BattleHeader extends StatelessWidget {
       child: Row(
         children: [
           Expanded(
-            child: _TeamShowcase(team: attacker, regions: attackerRegions, strings: strings),
+            child: _TeamShowcase(
+                team: attacker, regions: attackerRegions, strings: strings),
           ),
           const Padding(
             padding: EdgeInsets.symmetric(horizontal: 10),
@@ -393,7 +404,8 @@ class _BattleHeader extends StatelessWidget {
             ),
           ),
           Expanded(
-            child: _TeamShowcase(team: defender, regions: defenderRegions, strings: strings),
+            child: _TeamShowcase(
+                team: defender, regions: defenderRegions, strings: strings),
           ),
         ],
       ),
@@ -438,7 +450,8 @@ class _TransferPlayerCard extends StatelessWidget {
                       ),
                     ),
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 6),
                       decoration: BoxDecoration(
                         color: const Color(0xFF0EA5E9),
                         borderRadius: BorderRadius.circular(999),
@@ -463,8 +476,10 @@ class _TransferPlayerCard extends StatelessWidget {
                 ),
                 const SizedBox(height: 2),
                 Text(
-                  strings.valueWageLabel(player.value ?? '-', player.wage ?? '-'),
-                  style: const TextStyle(color: Color(0xFF93C5FD), fontSize: 12),
+                  strings.valueWageLabel(
+                      player.value ?? '-', player.wage ?? '-'),
+                  style:
+                      const TextStyle(color: Color(0xFF93C5FD), fontSize: 12),
                 ),
                 const SizedBox(height: 10),
                 Wrap(

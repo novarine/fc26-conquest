@@ -103,7 +103,9 @@ class _CustomWheelScreenState extends State<CustomWheelScreen> {
         return AlertDialog(
           title: Text(strings.newWheelDialogTitle),
           content: SizedBox(
-            width: 420,
+            // Cap at 420 on desktop, but shrink to fit narrow phone dialogs.
+            width: (MediaQuery.of(dialogContext).size.width - 64)
+                .clamp(0.0, 420.0),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
