@@ -50,7 +50,10 @@ class UpdateService {
     for (final key in candidateKeys) {
       final value = manifest[key];
       if (value is String && value.trim().isNotEmpty) {
-        return value.trim();
+        final sanitized = _sanitizeDownloadUrl(value.trim());
+        if (sanitized != null) {
+          return sanitized;
+        }
       }
     }
 
@@ -63,6 +66,19 @@ class UpdateService {
     }
 
     return downloadUrl;
+  }
+
+  static String? _sanitizeDownloadUrl(String value) {
+    final uri = Uri.tryParse(value);
+    if (uri == null || uri.scheme != 'https' || uri.host.isEmpty) {
+      return null;
+    }
+
+    if (uri.host != Uri.parse(defaultUpdateCheckUrl).host) {
+      return null;
+    }
+
+    return uri.toString();
   }
 
   static String extractReleaseNotesFromManifest(Map<String, dynamic> manifest) {
