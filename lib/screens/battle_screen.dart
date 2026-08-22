@@ -5,7 +5,10 @@ import '../models/player.dart';
 import '../models/team.dart';
 import '../services/conquest_service.dart';
 import '../services/player_image_service.dart';
+import '../utils/color_utils.dart';
+import '../utils/rating_color.dart';
 import '../widgets/team_badge.dart';
+import '../widgets/hover_detail.dart';
 
 class BattleScreen extends StatefulWidget {
   const BattleScreen({
@@ -205,7 +208,10 @@ class _BattleScreenState extends State<BattleScreen> {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            TeamBadge(team: team, size: 26),
+            TeamHoverDetail(
+              team: team,
+              child: TeamBadge(team: team, size: 26),
+            ),
             const SizedBox(width: 8),
             Text(
               team.name,
@@ -289,18 +295,47 @@ class _BattleScreenState extends State<BattleScreen> {
               children: _losingSquad.take(4).map((player) {
                 return Container(
                   padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
                   decoration: BoxDecoration(
                     color: Colors.white.withValues(alpha: 0.08),
                     borderRadius: BorderRadius.circular(999),
                   ),
-                  child: Text(
-                    '${player.name} • ${player.position} ${player.rating}',
-                    style: const TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w700,
-                      color: Color(0xFFE2E8F0),
-                    ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      _PlayerFace(face: player.face, name: player.name, size: 22),
+                      const SizedBox(width: 6),
+                      ConstrainedBox(
+                        constraints: const BoxConstraints(maxWidth: 140),
+                        child: Text(
+                          '${player.name} • ${player.position}',
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                          style: const TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w700,
+                            color: Color(0xFFE2E8F0),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 6),
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 6, vertical: 2),
+                        decoration: BoxDecoration(
+                          color: ratingColor(player.rating),
+                          borderRadius: BorderRadius.circular(999),
+                        ),
+                        child: Text(
+                          '${player.rating}',
+                          style: const TextStyle(
+                            fontSize: 11,
+                            fontWeight: FontWeight.w900,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 );
               }).toList(),
@@ -431,7 +466,10 @@ class _TransferPlayerCard extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _PlayerFace(face: player.face, name: player.name),
+          PlayerHoverDetail(
+            player: player,
+            child: _PlayerFace(face: player.face, name: player.name),
+          ),
           const SizedBox(width: 12),
           Expanded(
             child: Column(
@@ -453,7 +491,7 @@ class _TransferPlayerCard extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 10, vertical: 6),
                       decoration: BoxDecoration(
-                        color: const Color(0xFF0EA5E9),
+                        color: ratingColor(player.rating),
                         borderRadius: BorderRadius.circular(999),
                       ),
                       child: Text(
@@ -506,7 +544,9 @@ class _TransferPlayerCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.14),
+        color: value == null
+            ? Colors.white.withValues(alpha: 0.14)
+            : ratingColor(value).withValues(alpha: 0.85),
         borderRadius: BorderRadius.circular(10),
       ),
       child: Text(
@@ -522,10 +562,11 @@ class _TransferPlayerCard extends StatelessWidget {
 }
 
 class _PlayerFace extends StatefulWidget {
-  const _PlayerFace({required this.face, required this.name});
+  const _PlayerFace({required this.face, required this.name, this.size = 84});
 
   final String? face;
   final String name;
+  final double size;
 
   @override
   State<_PlayerFace> createState() => _PlayerFaceState();
@@ -573,11 +614,11 @@ class _PlayerFaceState extends State<_PlayerFace> {
     }
 
     return ClipRRect(
-      borderRadius: BorderRadius.circular(12),
+      borderRadius: BorderRadius.circular(widget.size >= 48 ? 12 : 6),
       child: Image.network(
         url,
-        width: 84,
-        height: 84,
+        width: widget.size,
+        height: widget.size,
         fit: BoxFit.cover,
         errorBuilder: (_, __, ___) {
           if (!_triedFallbackUrl) {
@@ -605,21 +646,21 @@ class _PlayerFaceState extends State<_PlayerFace> {
         .join();
 
     return Container(
-      width: 84,
-      height: 84,
+      width: widget.size,
+      height: widget.size,
       decoration: BoxDecoration(
         gradient: const LinearGradient(
           colors: [Color(0xFF1D4ED8), Color(0xFF0EA5E9)],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(widget.size >= 48 ? 12 : 6),
       ),
       child: Center(
         child: Text(
           initials.isEmpty ? '?' : initials,
-          style: const TextStyle(
-            fontSize: 28,
+          style: TextStyle(
+            fontSize: widget.size >= 48 ? 28 : widget.size * 0.42,
             fontWeight: FontWeight.w900,
             color: Colors.white,
           ),
@@ -644,7 +685,10 @@ class _TeamShowcase extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        TeamBadge(team: team, size: 62),
+        TeamHoverDetail(
+          team: team,
+          child: TeamBadge(team: team, size: 62),
+        ),
         const SizedBox(height: 8),
         Text(
           team.name,
@@ -656,11 +700,39 @@ class _TeamShowcase extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 4),
+        _kitColorSwatch(),
+        const SizedBox(height: 4),
         Text(
           strings.regionsLabel(regions),
           style: const TextStyle(color: Color(0xFFBFDBFE)),
         ),
       ],
+    );
+  }
+
+  Widget _kitColorSwatch() {
+    final secondaryHex = team.secondaryColor;
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        _kitDot(parseHexColor(team.primaryColor)),
+        if (secondaryHex != null) ...[
+          const SizedBox(width: 4),
+          _kitDot(parseHexColor(secondaryHex)),
+        ],
+      ],
+    );
+  }
+
+  Widget _kitDot(Color color) {
+    return Container(
+      width: 12,
+      height: 12,
+      decoration: BoxDecoration(
+        color: color,
+        shape: BoxShape.circle,
+        border: Border.all(color: Colors.white.withValues(alpha: 0.6)),
+      ),
     );
   }
 }

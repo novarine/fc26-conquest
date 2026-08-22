@@ -12,7 +12,7 @@ class SeedDataService {
 
   static const _teamsCacheKey = 'fc26_catalog_teams';
   static const _teamsCacheVersionKey = 'fc26_catalog_teams_version';
-  static const _teamsCacheVersion = 11;
+  static const _teamsCacheVersion = 12;
   static const _playersCacheKey = 'fc26_catalog_players';
 
   Future<void> clearTeamCache() async {

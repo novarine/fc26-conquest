@@ -4,6 +4,8 @@ import '../localization/app_strings.dart';
 import '../models/campaign_setup.dart';
 import '../models/team.dart';
 import '../utils/team_filter.dart';
+import '../widgets/hover_detail.dart';
+import '../widgets/team_badge.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({
@@ -75,6 +77,38 @@ class _HomeScreenState extends State<HomeScreen> {
     _country = null;
     _ratingRange = null;
     _licensedOnly = false;
+  }
+
+  @override
+  void didUpdateWidget(covariant HomeScreen oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    final availableLeagues = widget.teams
+        .where((team) => team.type == TeamType.club)
+        .map((team) => team.league)
+        .whereType<String>()
+        .toSet();
+    final availableCountries = widget.teams
+        .where((team) => team.type == TeamType.club)
+        .map((team) => team.country)
+        .whereType<String>()
+        .toSet();
+    if (_league != null && !availableLeagues.contains(_league)) {
+      _league = null;
+    }
+    if (_country != null && !availableCountries.contains(_country)) {
+      _country = null;
+    }
+  }
+
+  // Country entries in club mode share their name with a nation-type team, so
+  // its already-resolved logo (flagcdn.com asset) doubles as a flag icon.
+  Team? _nationTeamFor(String country) {
+    for (final team in widget.teams) {
+      if (team.type == TeamType.nation && team.name == country) {
+        return team;
+      }
+    }
+    return null;
   }
 
   @override
@@ -167,8 +201,17 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             ),
                             const SizedBox(height: 18),
-                            Text('FC 26 Conquest',
-                                style: theme.textTheme.displaySmall),
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                Expanded(
+                                  child: Text('FC 26 Conquest',
+                                      style: theme.textTheme.displaySmall),
+                                ),
+                                const Icon(Icons.public,
+                                    color: Color(0xFF0284C7), size: 34),
+                              ],
+                            ),
                             const SizedBox(height: 10),
                             Text(
                               strings.homeHeadline,
@@ -198,6 +241,38 @@ class _HomeScreenState extends State<HomeScreen> {
                                     label: strings.featureMap),
                               ],
                             ),
+                            const SizedBox(height: 18),
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 14, vertical: 12),
+                              decoration: BoxDecoration(
+                                color: const Color(0xFF0F172A),
+                                borderRadius: BorderRadius.circular(18),
+                              ),
+                              child: Row(
+                                children: [
+                                  const Icon(Icons.insights_rounded,
+                                      color: Color(0xFF67E8F9), size: 22),
+                                  const SizedBox(width: 10),
+                                  Expanded(
+                                    child: Text(
+                                      'Katalog bereit fuer deine naechste Kampagne',
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w800,
+                                      ),
+                                    ),
+                                  ),
+                                  Text(
+                                    '${widget.availableClubTeams + widget.availableNationTeams} Teams',
+                                    style: const TextStyle(
+                                      color: Color(0xFF67E8F9),
+                                      fontWeight: FontWeight.w900,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
                             const SizedBox(height: 24),
                             Container(
                               padding: const EdgeInsets.all(16),
@@ -213,6 +288,17 @@ class _HomeScreenState extends State<HomeScreen> {
                                     style:
                                         theme.textTheme.titleMedium?.copyWith(
                                       fontWeight: FontWeight.w900,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 4),
+                                  Text(
+                                    _mode == TeamType.club
+                                        ? 'Waehle Liga, Land und Lizenzumfang fuer deine Club-Auswahl.'
+                                        : 'Waehle Nationen und lege die Staerke deiner Kampagne fest.',
+                                    style: const TextStyle(
+                                      color: Color(0xFF64748B),
+                                      fontSize: 13,
+                                      height: 1.3,
                                     ),
                                   ),
                                   const SizedBox(height: 12),
@@ -269,10 +355,29 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 value: null,
                                                 child:
                                                     Text(strings.allCountries)),
-                                            ...countries.map((value) =>
-                                                DropdownMenuItem<String?>(
-                                                    value: value,
-                                                    child: Text(value))),
+                                            ...countries.map((value) {
+                                              final nationTeam =
+                                                  _nationTeamFor(value);
+                                              return DropdownMenuItem<String?>(
+                                                value: value,
+                                                child: Row(
+                                                  mainAxisSize:
+                                                      MainAxisSize.min,
+                                                  children: [
+                                                    if (nationTeam != null) ...[
+                                                      TeamHoverDetail(
+                                                        team: nationTeam,
+                                                        child: TeamBadge(
+                                                            team: nationTeam,
+                                                            size: 18),
+                                                      ),
+                                                      const SizedBox(width: 8),
+                                                    ],
+                                                    Text(value),
+                                                  ],
+                                                ),
+                                              );
+                                            }),
                                           ],
                                           onChanged: (value) => setState(() {
                                             _country = value;
@@ -357,33 +462,59 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             ),
                             const SizedBox(height: 20),
-                            FilledButton.icon(
-                              onPressed: filteredTeams.length < 2
-                                  ? null
-                                  : () => widget.onNewCampaign(
-                                        CampaignSetup(
-                                          mode: _mode,
-                                          teamCount: effectiveTeamCount,
-                                          league: _mode == TeamType.club
-                                              ? _league
-                                              : null,
-                                          country: _mode == TeamType.club
-                                              ? _country
-                                              : null,
-                                          minRating: ratingRange.start.round(),
-                                          maxRating: ratingRange.end.round(),
-                                          licensedOnly: _licensedOnly,
-                                        ),
-                                      ),
-                              icon: const Icon(Icons.auto_awesome),
-                              label: Text(strings.newCampaignButton),
-                            ),
-                            const SizedBox(height: 12),
-                            OutlinedButton.icon(
-                              onPressed:
-                                  widget.hasCampaign ? widget.onContinue : null,
-                              icon: const Icon(Icons.play_arrow),
-                              label: Text(strings.continueCampaignButton),
+                            LayoutBuilder(
+                              builder: (context, actionsConstraints) {
+                                final stackActions =
+                                    actionsConstraints.maxWidth < 430;
+                                final newCampaignButton = FilledButton.icon(
+                                  onPressed: filteredTeams.length < 2
+                                      ? null
+                                      : () => widget.onNewCampaign(
+                                            CampaignSetup(
+                                              mode: _mode,
+                                              teamCount: effectiveTeamCount,
+                                              league: _mode == TeamType.club
+                                                  ? _league
+                                                  : null,
+                                              country: _mode == TeamType.club
+                                                  ? _country
+                                                  : null,
+                                              minRating:
+                                                  ratingRange.start.round(),
+                                              maxRating:
+                                                  ratingRange.end.round(),
+                                              licensedOnly: _licensedOnly,
+                                            ),
+                                          ),
+                                  icon: const Icon(Icons.auto_awesome),
+                                  label: Text(strings.newCampaignButton),
+                                );
+                                final continueButton = OutlinedButton.icon(
+                                  onPressed: widget.hasCampaign
+                                      ? widget.onContinue
+                                      : null,
+                                  icon: const Icon(Icons.play_arrow),
+                                  label: Text(strings.continueCampaignButton),
+                                );
+                                if (stackActions) {
+                                  return Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.stretch,
+                                    children: [
+                                      newCampaignButton,
+                                      const SizedBox(height: 10),
+                                      continueButton,
+                                    ],
+                                  );
+                                }
+                                return Row(
+                                  children: [
+                                    Expanded(child: newCampaignButton),
+                                    const SizedBox(width: 10),
+                                    Expanded(child: continueButton),
+                                  ],
+                                );
+                              },
                             ),
                             const SizedBox(height: 12),
                             TextButton.icon(

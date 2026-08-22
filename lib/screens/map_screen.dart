@@ -6,7 +6,9 @@ import '../localization/app_strings.dart';
 import '../models/campaign_state.dart';
 import '../models/player.dart';
 import '../models/team.dart';
+import '../utils/rating_color.dart';
 import '../widgets/team_badge.dart';
+import '../widgets/hover_detail.dart';
 import '../widgets/team_wheel_dialog.dart';
 import '../widgets/world_map_board.dart';
 
@@ -333,7 +335,8 @@ class _MapScreenState extends State<MapScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    TeamBadge(team: teamA, size: 58),
+                    TeamHoverDetail(
+                      team: teamA, child: TeamBadge(team: teamA, size: 58)),
                     const Padding(
                       padding: EdgeInsets.symmetric(horizontal: 12),
                       child: Text('VS',
@@ -342,7 +345,8 @@ class _MapScreenState extends State<MapScreen> {
                               fontSize: 26,
                               fontWeight: FontWeight.w900)),
                     ),
-                    TeamBadge(team: teamB, size: 58),
+                    TeamHoverDetail(
+                      team: teamB, child: TeamBadge(team: teamB, size: 58)),
                   ],
                 ),
                 const SizedBox(height: 12),
@@ -538,7 +542,11 @@ class _ChampionCelebrationDialogState extends State<_ChampionCelebrationDialog>
                                 ],
                               ),
                               const SizedBox(height: 12),
-                              TeamBadge(team: widget.champion, size: 96),
+                              TeamHoverDetail(
+                                team: widget.champion,
+                                child: TeamBadge(
+                                    team: widget.champion, size: 96),
+                              ),
                               const SizedBox(height: 10),
                               Text(
                                 widget.champion.name,
@@ -573,12 +581,45 @@ class _ChampionCelebrationDialogState extends State<_ChampionCelebrationDialog>
                                           borderRadius:
                                               BorderRadius.circular(999),
                                         ),
-                                        child: Text(
-                                          player.name,
-                                          style: const TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.w700,
-                                          ),
+                                        child: Row(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            ConstrainedBox(
+                                              constraints: const BoxConstraints(
+                                                  maxWidth: 140),
+                                              child: Text(
+                                                player.name,
+                                                overflow:
+                                                    TextOverflow.ellipsis,
+                                                maxLines: 1,
+                                                style: const TextStyle(
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.w700,
+                                                ),
+                                              ),
+                                            ),
+                                            const SizedBox(width: 6),
+                                            Container(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 6,
+                                                      vertical: 2),
+                                              decoration: BoxDecoration(
+                                                color:
+                                                    ratingColor(player.rating),
+                                                borderRadius:
+                                                    BorderRadius.circular(999),
+                                              ),
+                                              child: Text(
+                                                '${player.rating}',
+                                                style: const TextStyle(
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.w900,
+                                                  fontSize: 11,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
                                         ),
                                       ),
                                   ],
@@ -829,7 +870,10 @@ class _RightPanel extends StatelessWidget {
                   ),
                   child: Row(
                     children: [
-                      TeamBadge(team: team, size: 40),
+                      TeamHoverDetail(
+                        team: team,
+                        child: TeamBadge(team: team, size: 40),
+                      ),
                       const SizedBox(width: 8),
                       Expanded(
                         child: Text(
@@ -982,7 +1026,11 @@ class _ChampionSidePanelState extends State<_ChampionSidePanel>
                                 ],
                               ),
                               child:
-                                  TeamBadge(team: widget.champion, size: 124),
+                                  TeamHoverDetail(
+                                    team: widget.champion,
+                                    child: TeamBadge(
+                                        team: widget.champion, size: 124),
+                                  ),
                             );
                           },
                         ),
@@ -1026,21 +1074,52 @@ class _ChampionSidePanelState extends State<_ChampionSidePanel>
                         runSpacing: 8,
                         children: [
                           for (final player in widget.squad)
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 10, vertical: 7),
-                              decoration: BoxDecoration(
-                                color: const Color(0x33FACC15),
-                                borderRadius: BorderRadius.circular(999),
-                                border: Border.all(
-                                    color:
-                                        Colors.white.withValues(alpha: 0.12)),
-                              ),
-                              child: Text(
-                                player.name,
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w700,
+                            PlayerHoverDetail(
+                              player: player,
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 10, vertical: 7),
+                                decoration: BoxDecoration(
+                                  color: const Color(0x33FACC15),
+                                  borderRadius: BorderRadius.circular(999),
+                                  border: Border.all(
+                                      color: Colors.white
+                                          .withValues(alpha: 0.12)),
+                                ),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                  ConstrainedBox(
+                                    constraints:
+                                        const BoxConstraints(maxWidth: 140),
+                                    child: Text(
+                                      player.name,
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 1,
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(width: 6),
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 6, vertical: 2),
+                                    decoration: BoxDecoration(
+                                      color: ratingColor(player.rating),
+                                      borderRadius: BorderRadius.circular(999),
+                                    ),
+                                    child: Text(
+                                      '${player.rating}',
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w900,
+                                        fontSize: 11,
+                                      ),
+                                    ),
+                                  ),
+                                  ],
                                 ),
                               ),
                             ),

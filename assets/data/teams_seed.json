@@ -364,6 +364,18 @@
         "logo":  "assets/logos/lask.png"
     },
     {
+        "id":  34,
+        "type":  "club",
+        "rating":  73,
+        "league":  "Austrian Bundesliga",
+        "name":  "Sturm Graz",
+        "primaryColor":  "#000000",
+        "secondaryColor":  "#FFFFFF",
+        "country":  "Austria",
+        "logo":  "assets/logos/sturm-graz.svg",
+        "licensedInFc26":  false
+    },
+    {
         "id":  35,
         "type":  "club",
         "rating":  78,
@@ -439,6 +451,30 @@
         "secondaryColor":  "#231F20",
         "country":  "United States",
         "logo":  "assets/logos/inter-miami.png"
+    },
+    {
+        "id":  44,
+        "type":  "club",
+        "rating":  70,
+        "league":  "Austrian Bundesliga",
+        "name":  "Wolfsberger AC",
+        "primaryColor":  "#4B0082",
+        "secondaryColor":  "#FFFFFF",
+        "country":  "Austria",
+        "logo":  "assets/logos/wolfsberger-ac.svg",
+        "licensedInFc26":  false
+    },
+    {
+        "id":  45,
+        "type":  "club",
+        "rating":  68,
+        "league":  "Austrian Bundesliga",
+        "name":  "WSG Tirol",
+        "primaryColor":  "#1B5E20",
+        "secondaryColor":  "#FFFFFF",
+        "country":  "Austria",
+        "logo":  "assets/logos/wsg-tirol.svg",
+        "licensedInFc26":  false
     },
     {
         "id":  101,

@@ -6,6 +6,7 @@ import '../localization/app_strings.dart';
 import '../models/team.dart';
 import '../utils/color_utils.dart';
 import 'team_badge.dart';
+import 'hover_detail.dart';
 
 Future<Team?> showTeamWheelDialog({
   required BuildContext context,
@@ -200,8 +201,11 @@ class _TeamWheelDialogState extends State<_TeamWheelDialog>
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        TeamBadge(
-                            team: selectedTeam, size: 52, showFrame: true),
+                        TeamHoverDetail(
+                          team: selectedTeam,
+                          child: TeamBadge(
+                              team: selectedTeam, size: 52, showFrame: true),
+                        ),
                         const SizedBox(width: 10),
                         Text(
                           selectedTeam.name,
@@ -367,7 +371,10 @@ class _WheelDisk extends StatelessWidget {
       widgets.add(
         Transform.translate(
           offset: Offset(x, y),
-          child: TeamBadge(team: teams[index], size: widgetBadgeSize()),
+          child: TeamHoverDetail(
+            team: teams[index],
+            child: TeamBadge(team: teams[index], size: widgetBadgeSize()),
+          ),
         ),
       );
     }

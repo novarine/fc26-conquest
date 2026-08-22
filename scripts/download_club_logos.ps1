@@ -42,7 +42,10 @@ $logos = @(
   @{ id=38; slug='celtic';             url='https://upload.wikimedia.org/wikipedia/en/thumb/7/71/Celtic_FC_crest.svg/960px-Celtic_FC_crest.svg.png' },
   @{ id=39; slug='rangers';            url='https://upload.wikimedia.org/wikipedia/en/thumb/4/43/Rangers_FC.svg/960px-Rangers_FC.svg.png' },
   @{ id=41; slug='al-nassr';           url='https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Nassr_FC_Logo.svg/960px-Nassr_FC_Logo.svg.png' },
-  @{ id=42; slug='inter-miami';        url='https://upload.wikimedia.org/wikipedia/en/thumb/5/5c/Inter_Miami_CF_logo.svg/960px-Inter_Miami_CF_logo.svg.png' }
+  @{ id=42; slug='inter-miami';        url='https://upload.wikimedia.org/wikipedia/en/thumb/5/5c/Inter_Miami_CF_logo.svg/960px-Inter_Miami_CF_logo.svg.png' },
+  @{ id=34; slug='sturm-graz';         url='https://upload.wikimedia.org/wikipedia/en/9/91/SK_Sturm_Graz_logo.svg'; ext='svg' },
+  @{ id=44; slug='wolfsberger-ac';     url='https://upload.wikimedia.org/wikipedia/en/c/cd/Wolfsberger_AC_logo.svg'; ext='svg' },
+  @{ id=45; slug='wsg-tirol';          url='https://upload.wikimedia.org/wikipedia/en/8/85/WSG_Tirol_logo.svg'; ext='svg' }
 )
 
 $results = New-Object System.Collections.Generic.List[object]

@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": ["schemaVersion", "game", "generatedAt", "countries", "leagues", "clubs", "players"],
+  "properties": {
+    "schemaVersion": {"type": "integer"},
+    "game": {"const": "EA Sports FC 26"},
+    "generatedAt": {"type": "string"},
+    "countries": {"type": "array"},
+    "leagues": {"type": "array"},
+    "clubs": {"type": "array"},
+    "players": {"type": "array"}
+  }
+}

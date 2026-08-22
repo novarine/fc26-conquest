@@ -17,6 +17,7 @@ class Player {
     this.defending,
     this.physical,
     this.face,
+    this.subAttributes = const {},
   });
 
   final int id;
@@ -36,6 +37,7 @@ class Player {
   final int? defending;
   final int? physical;
   final String? face;
+  final Map<String, int> subAttributes;
 
   Player copyWith({
     int? id,
@@ -55,6 +57,7 @@ class Player {
     int? defending,
     int? physical,
     String? face,
+    Map<String, int>? subAttributes,
   }) {
     return Player(
       id: id ?? this.id,
@@ -74,6 +77,7 @@ class Player {
       defending: defending ?? this.defending,
       physical: physical ?? this.physical,
       face: face ?? this.face,
+      subAttributes: subAttributes ?? this.subAttributes,
     );
   }
 
@@ -96,6 +100,7 @@ class Player {
       defending: json['defending'] as int?,
       physical: json['physical'] as int?,
       face: json['face'] as String?,
+      subAttributes: _subAttributesFromJson(json['subAttributes']),
     );
   }
 
@@ -118,6 +123,25 @@ class Player {
       'defending': defending,
       'physical': physical,
       'face': face,
+      'subAttributes': subAttributes,
     };
+  }
+
+  static Map<String, int> _subAttributesFromJson(dynamic value) {
+    if (value is! Map) {
+      return const {};
+    }
+    return Map.fromEntries(
+      value.entries
+          .map((entry) {
+            final parsed = entry.value is num
+                ? (entry.value as num).toInt()
+                : int.tryParse(entry.value.toString());
+            return parsed == null
+                ? null
+                : MapEntry(entry.key.toString(), parsed);
+          })
+          .whereType<MapEntry<String, int>>(),
+    );
   }
 }

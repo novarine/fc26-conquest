@@ -32,10 +32,10 @@ class AppStrings {
   String ratingRangeLabel(int min, int max) =>
       _v('Rating: $min - $max', 'Rating: $min - $max');
   String get licensedOnlyTitle =>
-      _v('Nur FC 26 Lizenzteams', 'FC 26 licensed teams only');
+      _v('Nur Teams mit echtem FC-26-Namen/Wappen', 'Only teams with their real FC 26 name/crest');
   String get licensedOnlySubtitle => _v(
-        'Manuell gepflegte Bestenliste, nicht live mit aktuellen FC-26-Patches synchronisiert.',
-        'Manually maintained list, not live-synced with current FC 26 patches.',
+        'Blendet Teams aus, die in FC 26 wegen Lizenzstreitigkeiten unter einem anderen Namen laufen (z. B. PSG). Kein Umschalter zwischen zwei Datensaetzen - alle Teams stammen aus derselben Liste und werden manuell gepflegt, nicht live mit FC-26-Patches synchronisiert.',
+        'Hides teams that appear under a different name in FC 26 due to licensing disputes (e.g. PSG). Not a switch between two datasets - all teams come from the same list and are manually maintained, not live-synced with FC 26 patches.',
       );
   String teamCountLabel(int count, int available) => _v(
       'Teamanzahl: $count von $available verfuegbar',

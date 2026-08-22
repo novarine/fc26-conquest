@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>FC 26 Player Detail Card</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root { color-scheme: dark; }
+    body { background: #10151b; font-family: Georgia, 'Times New Roman', serif; }
+    .stat-fill { width: var(--stat-value); }
+    .stat-high { --stat-color: #53d769; }
+    .stat-medium { --stat-color: #f2c94c; }
+    .stat-low { --stat-color: #f27777; }
+    .stat-fill { background: var(--stat-color); }
+    .player-image { object-fit: contain; object-position: bottom center; }
+  </style>
+</head>
+<body class="min-h-screen px-4 py-6 text-slate-100 sm:px-6">
+  <main class="mx-auto w-full max-w-md" aria-live="polite">
+    <article class="overflow-hidden rounded-[1.75rem] border border-white/10 bg-[#1a222b] shadow-2xl shadow-black/40">
+      <header class="relative min-h-[18rem] overflow-hidden bg-gradient-to-br from-[#243442] via-[#1d2932] to-[#12171d] px-5 pt-5">
+        <div class="absolute -right-16 -top-20 h-52 w-52 rounded-full border border-white/10"></div>
+        <div class="relative z-10 flex items-start justify-between">
+          <div>
+            <p id="dataset-badge" class="inline-flex rounded-full border border-emerald-300/30 bg-emerald-300/10 px-2.5 py-1 text-[0.65rem] font-bold uppercase tracking-[0.18em] text-emerald-200">FC 26</p>
+            <p id="player-position" class="mt-5 text-xs font-bold uppercase tracking-[0.24em] text-slate-300">ST</p>
+            <p id="player-rating" class="mt-1 text-6xl font-black leading-none text-white">90</p>
+            <p class="mt-1 text-[0.65rem] uppercase tracking-[0.2em] text-slate-400">OVR</p>
+          </div>
+          <div class="flex gap-2 pt-1">
+            <div class="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-lg" title="Nationalität" aria-label="Nationalität">🇫🇷</div>
+            <div id="club-logo" class="flex h-10 w-10 items-center justify-center rounded-full bg-white p-1 text-[0.6rem] font-black text-slate-800" title="Vereinslogo" aria-label="Vereinslogo">PSG</div>
+          </div>
+        </div>
+        <div class="absolute bottom-0 left-1/2 h-56 w-64 -translate-x-1/2">
+          <div id="image-fallback" class="absolute inset-0 flex items-center justify-center text-7xl font-black text-white/10" aria-hidden="true">MP</div>
+          <img id="player-image" class="player-image relative z-10 h-full w-full opacity-0 transition-opacity duration-300" loading="lazy" decoding="async" alt="Spielerbild von Kylian Mbappe">
+        </div>
+      </header>
+
+      <section class="px-5 pb-5 pt-4">
+        <div class="flex items-end justify-between gap-3">
+          <div class="min-w-0">
+            <p class="truncate text-2xl font-black tracking-tight" id="player-name">Kylian Mbappe</p>
+            <p class="mt-1 truncate text-sm text-slate-400"><span id="club-name">Paris Saint-Germain</span><span class="mx-2 text-slate-600">·</span><span id="player-meta">27 Jahre · 178 cm</span></p>
+          </div>
+          <span class="shrink-0 rounded-lg bg-white/5 px-2 py-1 text-xs font-bold text-slate-300">ST</span>
+        </div>
+
+        <div class="mt-5 grid grid-cols-2 gap-x-4 gap-y-3" id="stats-grid"></div>
+
+        <button id="substats-toggle" class="mt-5 flex w-full items-center justify-between border-t border-white/10 pt-4 text-left text-sm font-bold text-slate-200" type="button" aria-expanded="false" aria-controls="substats-panel">
+          <span>Sub-Stats anzeigen</span><span id="substats-chevron" class="text-slate-500 transition-transform">⌄</span>
+        </button>
+        <div id="substats-panel" class="hidden grid-cols-2 gap-3 pt-3 text-xs" role="region" aria-label="Sub-Stats"></div>
+      </section>
+    </article>
+  </main>
+
+  <script>
+    const player = {
+      name: 'Kylian Mbappe', position: 'ST', overall: 91, nationFlag: '🇫🇷',
+      club: 'Paris Saint-Germain', clubShort: 'PSG', age: 27, heightCm: 178,
+      imageUrl: '',
+      stats: { PAC: 97, SHO: 91, PAS: 81, DRI: 92, DEF: 39, PHY: 79 },
+      subStats: { 'Sprinttempo': 97, 'Antritt': 97, 'Ausdauer': 88, 'Abschluss': 93, 'Freistoß': 79, 'Dribbling': 95 }
+    };
+
+    const statTone = (value) => value >= 80 ? 'stat-high' : value >= 60 ? 'stat-medium' : 'stat-low';
+    const statLabel = (value) => value >= 80 ? 'hoch' : value >= 60 ? 'mittel' : 'niedrig';
+    const statsGrid = document.querySelector('#stats-grid');
+
+    for (const [label, value] of Object.entries(player.stats)) {
+      const row = document.createElement('div');
+      row.className = 'space-y-1.5';
+      row.innerHTML = `
+        <div class="flex items-center justify-between text-xs font-bold">
+          <span class="text-slate-400">${label}</span><span class="text-slate-100">${value}</span>
+        </div>
+        <div class="h-1.5 overflow-hidden rounded-full bg-white/10" role="progressbar" aria-label="${label}" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${value}" aria-valuetext="${value}, ${statLabel(value)}">
+          <div class="stat-fill ${statTone(value)} h-full rounded-full transition-[width] duration-700" style="--stat-value: ${value}%"></div>
+        </div>`;
+      statsGrid.append(row);
+    }
+
+    const substatsPanel = document.querySelector('#substats-panel');
+    for (const [label, value] of Object.entries(player.subStats)) {
+      const item = document.createElement('div');
+      item.className = 'flex items-center justify-between rounded-lg bg-white/5 px-3 py-2 text-slate-300';
+      item.innerHTML = `<span>${label}</span><strong class="text-white">${value}</strong>`;
+      substatsPanel.append(item);
+    }
+
+    document.querySelector('#player-position').textContent = player.position;
+    document.querySelector('#player-rating').textContent = player.overall;
+    document.querySelector('#player-name').textContent = player.name;
+    document.querySelector('#club-name').textContent = player.club;
+    document.querySelector('#player-meta').textContent = `${player.age} Jahre · ${player.heightCm} cm`;
+    document.querySelector('#club-logo').textContent = player.clubShort;
+    document.querySelector('[aria-label="Nationalität"]').textContent = player.nationFlag;
+
+    const image = document.querySelector('#player-image');
+    const fallback = document.querySelector('#image-fallback');
+    fallback.textContent = player.name.split(' ').map((part) => part[0]).join('').slice(0, 2);
+    if (player.imageUrl) {
+      image.src = player.imageUrl;
+      image.addEventListener('load', () => { image.classList.remove('opacity-0'); fallback.classList.add('hidden'); }, { once: true });
+      image.addEventListener('error', () => { image.remove(); }, { once: true });
+    }
+
+    document.querySelector('#substats-toggle').addEventListener('click', (event) => {
+      const button = event.currentTarget;
+      const expanded = button.getAttribute('aria-expanded') === 'true';
+      button.setAttribute('aria-expanded', String(!expanded));
+      button.querySelector('#substats-chevron').classList.toggle('rotate-180', !expanded);
+      substatsPanel.classList.toggle('hidden', expanded);
+      substatsPanel.classList.toggle('grid', !expanded);
+    });
+  </script>
+</body>
+</html>
